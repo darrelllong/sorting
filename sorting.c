@@ -66,7 +66,7 @@ void printArray(uint32_t a[], int length) {
       printf("\n");
     }
   }
-  if (printMax % WIDTH != 0 || length % WIDTH != 0) {
+  if (length % WIDTH != 0) {
     printf("\n");
   }
   return;

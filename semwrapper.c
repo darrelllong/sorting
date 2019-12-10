@@ -11,14 +11,13 @@
 // key:   The key to create a set of semaphores with.
 //
 int sem_create(key_t key) {
-  int semid = semget(key, 1, IPC_CREAT);
+  int semid = semget(key, 1, 0600);
   if (semid < 0) {
     perror("sem_create:semget");
     return -1;
   }
 
-  union semun arg;
-  arg.val = 1;
+  union semun arg = { 1 };
   if (semctl(semid, 0, SETVAL, arg) < 0) {
     perror("semcreate:semctl");
     return -1;

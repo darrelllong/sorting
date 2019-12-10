@@ -3,6 +3,8 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 
+#include "semwrapper.h"
+
 //
 // Returns the identifier of one initialized semaphore.
 //

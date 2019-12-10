@@ -1,21 +1,38 @@
+#include <errno.h>
+#include <stdio.h>
+#include <sys/ipc.h>
 #include <sys/sem.h>
 
+#define FLAGS   SEM_R|SEM_A|(SEM_R >> 3)|(SEM_A >> 3)
+
 //
-// Returns the identifier of a set of semaphores based.
-// The set of semaphores is generated using a key and the number of semaphores.
+// Returns the identifier of one initialized semaphore.
+// The semaphore is generated using a key.
 // The key can be generated using ftok() using a pathname.
 //
 // key:   The key to create a set of semaphores with.
-// nsems: The number of semaphores to create (0 if a set isn't desired).
 //
-int sem_create(key_t key, int nsems) {
-  return semget(key, nsems, 0666);
+int sem_create(key_t key) {
+  int semid = semget(key, 1, IPC_CREAT|0777);
+  if (semid < 0) {
+    perror("sem_create:semget");
+    return -1;
+  }
+
+  union semun arg;
+  arg.val = 1;
+  if (semctl(semid, 0, SETVAL, arg) < 0) {
+    perror("semcreate:semctl");
+    return -1;
+  }
+
+  return semid;
 }
 
 //
 // Removes the specified semaphore set from the system.
 //
-// semid: The semaphore set to remove.
+// semid: The semaphore to remove.
 //
 int sem_delete(int semid) {
   union semun arg = { 0 };
@@ -23,23 +40,21 @@ int sem_delete(int semid) {
 }
 
 //
-// Increments a semaphore value by 1.
+// Increments a semaphore's value by 1.
 //
-// semid:   The semaphore set containing the semaphore to increment.
-// semnum:  The semaphore number within the set to increment.
+// semid:   The semaphore to increment.
 //
-int sem_signal(int semid, int semnum) {
-  struct sembuf sops = { semnum, 1, SEM_UNDO };
+int sem_signal(int semid) {
+  struct sembuf sops = { 0, 1, SEM_UNDO };
   return semop(semid, &sops, 1);
 }
 
 //
-// Decrements a semaphore value by 1.
+// Decrements a semaphore's value by 1.
 //
-// semid:   The semaphore set containing the semaphore to decrement.
-// semnum:  The semaphore number within the set to decrement.
+// semid:   The semaphore to decrement.
 //
-int sem_wait(int semid, int semnum) {
-  struct sembuf sops = { semnum, -1, SEM_UNDO };
+int sem_wait(int semid) {
+  struct sembuf sops = { 0, -1, SEM_UNDO };
   return semop(semid, &sops, 1);
 }

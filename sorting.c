@@ -75,7 +75,7 @@ void printArray(uint32_t a[], int length) {
 #define OPTIONS "-uAmbSBisqQMhzp:r:n:"
 
 static char *names[] = { "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
-                         "Binary Insertion Sort", "Shell Sort", "Quick Sort", 
+                         "Binary Insertion Sort", "Shell Sort", "Quick Sort",
                          "Quick Sort (Iterative)", "Merge Sort", "Heap Sort" };
 
 int main(int argc, char **argv) {
@@ -87,7 +87,7 @@ int main(int argc, char **argv) {
 
   bitV *sortSet = newVec(EndSort); // Set of sorts to perform
 
-  int sem = sem_create(ftok("/tmp/ddel", 0xc0c0d00d), 1);
+  int sem = sem_create(ftok("/tmp/ddel", 0xc0c0d00d));
 
 
   while ((c = getopt(argc, argv, OPTIONS)) != -1) {
@@ -204,14 +204,14 @@ int main(int argc, char **argv) {
     }
 
     // P the semaphore
-    sem_wait(sem, 0);
+    sem_wait(sem);
     printf("%s\n", names[t]); fflush(stdout);
 
     printf("%" PRIu32 " elements %" PRIu64 " moves %" PRIu64 " compares\n",
         count, moves, compares); fflush(stdout);
     printArray(a, count);
     // V the semaphore
-    sem_signal(sem, 0);
+    sem_signal(sem);
   } else {
     for (sorts s = MinSort; s < EndSort; s += 1) {
       if (valBit(sortSet, s) == 1) {

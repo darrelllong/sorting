@@ -5,12 +5,8 @@
 
 //
 // Returns the identifier of one initialized semaphore.
-// The semaphore is generated using a key.
-// The key can be generated using ftok() using a pathname.
 //
-// key:   The key to create a set of semaphores with.
-//
-int sem_create(key_t key);
+int sem_create(void);
 
 //
 // Removes the specified semaphore from the system.

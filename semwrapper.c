@@ -10,8 +10,8 @@
 //
 // key:   The key to create a set of semaphores with.
 //
-int sem_create(key_t key) {
-  int semid = semget(key, 1, 0600);
+int sem_create(void) {
+  int semid = semget(IPC_PRIVATE, 1, 0600);
   if (semid < 0) {
     perror("sem_create:semget");
     return -1;

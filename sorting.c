@@ -101,7 +101,7 @@ int main(int argc, char **argv) {
   sort[MergeSort]       =  mergeSort;
   sort[HeapSort]        =  heapSort;
 
-  int sem = sem_create(ftok("/tmp/ddel", 0xc0c0babe));
+  int sem = sem_create();
 
   while ((c = getopt(argc, argv, OPTIONS)) != -1) {
     switch (c) {

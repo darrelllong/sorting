@@ -7,7 +7,7 @@
 #include <sys/ipc.h>
 #include <unistd.h>
 
-#include "bv.h"
+#include "sets.h"
 #include "semwrapper.h"
 
 #include "binsert.h"
@@ -72,7 +72,7 @@ void printArray(uint32_t a[], int length) {
   return;
 }
 
-#define OPTIONS "-uAmbSBisqQMhzp:r:n:"
+#define OPTIONS "-AmbSBisqQMhzp:r:n:"
 
 static char *names[] = { "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
                          "Binary Insertion Sort", "Shell Sort", "Quick Sort", 
@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
 
   uint32_t *a; // Array to be sorted
 
-  bitV *sortSet = newVec(EndSort); // Set of sorts to perform
+  set sortSet = 0;
 
   sort[MinSort]         =  minSort;
   sort[BubbleSort]      =  bubbleSort;
@@ -107,52 +107,48 @@ int main(int argc, char **argv) {
     switch (c) {
     case 'A': {
       for (sorts s = MinSort; s < EndSort; s += 1) {
-        setBit(sortSet, s);
+        sortSet = insertSet(s, sortSet);
       }
       break;
     }
-    case 'u': {
-      setBit(sortSet, EndSort);
-      break;
-    }
     case 'm': {
-      setBit(sortSet, MinSort);
+      sortSet = insertSet(MinSort, sortSet);
       break;
     }
     case 'b': {
-      setBit(sortSet, BubbleSort);
+      sortSet = insertSet(BubbleSort, sortSet);
       break;
     }
     case 'S': {
-      setBit(sortSet, ShakerSort);
+      sortSet = insertSet(ShakerSort, sortSet);
       break;
     }
     case 'B': {
-      setBit(sortSet, BinaryInsertion);
+      sortSet = insertSet(BinaryInsertion, sortSet);
       break;
     }
     case 'i': {
-      setBit(sortSet, InsertionSort);
+      sortSet = insertSet(InsertionSort, sortSet);
       break;
     }
     case 's': {
-      setBit(sortSet, ShellSort);
+      sortSet = insertSet(ShellSort, sortSet);
       break;
     }
     case 'q': {
-      setBit(sortSet, QuickSort);
+      sortSet = insertSet(QuickSort, sortSet);
       break;
     }
     case 'M': {
-      setBit(sortSet, MergeSort);
+      sortSet = insertSet(MergeSort, sortSet);
       break;
     }
     case 'Q': {
-      setBit(sortSet, QSI);
+      sortSet = insertSet(QSI, sortSet);
       break;
     }
     case 'h': {
-      setBit(sortSet, HeapSort);
+      sortSet = insertSet(HeapSort, sortSet);
       break;
     }
     case 'z': {
@@ -183,7 +179,7 @@ int main(int argc, char **argv) {
 
   // Spawn a process for each sort
   for (sorts s = MinSort; s < EndSort; s += 1) {
-    if (valBit(sortSet, s) == 1) {
+    if (memberSet(s, sortSet)) {
       t = s;
       if ((pid = fork()) == 0) {
         break;
@@ -209,13 +205,13 @@ int main(int argc, char **argv) {
   } else {
     // Reap what we have sown
     for (sorts s = MinSort; s < EndSort; s += 1) {
-      if (valBit(sortSet, s) == 1) {
+      if (memberSet(s, sortSet)) {
         wait((int *)0);
       }
     }
   }
   sem_delete(sem);
-  free(a); delVec(sortSet);
+  free(a);
 
   return 0;
 }

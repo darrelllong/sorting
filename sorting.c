@@ -7,9 +7,11 @@
 #include <sys/ipc.h>
 #include <unistd.h>
 
+#include "bv.h"
+#include "semwrapper.h"
+
 #include "binsert.h"
 #include "bubblesort.h"
-#include "bv.h"
 #include "heapsort.h"
 #include "insertionsort.h"
 #include "mergesort.h"
@@ -17,14 +19,12 @@
 #include "quicksort.h"
 #include "shakersort.h"
 #include "shellsort.h"
-#include "stack.h"
-#include "semwrapper.h"
 
 #define RANDOM random
 #define SRANDOM srandom
 
 #ifndef MASK
-#define MASK 0x00ffffff
+#define MASK 0x1fffffff
 #endif
 
 typedef enum sorts {
@@ -75,8 +75,11 @@ void printArray(uint32_t a[], int length) {
 #define OPTIONS "-uAmbSBisqQMhzp:r:n:"
 
 static char *names[] = { "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
-                         "Binary Insertion Sort", "Shell Sort", "Quick Sort",
+                         "Binary Insertion Sort", "Shell Sort", "Quick Sort", 
                          "Quick Sort (Iterative)", "Merge Sort", "Heap Sort" };
+
+static void (*sort[EndSort])();
+
 
 int main(int argc, char **argv) {
   int c = 0;
@@ -87,8 +90,18 @@ int main(int argc, char **argv) {
 
   bitV *sortSet = newVec(EndSort); // Set of sorts to perform
 
-  int sem = sem_create(ftok("/tmp/ddel", 0xc0c0d00d));
+  sort[MinSort]         =  minSort;
+  sort[BubbleSort]      =  bubbleSort;
+  sort[ShakerSort]      =  shakerSort;
+  sort[InsertionSort]   =  insertionSort;
+  sort[BinaryInsertion] =  binaryInsertionSort;
+  sort[ShellSort]       =  shellSort;
+  sort[QuickSort]       =  qSort;
+  sort[QSI]             =  qSortI;
+  sort[MergeSort]       =  mergeSort;
+  sort[HeapSort]        =  heapSort;
 
+  int sem = sem_create(ftok("/tmp/ddel", 0xc0c0babe));
 
   while ((c = getopt(argc, argv, OPTIONS)) != -1) {
     switch (c) {
@@ -165,16 +178,10 @@ int main(int argc, char **argv) {
 
   a = calloc(count, sizeof(uint32_t));
 
-  if (valBit(sortSet, EndSort) == 1) {
-    SRANDOM(seed); // Where shall we start?
-    fillArray(a, count); // Random numbers
-    printf("Unsorted\n");
-    printArray(a, count);
-  }
-
   int pid;
   sorts t;
 
+  // Spawn a process for each sort
   for (sorts s = MinSort; s < EndSort; s += 1) {
     if (valBit(sortSet, s) == 1) {
       t = s;
@@ -186,32 +193,19 @@ int main(int argc, char **argv) {
 
   if (pid == 0) {
     compares = 0; moves = 0; // Reset statistics
-    SRANDOM(seed); // Where shall we start?
-    fillArray(a, count); // Random numbers
+    SRANDOM(seed);           // Starting position
 
-    switch (t) {
-    case MinSort:         { minSort(a, count); break; }
-    case BubbleSort:      { bubbleSort(a, count); break; }
-    case ShakerSort:      { shakerSort(a, count); break; }
-    case InsertionSort:   { insertionSort(a, count); break; }
-    case BinaryInsertion: { binaryInsertionSort(a, count); break; }
-    case ShellSort:       { shellSort(a, count); break; }
-    case QuickSort:       { qSort(a, count); break; }
-    case QSI:             { qSortI(a, count); break; }
-    case MergeSort:       { mergeSort(a, count); break; }
-    case HeapSort:        { heapSort(a, count); break; }
-    case EndSort:         { break; } // Nothing
-    }
+    fillArray(a, count); // Load the array
 
-    // P the semaphore
-    sem_wait(sem);
+    sort[t](a, count); // Perform the sort
+
+    sem_wait(sem); // P the semaphore
     printf("%s\n", names[t]); fflush(stdout);
 
     printf("%" PRIu32 " elements %" PRIu64 " moves %" PRIu64 " compares\n",
         count, moves, compares); fflush(stdout);
     printArray(a, count);
-    // V the semaphore
-    sem_signal(sem);
+    sem_signal(sem); // V the semaphore
   } else {
     for (sorts s = MinSort; s < EndSort; s += 1) {
       if (valBit(sortSet, s) == 1) {
@@ -219,8 +213,7 @@ int main(int argc, char **argv) {
       }
     }
   }
-  free(a);
-  delVec(sortSet);
+  free(a); delVec(sortSet);
 
   return 0;
 }

@@ -207,6 +207,7 @@ int main(int argc, char **argv) {
     printArray(a, count);
     sem_signal(sem); // V the semaphore
   } else {
+    // Reap what we have sown
     for (sorts s = MinSort; s < EndSort; s += 1) {
       if (valBit(sortSet, s) == 1) {
         wait((int *)0);

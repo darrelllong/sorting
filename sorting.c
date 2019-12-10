@@ -213,6 +213,7 @@ int main(int argc, char **argv) {
       }
     }
   }
+  sem_delete(sem);
   free(a); delVec(sortSet);
 
   return 0;

@@ -5,10 +5,6 @@
 
 //
 // Returns the identifier of one initialized semaphore.
-// The semaphore is generated using a key.
-// The key can be generated using ftok() using a pathname.
-//
-// key:   The key to create a set of semaphores with.
 //
 int sem_create(void) {
   int semid = semget(IPC_PRIVATE, 1, 0600);

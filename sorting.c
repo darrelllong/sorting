@@ -209,8 +209,8 @@ int main(int argc, char **argv) {
         wait((int *)0);
       }
     }
+    sem_delete(sem); // Let the parent delete it once all children are dead
   }
-  sem_delete(sem);
   free(a);
 
   return 0;

@@ -3,8 +3,6 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 
-#define FLAGS   SEM_R|SEM_A|(SEM_R >> 3)|(SEM_A >> 3)
-
 //
 // Returns the identifier of one initialized semaphore.
 // The semaphore is generated using a key.
@@ -13,7 +11,7 @@
 // key:   The key to create a set of semaphores with.
 //
 int sem_create(key_t key) {
-  int semid = semget(key, 1, IPC_CREAT|0777);
+  int semid = semget(key, 1, IPC_CREAT);
   if (semid < 0) {
     perror("sem_create:semget");
     return -1;

@@ -63,12 +63,13 @@ void printArray(uint32_t a[], int length) {
   for (int i = 0; i < length && i < printMax; i += 1) {
     printf("%10d", a[i]);
     if ((i + 1) % WIDTH == 0) {
-      printf("\n");
+      putchar('\n');
     }
   }
   if (length % WIDTH != 0) {
-    printf("\n");
+    putchar('\n');
   }
+  putchar('\n');
   return;
 }
 

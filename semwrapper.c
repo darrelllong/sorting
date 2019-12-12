@@ -15,7 +15,7 @@ int sem_create(void) {
     return -1;
   }
 
-  union semun arg = { 1 };
+  union semun arg = { .val = 1 };
   if (semctl(semid, 0, SETVAL, arg) < 0) {
     perror("semcreate:semctl");
     return -1;
@@ -30,7 +30,7 @@ int sem_create(void) {
 // semid: The semaphore to remove.
 //
 int sem_delete(int semid) {
-  union semun arg = { 0 };
+  union semun arg = { .val = 0 };
   return semctl(semid, 0, IPC_RMID, arg);
 }
 

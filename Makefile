@@ -4,6 +4,11 @@ CC=cc
 OBJS=sorting.o bubblesort.o minsort.o insertionsort.o quicksort.o \
 mergesort.o shellsort.o heapsort.o stack.o binsert.o shakersort.o semwrapper.o
 
+UNAME=$(shell uname -s)
+ifeq ($(UNAME), Linux)
+	CFLAGS+=-DLAME
+endif
+
 sorting	: Makefile $(OBJS)
 	$(CC) -o sorting $(OBJS)
 

@@ -6,19 +6,21 @@
 #include "semwrapper.h"
 
 //
-// Definition of union used by semctl()
+// Definition of union used by semctl() if on Linux.
 //
 // val:   Value for SETVAL
 // buf:   Buffer for IPC_STAT, IPC_SET
 // array: Array for GETALL, SETALL
 // __buf: Buffer for IPC_INFO (Linux-specific)
 //
+#ifdef LAME
 typedef union semun {
   int val;
   struct semid_ds *buf;
   unsigned short *array;
   struct seminfo *_buf;
 } semun;
+#endif
 
 //
 // Returns the identifier of one initialized semaphore.

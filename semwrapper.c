@@ -11,7 +11,7 @@
 // val:   Value for SETVAL
 // buf:   Buffer for IPC_STAT, IPC_SET
 // array: Array for GETALL, SETALL
-// __buf: Buffer for IPC_INFO (Linux-specific)
+// _buf: Buffer for IPC_INFO (Linux-specific)
 //
 #ifdef LAME
 union semun {
@@ -34,7 +34,7 @@ int sem_create(void) {
 
   union semun arg = { .val = 1 };
   if (semctl(semid, 0, SETVAL, arg) < 0) {
-    perror("semcreate:semctl");
+    perror("sem_create:semctl");
     return -1;
   }
 

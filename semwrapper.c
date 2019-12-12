@@ -14,12 +14,12 @@
 // __buf: Buffer for IPC_INFO (Linux-specific)
 //
 #ifdef LAME
-typedef union semun {
+union semun {
   int val;
   struct semid_ds *buf;
   unsigned short *array;
   struct seminfo *_buf;
-} semun;
+};
 #endif
 
 //
@@ -32,7 +32,7 @@ int sem_create(void) {
     return -1;
   }
 
-  semun arg = { .val = 1 };
+  union semun arg = { .val = 1 };
   if (semctl(semid, 0, SETVAL, arg) < 0) {
     perror("semcreate:semctl");
     return -1;
@@ -47,7 +47,7 @@ int sem_create(void) {
 // semid: The semaphore to remove.
 //
 int sem_delete(int semid) {
-  semun arg = { .val = 0 };
+  union semun arg = { .val = 0 };
   return semctl(semid, 0, IPC_RMID, arg);
 }
 

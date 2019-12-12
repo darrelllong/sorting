@@ -6,6 +6,21 @@
 #include "semwrapper.h"
 
 //
+// Definition of union used by semctl()
+//
+// val:   Value for SETVAL
+// buf:   Buffer for IPC_STAT, IPC_SET
+// array: Array for GETALL, SETALL
+// __buf: Buffer for IPC_INFO (Linux-specific)
+//
+typedef union semun {
+  int val;
+  struct semid_ds *buf;
+  unsigned short *array;
+  struct seminfo *_buf;
+} semun;
+
+//
 // Returns the identifier of one initialized semaphore.
 //
 int sem_create(void) {
@@ -15,7 +30,7 @@ int sem_create(void) {
     return -1;
   }
 
-  union semun arg = { .val = 1 };
+  semun arg = { .val = 1 };
   if (semctl(semid, 0, SETVAL, arg) < 0) {
     perror("semcreate:semctl");
     return -1;
@@ -30,7 +45,7 @@ int sem_create(void) {
 // semid: The semaphore to remove.
 //
 int sem_delete(int semid) {
-  union semun arg = { .val = 0 };
+  semun arg = { .val = 0 };
   return semctl(semid, 0, IPC_RMID, arg);
 }
 

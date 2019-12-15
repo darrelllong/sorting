@@ -3,7 +3,7 @@
 #include <sys/ipc.h>
 #include <sys/sem.h>
 
-#include "semwrapper.h"
+#include "semaphore.h"
 
 //
 // Definition of union used by semctl() if on Linux.

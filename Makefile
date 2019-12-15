@@ -2,7 +2,7 @@ MASK=0x00ffffff
 CFLAGS=-Wall -Werror -Wextra -pedantic -Ofast
 CC=clang
 OBJS=sorting.o bubblesort.o minsort.o insertionsort.o quicksort.o \
-mergesort.o shellsort.o heapsort.o stack.o binsert.o shakersort.o semwrapper.o
+mergesort.o shellsort.o heapsort.o stack.o binsert.o shakersort.o semaphore.o
 
 UNAME=$(shell uname -s)
 ifeq ($(UNAME), Linux)

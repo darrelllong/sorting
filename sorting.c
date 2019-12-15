@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 #include "sets.h"
-#include "semwrapper.h"
+#include "semaphore.h"
 
 #include "binsert.h"
 #include "bubblesort.h"

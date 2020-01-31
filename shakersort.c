@@ -1,6 +1,6 @@
+#include "shakersort.h"
 #include <stdbool.h>
 #include <stdint.h>
-#include "shakersort.h"
 
 void shakerSort(uint32_t a[], int length) {
   bool swapped;
@@ -17,13 +17,15 @@ void shakerSort(uint32_t a[], int length) {
     }
     high -= 1; // Last is the largest, so move the bottom up
 
-    for (int i = high; i > low; i -= 1) { // Move lightest up
-      if (++compares && a[i - 1] > a[i]) {
-        SWAP(a[i - 1], a[i]);
-        swapped = true;
+    if (swapped) {
+      for (int i = high; i > low; i -= 1) { // Move lightest up
+        if (++compares && a[i - 1] > a[i]) {
+          SWAP(a[i - 1], a[i]);
+          swapped = true;
+        }
       }
+      low += 1; // First is the smallest, so move the top down
     }
-    low += 1; // First is the smallest, so move the top down
 
   } while (swapped);
   return;

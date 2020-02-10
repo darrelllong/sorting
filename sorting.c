@@ -2,13 +2,13 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ipc.h>
 #include <sys/sem.h>
 #include <sys/wait.h>
-#include <sys/ipc.h>
 #include <unistd.h>
 
-#include "sets.h"
 #include "semaphore.h"
+#include "sets.h"
 
 #include "binsert.h"
 #include "bubblesort.h"
@@ -27,20 +27,9 @@
 #define MASK 0x1fffffff
 #endif
 
-typedef enum sorts {
-  MinSort,
-  BubbleSort,
-  ShakerSort,
-  InsertionSort,
-  BinaryInsertion,
-  ShellSort,
-  QuickSort,
-  QSI,
-  MergeSort,
-  HeapSort,
-  EndSort
+typedef enum sorts { MinSort, BubbleSort, ShakerSort, InsertionSort, BinaryInsertion,
+  ShellSort, QuickSort, QSI, MergeSort, HeapSort, EndSort
 } sorts;
-
 
 #define MAX 100
 #define SEED 8062022
@@ -73,14 +62,13 @@ void printArray(uint32_t a[], int length) {
   return;
 }
 
-#define OPTIONS "-AmbSBisqQMhzp:r:n:"
+#define OPTIONS "-AmbSBisqQMHhzp:r:n:"
 
-static char *names[] = { "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
-                         "Binary Insertion Sort", "Shell Sort", "Quick Sort", 
-                         "Quick Sort (Iterative)", "Merge Sort", "Heap Sort" };
+static char *names[] = {"Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
+                        "Binary Insertion Sort", "Shell Sort", "Quick Sort",
+                        "Quick Sort (Iterative)", "Merge Sort", "Heap Sort"};
 
 static void (*sort[EndSort])();
-
 
 int main(int argc, char **argv) {
   int c = 0;
@@ -91,16 +79,16 @@ int main(int argc, char **argv) {
 
   set sortSet = 0;
 
-  sort[MinSort]         =  minSort;
-  sort[BubbleSort]      =  bubbleSort;
-  sort[ShakerSort]      =  shakerSort;
-  sort[InsertionSort]   =  insertionSort;
-  sort[BinaryInsertion] =  binaryInsertionSort;
-  sort[ShellSort]       =  shellSort;
-  sort[QuickSort]       =  qSort;
-  sort[QSI]             =  qSortI;
-  sort[MergeSort]       =  mergeSort;
-  sort[HeapSort]        =  heapSort;
+  sort[MinSort] = minSort;
+  sort[BubbleSort] = bubbleSort;
+  sort[ShakerSort] = shakerSort;
+  sort[InsertionSort] = insertionSort;
+  sort[BinaryInsertion] = binaryInsertionSort;
+  sort[ShellSort] = shellSort;
+  sort[QuickSort] = qSort;
+  sort[QSI] = qSortI;
+  sort[MergeSort] = mergeSort;
+  sort[HeapSort] = heapSort;
 
   int sem = sem_create();
 
@@ -152,6 +140,23 @@ int main(int argc, char **argv) {
       sortSet = insertSet(HeapSort, sortSet);
       break;
     }
+    case 'H': {
+      printf("Usage: sorting -options\n" 
+             "\t-n <length>\n"
+             "\t-p <number to print>\n"
+             "\t-A All sorts\n"
+             "\t-m Minimum sort\n"
+             "\t-b Bubble sort\n"
+             "\t-B Binary insertion sort\n"
+             "\t-M Merge Sort\n"
+             "\t-q QuickSort (recursive)\n"
+             "\t-Q QuickSort (iterative)\n"
+             "\t-h HeapSort\n"
+             "\t-i Insertion sort\n"
+             "\t-s Shell sort\n"
+             "\t-S Shaker sort\n");
+      break;
+    }
     case 'z': {
       sortedData = true;
       break;
@@ -189,18 +194,21 @@ int main(int argc, char **argv) {
   }
 
   if (pid == 0) {
-    compares = 0; moves = 0; // Reset statistics
-    SRANDOM(seed);           // Starting position
+    compares = 0;
+    moves = 0;     // Reset statistics
+    SRANDOM(seed); // Starting position
 
     fillArray(a, count); // Load the array
 
     sort[t](a, count); // Perform the sort
 
     sem_wait(sem); // P the semaphore
-    printf("%s\n", names[t]); fflush(stdout);
+    printf("%s\n", names[t]);
+    fflush(stdout);
 
     printf("%" PRIu32 " elements %" PRIu64 " moves %" PRIu64 " compares\n",
-        count, moves, compares); fflush(stdout);
+           count, moves, compares);
+    fflush(stdout);
     printArray(a, count);
     sem_signal(sem); // V the semaphore
   } else {

@@ -2,8 +2,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-void merge(uint32_t values[], uint32_t left[], uint32_t right[], int middle,
-    int total) {
+void merge(uint32_t values[], uint32_t left[], uint32_t right[], int middle, int total) {
   int left_size = middle, right_size = total - middle;
   int i = 0, j = 0;
 

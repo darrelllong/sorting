@@ -1,4 +1,3 @@
-MASK=0x00ffffff
 CFLAGS=-Wall -Werror -Wextra -pedantic -Ofast
 CC=clang
 OBJS=sorting.o bubblesort.o minsort.o insertionsort.o quicksort.o \
@@ -13,7 +12,7 @@ sorting	: Makefile $(OBJS)
 	$(CC) -o sorting $(OBJS)
 
 sorting.o	:	sorting.c
-	$(CC) $(CFLAGS) -DMASK=$(MASK) -c sorting.c
+	$(CC) $(CFLAGS) -c sorting.c
 
 clean	:
 	rm -rf $(OBJS) sorting infer-out

@@ -24,7 +24,7 @@
 #define SRANDOM srandom
 
 #ifndef MASK
-#define MASK 0x1fffffff
+#define MASK (1 << 30) - 1
 #endif
 
 typedef enum sorts { MinSort, BubbleSort, ShakerSort, InsertionSort, BinaryInsertion,

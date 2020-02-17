@@ -1,6 +1,6 @@
 CFLAGS=-Wall -Werror -Wextra -pedantic -Ofast
 CC=clang
-OBJS=sorting.o bubblesort.o minsort.o insertionsort.o quicksort.o \
+OBJS=sorting.o bubblesort.o minsort.o insertionsort.o quicksort.o schlubsort.o \
 mergesort.o shellsort.o heapsort.o stack.o binsert.o shakersort.o semaphore.o
 
 UNAME=$(shell uname -s)

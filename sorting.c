@@ -17,6 +17,7 @@
 #include "mergesort.h"
 #include "minsort.h"
 #include "quicksort.h"
+#include "schlubsort.h"
 #include "shakersort.h"
 #include "shellsort.h"
 
@@ -27,8 +28,9 @@
 #define MASK (1 << 30) - 1
 #endif
 
-typedef enum sorts { MinSort, BubbleSort, ShakerSort, InsertionSort, BinaryInsertion,
-  ShellSort, QuickSort, QSI, MergeSort, HeapSort, EndSort
+typedef enum sorts {
+  MinSort, BubbleSort, ShakerSort, InsertionSort, BinaryInsertion, ShellSort,
+  QuickSort, QSI, MergeSort, HeapSort, SchlubSort, EndSort
 } sorts;
 
 #define MAX 100
@@ -50,7 +52,7 @@ void fillArray(uint32_t a[], int length) {
 
 void printArray(uint32_t a[], int length) {
   for (int i = 0; i < length && i < printMax; i += 1) {
-    printf("%10d", a[i]);
+    printf("%12d", a[i]);
     if ((i + 1) % WIDTH == 0) {
       putchar('\n');
     }
@@ -62,11 +64,13 @@ void printArray(uint32_t a[], int length) {
   return;
 }
 
-#define OPTIONS "-AmbSBisqQMHhzp:r:n:"
+#define OPTIONS "-AmbSBisqQMHhlzp:r:n:"
 
-static char *names[] = {"Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
-                        "Binary Insertion Sort", "Shell Sort", "Quick Sort",
-                        "Quick Sort (Iterative)", "Merge Sort", "Heap Sort"};
+static char *names[] = {
+  "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
+  "Binary Insertion Sort", "Shell Sort", "Quick Sort",
+  "Quick Sort (Iterative)", "Merge Sort", "Heap Sort", "Schlub Sort"
+};
 
 static void (*sort[EndSort])();
 
@@ -89,6 +93,7 @@ int main(int argc, char **argv) {
   sort[QSI] = qSortI;
   sort[MergeSort] = mergeSort;
   sort[HeapSort] = heapSort;
+  sort[SchlubSort] = schlubSort;
 
   int sem = sem_create();
 
@@ -140,8 +145,12 @@ int main(int argc, char **argv) {
       sortSet = insertSet(HeapSort, sortSet);
       break;
     }
+    case 'l': {
+      sortSet = insertSet(SchlubSort, sortSet);
+      break;
+    }
     case 'H': {
-      printf("Usage: sorting -options\n" 
+      printf("Usage: sorting -options\n"
              "\t-n <length>\n"
              "\t-p <number to print>\n"
              "\t-A All sorts\n"
@@ -152,6 +161,7 @@ int main(int argc, char **argv) {
              "\t-q QuickSort (recursive)\n"
              "\t-Q QuickSort (iterative)\n"
              "\t-h HeapSort\n"
+             "\t-l SchlubSort\n"
              "\t-i Insertion sort\n"
              "\t-s Shell sort\n"
              "\t-S Shaker sort\n");

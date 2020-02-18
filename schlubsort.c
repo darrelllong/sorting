@@ -31,7 +31,7 @@ void schlubSort(uint32_t arr[], uint32_t length) {
     do {
       swapped = false;
 
-      for (uint32_t j = passes * gap; j < length; j += 1) {
+      for (uint32_t j = gap; j < length; j += gap) {
         if (++compares && arr[j - gap] > arr[j]) {
           SWAP(arr[j], arr[j - gap]);
           swapped = true;

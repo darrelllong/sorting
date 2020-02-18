@@ -169,6 +169,7 @@ int main(int argc, char **argv) {
              "\t-Q QuickSort (iterative)\n"
              "\t-h HeapSort\n"
              "\t-l SchlubSort\n"
+             "\t-t TiniklingSort\n"
              "\t-i Insertion sort\n"
              "\t-s Shell sort\n"
              "\t-S Shaker sort\n");

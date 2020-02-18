@@ -27,12 +27,12 @@ void schlubSort(uint32_t arr[], uint32_t length) {
     
   for (uint8_t i = 0; i < GAPS; i += 1) {
     bool swapped;
-    uint32_t gap = gaps[i];
+    uint32_t gap = gaps[i], passes = 1;
 
     do {
       swapped = false;
 
-      for (uint32_t j = gap; j < length; j += gap) {
+      for (uint32_t j = passes * gap; j < length; j += 1, passes += 1) {
         if (++compares && arr[j - gap] > arr[j]) {
           SWAP(arr[j], arr[j - gap]);
           swapped = true;

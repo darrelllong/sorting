@@ -1,7 +1,8 @@
 CFLAGS=-Wall -Werror -Wextra -pedantic -Ofast
 CC=clang
 OBJS=sorting.o bubblesort.o minsort.o insertionsort.o quicksort.o schlubsort.o \
-mergesort.o shellsort.o heapsort.o stack.o binsert.o shakersort.o semaphore.o
+mergesort.o shellsort.o heapsort.o stack.o binsert.o shakersort.o semaphore.o \
+tiniklingsort.o
 
 UNAME=$(shell uname -s)
 ifeq ($(UNAME), Linux)

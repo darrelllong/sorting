@@ -20,6 +20,7 @@
 #include "schlubsort.h"
 #include "shakersort.h"
 #include "shellsort.h"
+#include "tiniklingsort.h"
 
 #define RANDOM random
 #define SRANDOM srandom
@@ -30,7 +31,7 @@
 
 typedef enum sorts {
   MinSort, BubbleSort, ShakerSort, InsertionSort, BinaryInsertion, ShellSort,
-  QuickSort, QSI, MergeSort, HeapSort, SchlubSort, EndSort
+  QuickSort, QSI, MergeSort, HeapSort, SchlubSort, TiniklingSort, EndSort
 } sorts;
 
 #define MAX 100
@@ -64,12 +65,13 @@ void printArray(uint32_t a[], int length) {
   return;
 }
 
-#define OPTIONS "-AmbSBisqQMHhlzp:r:n:"
+#define OPTIONS "-AmbSBisqQMHhltzp:r:n:"
 
 static char *names[] = {
   "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
   "Binary Insertion Sort", "Shell Sort", "Quick Sort",
-  "Quick Sort (Iterative)", "Merge Sort", "Heap Sort", "Schlub Sort"
+  "Quick Sort (Iterative)", "Merge Sort", "Heap Sort", "Schlub Sort",
+  "Tinikling Sort"
 };
 
 static void (*sort[EndSort])();
@@ -94,6 +96,7 @@ int main(int argc, char **argv) {
   sort[MergeSort] = mergeSort;
   sort[HeapSort] = heapSort;
   sort[SchlubSort] = schlubSort;
+  sort[TiniklingSort] = tiniklingSort;
 
   int sem = sem_create();
 
@@ -147,6 +150,10 @@ int main(int argc, char **argv) {
     }
     case 'l': {
       sortSet = insertSet(SchlubSort, sortSet);
+      break;
+    }
+    case 't': {
+      sortSet = insertSet(TiniklingSort, sortSet);
       break;
     }
     case 'H': {

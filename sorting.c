@@ -26,7 +26,7 @@
 #define SRANDOM srandom
 
 #ifndef MASK
-#define MASK (1 << 30) - 1
+#define MASK ((1 << 30) - 1)
 #endif
 
 typedef enum sorts {

@@ -5,9 +5,9 @@ void binaryInsertionSort(uint32_t a[], int length) {
   for (int i = 1; i < length; i += 1) {
     int left = 0, right = i - 1;
     uint32_t temporary = a[i];
-    while (++compares && right >= left) { // Binary search for the correct position
+    while (right >= left) { // Binary search for the correct position
       int middle = (left + right) / 2;
-      if (temporary < a[middle]) {
+      if (++compares && temporary < a[middle]) {
         right = middle - 1;
       } else {
         left = middle + 1;

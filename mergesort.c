@@ -1,4 +1,5 @@
 #include "mergesort.h"
+#include <assert.h>
 #include <stdint.h>
 #include <stdlib.h>
 
@@ -31,6 +32,8 @@ void mergeSort(uint32_t values[], int n) {
     int middle = n / 2;
     uint32_t *left  = (uint32_t *) malloc(middle * sizeof(uint32_t));
     uint32_t *right = (uint32_t *) malloc((n - middle) * sizeof(uint32_t));
+
+    assert(left && right);
 
     for (int i = 0; i < middle; i += 1) // Left side
     {

@@ -21,7 +21,6 @@ void shakerSort(uint32_t a[], int length) {
       for (int i = high; i > low; i -= 1) { // Move lightest up
         if (++compares && a[i - 1] > a[i]) {
           SWAP(a[i - 1], a[i]);
-          swapped = true;
         }
       }
       low += 1; // First is the smallest, so move the top down

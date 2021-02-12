@@ -5,7 +5,7 @@ if [ ! -e sorting ]
 then
     make
 fi
-for s in b
+for s in b B i S
 do
     touch sort-$s.data
     for ((i = 1; i < SMALL; i = i * 2))
@@ -17,7 +17,7 @@ do
 	awk '{ print $1, $2}' < sort-$s.data > sort-$s.mov
 	rm sort-$s.data
 done
-for s in s q h
+for s in s q h l M
 do
     touch sort-$s.data
     for ((i = 1; i < LARGE; i = i * 2))
@@ -29,38 +29,83 @@ do
 	awk '{ print $1, $2}' < sort-$s.data > sort-$s.mov
 	rm sort-$s.data
 done
-gnuplot << XXX
+
+gnuplot <<XXX
 set xzeroaxis
 set yzeroaxis
 set tics out nomirror
 set tics scale 0.8
 set key out
 set terminal png
-set output "sort-cmp.png"
+set output "sort-cmp-sm.png"
+set xlabel "Elements"
+set ylabel "Comparisons"
+set xrange [0:$SMALL]
+set logscale x
+plot "sort-s.cmp" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
+"sort-S.cmp" smooth sbezier lw 3 lc rgb "blue" title "Shakersort", \
+"sort-l.cmp" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
+"sort-i.cmp" smooth sbezier lw 3 lc rgb "blue" title "Insertion", \
+"sort-b.cmp" smooth sbezier lw 3 lc rgb "green" title "Bubblesort", \
+"sort-B.cmp" smooth sbezier lw 3 lc rgb "green" title "Binary Insertion"
+XXX
+
+gnuplot <<XXX
+set xzeroaxis
+set yzeroaxis
+set tics out nomirror
+set tics scale 0.8
+set key out
+set terminal png
+set output "sort-cmp-lg.png"
 set xlabel "Elements"
 set ylabel "Comparisons"
 set xrange [0:$LARGE]
 set logscale x
 plot "sort-s.cmp" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
+"sort-l.cmp" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
+"sort-M.cmp" smooth sbezier lw 3 lc rgb "blue" title "Mergesort", \
 "sort-q.cmp" smooth sbezier lw 3 lc rgb "blue" title "Quicksort", \
-"sort-b.cmp" smooth sbezier lw 3 lc rgb "green" title "Bubblesort", \
 "sort-h.cmp" smooth sbezier lw 3 lc rgb "orange" title "Heapsort"
 XXX
-gnuplot << XXX
+
+gnuplot <<XXX
 set xzeroaxis
 set yzeroaxis
 set tics out nomirror
 set tics scale 0.8
 set key out
 set terminal png
-set output "sort-mov.png"
+set output "sort-mov-sm.png"
+set xlabel "Elements"
+set ylabel "Moves"
+set xrange [0:$SMALL]
+set logscale x
+plot "sort-s.mov" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
+"sort-S.mov" smooth sbezier lw 3 lc rgb "blue" title "Shakersort", \
+"sort-l.mov" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
+"sort-i.mov" smooth sbezier lw 3 lc rgb "blue" title "Insertion", \
+"sort-b.mov" smooth sbezier lw 3 lc rgb "green" title "Bubblesort", \
+"sort-B.mov" smooth sbezier lw 3 lc rgb "green" title "Binary Insertion"
+XXX
+
+gnuplot <<XXX
+set xzeroaxis
+set yzeroaxis
+set tics out nomirror
+set tics scale 0.8
+set key out
+set terminal png
+set output "sort-mov-lg.png"
 set xlabel "Elements"
 set ylabel "Moves"
 set xrange [0:$LARGE]
 set logscale x
 plot "sort-s.mov" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
+"sort-l.mov" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
+"sort-M.mov" smooth sbezier lw 3 lc rgb "blue" title "Mergesort", \
 "sort-q.mov" smooth sbezier lw 3 lc rgb "blue" title "Quicksort", \
-"sort-b.mov" smooth sbezier lw 3 lc rgb "green" title "Bubblesort", \
 "sort-h.mov" smooth sbezier lw 3 lc rgb "orange" title "Heapsort"
 XXX
+
 rm -f sort-?.{cmp,mov}

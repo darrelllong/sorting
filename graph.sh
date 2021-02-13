@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-SMALL=15000
-LARGE=1000000
+SMALL=200000
+LARGE=10000000
 if [ ! -e sorting ]
 then
     make
@@ -40,14 +40,12 @@ set terminal png
 set output "sort-cmp-sm.png"
 set xlabel "Elements"
 set ylabel "Comparisons"
-set xrange [0:$SMALL]
+set xrange [1:$SMALL]
 set logscale x
-plot "sort-s.cmp" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
-"sort-S.cmp" smooth sbezier lw 3 lc rgb "blue" title "Shakersort", \
-"sort-l.cmp" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
-"sort-i.cmp" smooth sbezier lw 3 lc rgb "blue" title "Insertion", \
+plot "sort-S.cmp" smooth sbezier lw 3 lc rgb "blue" title "Shakersort", \
+"sort-i.cmp" smooth sbezier lw 3 lc rgb "red" title "Insertion", \
 "sort-b.cmp" smooth sbezier lw 3 lc rgb "green" title "Bubblesort", \
-"sort-B.cmp" smooth sbezier lw 3 lc rgb "green" title "Binary Insertion"
+"sort-B.cmp" smooth sbezier lw 3 lc rgb "orange" title "Binary Insertion"
 XXX
 
 gnuplot <<XXX
@@ -64,8 +62,8 @@ set xrange [0:$LARGE]
 set logscale x
 plot "sort-s.cmp" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
 "sort-l.cmp" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
-"sort-M.cmp" smooth sbezier lw 3 lc rgb "blue" title "Mergesort", \
-"sort-q.cmp" smooth sbezier lw 3 lc rgb "blue" title "Quicksort", \
+"sort-M.cmp" smooth sbezier lw 3 lc rgb "green" title "Mergesort", \
+"sort-q.cmp" smooth sbezier lw 3 lc rgb "violet" title "Quicksort", \
 "sort-h.cmp" smooth sbezier lw 3 lc rgb "orange" title "Heapsort"
 XXX
 
@@ -79,14 +77,12 @@ set terminal png
 set output "sort-mov-sm.png"
 set xlabel "Elements"
 set ylabel "Moves"
-set xrange [0:$SMALL]
+set xrange [1:$SMALL]
 set logscale x
-plot "sort-s.mov" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
-"sort-S.mov" smooth sbezier lw 3 lc rgb "blue" title "Shakersort", \
-"sort-l.mov" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
-"sort-i.mov" smooth sbezier lw 3 lc rgb "blue" title "Insertion", \
+plot "sort-S.mov" smooth sbezier lw 3 lc rgb "blue" title "Shakersort", \
+"sort-i.mov" smooth sbezier lw 3 lc rgb "red" title "Insertion", \
 "sort-b.mov" smooth sbezier lw 3 lc rgb "green" title "Bubblesort", \
-"sort-B.mov" smooth sbezier lw 3 lc rgb "green" title "Binary Insertion"
+"sort-B.mov" smooth sbezier lw 3 lc rgb "orange" title "Binary Insertion"
 XXX
 
 gnuplot <<XXX
@@ -103,8 +99,8 @@ set xrange [0:$LARGE]
 set logscale x
 plot "sort-s.mov" smooth sbezier lw 3 lc rgb "red" title "Shellsort", \
 "sort-l.mov" smooth sbezier lw 3 lc rgb "blue" title "Schlubsort", \
-"sort-M.mov" smooth sbezier lw 3 lc rgb "blue" title "Mergesort", \
-"sort-q.mov" smooth sbezier lw 3 lc rgb "blue" title "Quicksort", \
+"sort-M.mov" smooth sbezier lw 3 lc rgb "green" title "Mergesort", \
+"sort-q.mov" smooth sbezier lw 3 lc rgb "violet" title "Quicksort", \
 "sort-h.mov" smooth sbezier lw 3 lc rgb "orange" title "Heapsort"
 XXX
 

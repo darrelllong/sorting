@@ -16,6 +16,6 @@ sorting.o	:	sorting.c
 	$(CC) $(CFLAGS) -c sorting.c
 
 clean	:
-	rm -rf $(OBJS) sorting infer-out
+	rm -rf $(OBJS) sorting infer-out *.png
 infer	:
 	make clean; infer-capture -- make; infer-analyze -- make

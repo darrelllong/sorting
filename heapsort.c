@@ -18,15 +18,17 @@ void fixHeap(uint32_t *seq, uint32_t first, uint32_t last) {
   uint32_t father = first, great;
   bool found = false;
   great = maxChild(seq, father, last);
+  uint32_t root = seq[first - 1]; moves += 1;
   while (++compares && father <= last / 2 && !found) {
-    if (++compares && seq[father - 1] < seq[great - 1]) {
-      SWAP(seq[father - 1], seq[great - 1]);
+    if (++compares && root < seq[great - 1]) {
+      seq[father - 1] = seq[great - 1]; moves += 1;
       father = great;
       great = maxChild(seq, father, last);
     } else {
       found = true;
     }
   }
+  seq[father - 1] = root; moves += 1;
   return;
 }
 

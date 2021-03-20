@@ -17,6 +17,7 @@
 #include "mergesort.h"
 #include "minsort.h"
 #include "quicksort.h"
+#include "bfssort.h"
 #include "schlubsort.h"
 #include "shakersort.h"
 #include "shellsort.h"
@@ -31,7 +32,7 @@
 
 typedef enum sorts {
   MinSort, BubbleSort, ShakerSort, InsertionSort, BinaryInsertion, ShellSort,
-  QuickSort, QSI, MergeSort, HeapSort, SchlubSort, TiniklingSort, EndSort
+  QuickSort, QSI, QueueSort, MergeSort, HeapSort, SchlubSort, TiniklingSort, EndSort
 } sorts;
 
 #define MAX 100
@@ -65,12 +66,12 @@ void printArray(uint32_t a[], int length) {
   return;
 }
 
-#define OPTIONS "-AmbSBisqQMHhltzp:r:n:"
+#define OPTIONS "-AmbSBisqQXMHhltzp:r:n:"
 
 static char *names[] = {
   "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
   "Binary Insertion Sort", "Shell Sort", "Quick Sort",
-  "Quick Sort (Iterative)", "Merge Sort", "Heap Sort", "Schlub Sort",
+  "Quick Sort (Iterative)", "BFS (queue) Sort", "Merge Sort", "Heap Sort", "Schlub Sort",
   "Tinikling Sort"
 };
 
@@ -93,6 +94,7 @@ int main(int argc, char **argv) {
   sort[ShellSort] = shellSort;
   sort[QuickSort] = qSort;
   sort[QSI] = qSortI;
+  sort[QueueSort] = BFSSort;
   sort[MergeSort] = mergeSort;
   sort[HeapSort] = heapSort;
   sort[SchlubSort] = schlubSort;
@@ -144,6 +146,10 @@ int main(int argc, char **argv) {
       sortSet = insertSet(QSI, sortSet);
       break;
     }
+    case 'X': {
+      sortSet = insertSet(QueueSort, sortSet);
+      break;
+    }
     case 'h': {
       sortSet = insertSet(HeapSort, sortSet);
       break;
@@ -167,6 +173,7 @@ int main(int argc, char **argv) {
              "\t-M Merge Sort\n"
              "\t-q QuickSort (recursive)\n"
              "\t-Q QuickSort (iterative)\n"
+             "\t-X BFS Sort (iterative)\n"
              "\t-h HeapSort\n"
              "\t-l SchlubSort\n"
              "\t-t TiniklingSort\n"

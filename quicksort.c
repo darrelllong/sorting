@@ -1,10 +1,9 @@
 #include "quicksort.h"
-
 #include "stack.h"
 
 #include <stdint.h>
 
-int partition(uint32_t a[], int32_t low, int32_t high) {
+static int partition(uint32_t a[], int32_t low, int32_t high) {
     uint32_t pivotValue = a[(low + high) / 2];
 
     int32_t i = low - 1;
@@ -55,10 +54,6 @@ void quickSort(uint32_t a[], int32_t low, int32_t high) {
     return;
 }
 
-void qSort(uint32_t a[], int length) {
-    quickSort(a, 0, length - 1);
-}
+void qSort(uint32_t a[], int length) { quickSort(a, 0, length - 1); }
 
-void qSortI(uint32_t a[], int length) {
-    quickSortI(a, 0, length - 1);
-}
+void qSortI(uint32_t a[], int length) { quickSortI(a, 0, length - 1); }

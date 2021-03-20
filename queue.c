@@ -1,6 +1,9 @@
 #include "queue.h"
 
+#include <stdio.h>
 #include <stdlib.h>
+
+static int depth = 0, max_depth = 0;
 
 static uint32_t succ(queue *q, uint32_t n) {
     return (n + 1) % q->size;
@@ -25,6 +28,7 @@ void delQueue(queue *q) {
         free(q->Q);
         free(q);
     }
+    printf("queue length = %d\n", max_depth);
 }
 
 bool emptyQ(queue *q) {
@@ -48,6 +52,8 @@ bool enqueue(queue *q, int i) {
         }
         q->Q[q->head] = i;
         q->head = succ(q, q->head);
+        depth += 1;
+        max_depth = depth > max_depth ? depth : max_depth;
         return true;
     } else {
         return false;
@@ -61,6 +67,7 @@ bool dequeue(queue *q, int *i) {
         }
         *i = q->Q[q->tail];
         q->tail = succ(q, q->tail);
+        depth -= 1;
         return true;
     } else {
         return false;

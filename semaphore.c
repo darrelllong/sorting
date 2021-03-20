@@ -1,9 +1,9 @@
+#include "semaphore.h"
+
 #include <errno.h>
 #include <stdio.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-
-#include "semaphore.h"
 
 //
 // Definition of union used by semctl() if on Linux.
@@ -15,10 +15,10 @@
 //
 #ifdef LAME
 union semun {
-  int val;
-  struct semid_ds *buf;
-  unsigned short *array;
-  struct seminfo *_buf;
+    int val;
+    struct semid_ds *buf;
+    unsigned short *array;
+    struct seminfo *_buf;
 };
 #endif
 
@@ -26,19 +26,19 @@ union semun {
 // Returns the identifier of one initialized semaphore.
 //
 int sem_create(void) {
-  int semid = semget(IPC_PRIVATE, 1, 0600);
-  if (semid < 0) {
-    perror("sem_create:semget");
-    return -1;
-  }
+    int semid = semget(IPC_PRIVATE, 1, 0600);
+    if (semid < 0) {
+        perror("sem_create:semget");
+        return -1;
+    }
 
-  union semun arg = { .val = 1 };
-  if (semctl(semid, 0, SETVAL, arg) < 0) {
-    perror("sem_create:semctl");
-    return -1;
-  }
+    union semun arg = { .val = 1 };
+    if (semctl(semid, 0, SETVAL, arg) < 0) {
+        perror("sem_create:semctl");
+        return -1;
+    }
 
-  return semid;
+    return semid;
 }
 
 //
@@ -47,8 +47,8 @@ int sem_create(void) {
 // semid: The semaphore to remove.
 //
 int sem_delete(int semid) {
-  union semun arg = { .val = 0 };
-  return semctl(semid, 0, IPC_RMID, arg);
+    union semun arg = { .val = 0 };
+    return semctl(semid, 0, IPC_RMID, arg);
 }
 
 //
@@ -57,8 +57,8 @@ int sem_delete(int semid) {
 // semid:   The semaphore to increment.
 //
 int sem_signal(int semid) {
-  struct sembuf sops = { 0, 1, SEM_UNDO };
-  return semop(semid, &sops, 1);
+    struct sembuf sops = { 0, 1, SEM_UNDO };
+    return semop(semid, &sops, 1);
 }
 
 //
@@ -67,6 +67,6 @@ int sem_signal(int semid) {
 // semid:   The semaphore to decrement.
 //
 int sem_wait(int semid) {
-  struct sembuf sops = { 0, -1, SEM_UNDO };
-  return semop(semid, &sops, 1);
+    struct sembuf sops = { 0, -1, SEM_UNDO };
+    return semop(semid, &sops, 1);
 }

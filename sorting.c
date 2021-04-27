@@ -170,6 +170,7 @@ int main(int argc, char **argv) {
         }
         case 'H': {
             printf("Usage: sorting -options\n"
+                   "\t-d data only mode\n"
                    "\t-n <length>\n"
                    "\t-p <number to print>\n"
                    "\t-A All sorts\n"

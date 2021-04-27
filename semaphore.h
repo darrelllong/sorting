@@ -1,5 +1,4 @@
-#ifndef __SEMWRAPPER_H__
-#define __SEMWRAPPER_H__
+#pragma once
 
 //
 // Returns the identifier of one initialized semaphore.
@@ -26,5 +25,3 @@ int sem_signal(int semid);
 // semid:   The semaphore to decrement.
 //
 int sem_wait(int semid);
-
-#endif

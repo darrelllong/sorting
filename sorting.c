@@ -235,8 +235,8 @@ int main(int argc, char **argv) {
 
         sem_wait(sem); // P the semaphore
         if (dataMode) {
-            printf("%" PRIu32 " %" PRIu64 " %" PRIu64 " %lf \n", count, moves, compares,
-                after - before);
+            printf("%" PRIu32 " %" PRIu64 " %" PRIu64 " %lf %s\n", count, moves, compares,
+                after - before, names[t]);
 
         } else {
             printf("%s\n", names[t]);

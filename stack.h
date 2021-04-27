@@ -1,5 +1,4 @@
-#ifndef _STACK_H
-#define _STACK_H
+#pragma once
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -23,5 +22,3 @@ item pop(stack *);
 void push(stack *, item);
 
 bool empty(stack *);
-
-#endif

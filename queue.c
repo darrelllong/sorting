@@ -1,6 +1,5 @@
 #include "queue.h"
 
-#include <stdio.h>
 #include <stdlib.h>
 
 static int depth = 0, max_depth = 0;
@@ -28,7 +27,6 @@ void delQueue(queue *q) {
         free(q->Q);
         free(q);
     }
-    printf("queue length = %d\n", max_depth);
 }
 
 bool emptyQ(queue *q) {

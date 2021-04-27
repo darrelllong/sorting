@@ -1,7 +1,6 @@
 #include "stack.h"
 
 #include <stdbool.h>
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -24,7 +23,6 @@ void delStack(stack *s) {
         free(s->entries);
         free(s);
     }
-    printf("stack depth = %d\n", max_depth);
     return;
 }
 

@@ -1,5 +1,4 @@
-#ifndef _BUBBLESORT_H
-#define _BUBBLESORT_H
+#pragma once
 #include <stdint.h>
 
 #ifndef SWAP
@@ -15,4 +14,3 @@
 extern uint64_t moves, compares;
 
 void bubbleSort(uint32_t[], int);
-#endif

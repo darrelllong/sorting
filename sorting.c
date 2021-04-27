@@ -6,12 +6,10 @@
 #include "mergesort.h"
 #include "minsort.h"
 #include "quicksort.h"
-#include "schlubsort.h"
 #include "semaphore.h"
 #include "sets.h"
 #include "shakersort.h"
 #include "shellsort.h"
-#include "tiniklingsort.h"
 
 #include <inttypes.h>
 #include <stdbool.h>
@@ -19,6 +17,7 @@
 #include <stdlib.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
+#include <sys/time.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -41,8 +40,6 @@ typedef enum sorts {
     QueueSort,
     MergeSort,
     HeapSort,
-    SchlubSort,
-    TiniklingSort,
     EndSort
 } sorts;
 
@@ -77,18 +74,25 @@ void printArray(uint32_t a[], int length) {
     return;
 }
 
-#define OPTIONS "-AmbSBisqQXMHhltzp:r:n:"
+#define OPTIONS "-dAmbSBisqQXMHhzp:r:n:"
 
 static char *names[] = { "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion Sort",
     "Binary Insertion Sort", "Shell Sort", "Quick Sort", "Quick Sort (Iterative)",
-    "BFS (queue) Sort", "Merge Sort", "Heap Sort", "Schlub Sort", "Tinikling Sort" };
+    "BFS (queue) Sort", "Merge Sort", "Heap Sort" };
 
 static void (*sort[EndSort])();
+
+double hickoryDickory(void) {
+    struct timeval t;
+    gettimeofday(&t, (struct timezone *) 0);
+    return t.tv_sec + t.tv_usec / 1000000.0;
+}
 
 int main(int argc, char **argv) {
     int c = 0;
     int seed = SEED; // Default random seed
     int count = MAX; // Sort 100 by default
+    bool dataMode = false;
 
     uint32_t *a; // Array to be sorted
 
@@ -105,13 +109,15 @@ int main(int argc, char **argv) {
     sort[QueueSort] = BFSSort;
     sort[MergeSort] = mergeSort;
     sort[HeapSort] = heapSort;
-    sort[SchlubSort] = schlubSort;
-    sort[TiniklingSort] = tiniklingSort;
 
     int sem = sem_create();
 
     while ((c = getopt(argc, argv, OPTIONS)) != -1) {
         switch (c) {
+        case 'd': {
+            dataMode = true;
+            break;
+        }
         case 'A': {
             for (sorts s = MinSort; s < EndSort; s += 1) {
                 sortSet = insertSet(s, sortSet);
@@ -162,14 +168,6 @@ int main(int argc, char **argv) {
             sortSet = insertSet(HeapSort, sortSet);
             break;
         }
-        case 'l': {
-            sortSet = insertSet(SchlubSort, sortSet);
-            break;
-        }
-        case 't': {
-            sortSet = insertSet(TiniklingSort, sortSet);
-            break;
-        }
         case 'H': {
             printf("Usage: sorting -options\n"
                    "\t-n <length>\n"
@@ -183,8 +181,6 @@ int main(int argc, char **argv) {
                    "\t-Q QuickSort (iterative)\n"
                    "\t-X BFS Sort (iterative)\n"
                    "\t-h HeapSort\n"
-                   "\t-l SchlubSort\n"
-                   "\t-t TiniklingSort\n"
                    "\t-i Insertion sort\n"
                    "\t-s Shell sort\n"
                    "\t-S Shaker sort\n");
@@ -232,17 +228,24 @@ int main(int argc, char **argv) {
         SRANDOM(seed); // Starting position
 
         fillArray(a, count); // Load the array
-
+        double before = hickoryDickory();
         sort[t](a, count); // Perform the sort
+        double after = hickoryDickory();
 
         sem_wait(sem); // P the semaphore
-        printf("%s\n", names[t]);
-        fflush(stdout);
+        if (dataMode) {
+            printf("%" PRIu32 " %" PRIu64 " %" PRIu64 " %lf \n", count, moves, compares,
+                after - before);
 
-        printf("%" PRIu32 " elements %" PRIu64 " moves %" PRIu64 " compares\n", count, moves,
-            compares);
-        fflush(stdout);
-        printArray(a, count);
+        } else {
+            printf("%s\n", names[t]);
+            fflush(stdout);
+
+            printf("%" PRIu32 " elements %" PRIu64 " moves %" PRIu64 " compares\n", count, moves,
+                compares);
+            fflush(stdout);
+            printArray(a, count);
+        }
         sem_signal(sem); // V the semaphore
     } else {
         // Reap what we have sown

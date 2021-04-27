@@ -1,4 +1,5 @@
 #include "bfssort.h"
+
 #include "queue.h"
 
 #include <stdint.h>
@@ -28,8 +29,10 @@ void BFSSortI(uint32_t a[], uint32_t left, uint32_t right) {
     enqueue(s, left);
     enqueue(s, right);
     while (!emptyQ(s)) {
-        int low;  dequeue(s, &low);
-        int high; dequeue(s, &high);
+        int low;
+        dequeue(s, &low);
+        int high;
+        dequeue(s, &high);
         int p = partition(a, low, high);
         if (p + 1 < high) {
             enqueue(s, p + 1);
@@ -44,4 +47,6 @@ void BFSSortI(uint32_t a[], uint32_t left, uint32_t right) {
     return;
 }
 
-void BFSSort(uint32_t a[], int length) { BFSSortI(a, 0, length - 1); }
+void BFSSort(uint32_t a[], int length) {
+    BFSSortI(a, 0, length - 1);
+}

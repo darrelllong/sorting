@@ -52,6 +52,4 @@ void push(stack *s, item i) {
     return;
 }
 
-bool empty(stack *s) {
-    return s && s->top == 0;
-}
+bool empty(stack *s) { return s && s->top == 0; }

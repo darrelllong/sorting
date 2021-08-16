@@ -98,17 +98,17 @@ int main(int argc, char **argv) {
 
     set sortSet = 0;
 
-    sort[MinSort] = minSort;
-    sort[BubbleSort] = bubbleSort;
-    sort[ShakerSort] = shakerSort;
-    sort[InsertionSort] = insertionSort;
+    sort[MinSort]         = minSort;
+    sort[BubbleSort]      = bubbleSort;
+    sort[ShakerSort]      = shakerSort;
+    sort[InsertionSort]   = insertionSort;
     sort[BinaryInsertion] = binaryInsertionSort;
-    sort[ShellSort] = shellSort;
-    sort[QuickSort] = qSort;
-    sort[QSI] = qSortI;
-    sort[QueueSort] = BFSSort;
-    sort[MergeSort] = mergeSort;
-    sort[HeapSort] = heapSort;
+    sort[ShellSort]       = shellSort;
+    sort[QuickSort]       = qSort;
+    sort[QSI]             = qSortI;
+    sort[QueueSort]       = BFSSort;
+    sort[MergeSort]       = mergeSort;
+    sort[HeapSort]        = heapSort;
 
     int sem = sem_create();
 
@@ -208,7 +208,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    a = calloc(count, sizeof(uint32_t));
+    a = calloc(count, sizeof(uint32_t)); // array to be sorted
 
     int pid;
     sorts t;

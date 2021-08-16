@@ -8,14 +8,14 @@
 // Sort by using decreasing increments. The expected running time is improved
 // since in the beginning out of order elements are moved long distances.
 //
-// This sorting routine is surprising poorly understood.
+// This sorting routine is surprisingly poorly understood.
 //
 // See: http://www.cs.princeton.edu/~rs/shell/paperF.pdf
 //
 
 void shellSort(uint32_t data[], int length) {
 
-    // Platt sequence -- best one that I know.
+    // Platt sequence
 
     const int hl = 100;
     const int h[] = { 1, 2, 3, 4, 6, 8, 9, 12, 16, 18, 24, 27, 32, 36, 48, 54, 64, 72, 81, 96, 108,
@@ -30,19 +30,14 @@ void shellSort(uint32_t data[], int length) {
         int step = h[s];
 
         for (int j = step; j < length; j += 1) {
-            uint32_t key = data[j];
+            uint32_t key = data[j]; moves += 1;
             int i = j - step;
 
-            moves += 1;
-
             while (++compares && i >= 0 && data[i] > key) {
-                data[i + step] = data[i];
+                data[i + step] = data[i]; moves += 1;
                 i -= step;
-                moves += 1;
             }
-            data[i + step] = key;
-
-            moves += 1;
+            data[i + step] = key; moves += 1;
         }
     }
     return;

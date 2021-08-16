@@ -2,13 +2,12 @@
 #include <stdint.h>
 
 #ifndef SWAP
-#define SWAP(a, b)          \
-    {                       \
-        uint32_t t = a;     \
-        a = b;              \
-        b = t;              \
-        moves += 3;         \
-    }
+#define SWAP(a, b) { \
+ uint32_t t = a;     \
+ a = b;              \
+ b = t;              \
+ moves += 3;         \
+}
 #endif
 
 extern uint64_t moves, compares;

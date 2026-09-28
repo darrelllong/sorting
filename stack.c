@@ -6,7 +6,7 @@
 
 static int depth = 0, max_depth = 0;
 
-stack *newStack() {
+stack *newStack(void) {
     stack *s = (stack *) calloc(MIN_STACK, sizeof(stack));
     if (s) {
         s->size = MIN_STACK;

@@ -80,7 +80,11 @@ static char *names[] = { "Min Sort", "Bubble Sort", "Shaker Sort", "Insertion So
     "Binary Insertion Sort", "Shell Sort", "Quick Sort", "Quick Sort (Iterative)",
     "BFS (queue) Sort", "Merge Sort", "Heap Sort" };
 
-static void (*sort[EndSort])();
+static void (*sort[EndSort])(uint32_t *, int);
+
+static void heapSortInt(uint32_t a[], int n) {
+    heapSort(a, (uint32_t) n);
+}
 
 double hickoryDickory(void) {
     struct timeval t;
@@ -108,7 +112,7 @@ int main(int argc, char **argv) {
     sort[QSI]             = qSortI;
     sort[QueueSort]       = BFSSort;
     sort[MergeSort]       = mergeSort;
-    sort[HeapSort]        = heapSort;
+    sort[HeapSort]        = heapSortInt;
 
     int sem = sem_create();
 

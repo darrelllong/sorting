@@ -1,0 +1,6 @@
+machine: dmz, Intel(R) Core(TM) i5-8259U CPU @ 2.30GHz, 8 threads, 30 GB
+system: Ubuntu 26.04.1 LTS, Linux 7.0.0-31-generic
+compiler: Ubuntu clang version 21.1.8 (6ubuntu1), -O3
+pilot: f01eec4 Replace the changepoint detection; document the revisions since 2016, preset normal
+pinned: taskset -c 3; frequency governor powersave, turbo on
+date: 2026-09-27

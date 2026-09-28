@@ -24,7 +24,10 @@ static uint32_t partition(uint32_t a[], int32_t low, int32_t high) {
 }
 
 void BFSSortI(uint32_t a[], uint32_t left, uint32_t right) {
-    queue *s = newQueue(right - left);
+    // The intervals in the queue are disjoint and have at least two elements
+    // each, so there are at most n / 2 of them, which is n entries. The
+    // queue keeps one slot empty to tell full from empty.
+    queue *s = newQueue(2 * (right - left + 1) + 2);
 
     enqueue(s, left);
     enqueue(s, right);

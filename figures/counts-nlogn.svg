@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="viz" width="900" height="420" viewBox="0 0 900 420" role="img" aria-labelledby="t d">
+<title id="t">Comparisons and moves of the O(n log n) sorts</title>
+<desc id="d">Mean counts of one sort divided by n log₂ n.</desc>
+<style>
+  .viz { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+         --grid: #e1e0d9; --axis: #c3c2b7; --ref: #898781; --quick: #2a78d6; --quicki: #eb6834; --bfs: #1baf7a; --merge: #eda100; --heap: #e87ba4; --shell: #4a3aa7; }
+  @media (prefers-color-scheme: dark) {
+    .viz { --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
+           --grid: #2c2c2a; --axis: #383835; --ref: #898781; --quick: #3987e5; --quicki: #d95926; --bfs: #199e70; --merge: #c98500; --heap: #d55181; --shell: #9085e9; }
+  }
+  .viz text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .title { font-size: 15px; font-weight: 600; fill: var(--ink); }
+  .sub { font-size: 12px; fill: var(--ink2); }
+  .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .axlabel { font-size: 12px; fill: var(--ink2); }
+  .label { font-size: 12px; fill: var(--ink); }
+  .legend { font-size: 12px; fill: var(--ink2); }
+  .grid { stroke: var(--grid); stroke-width: 1; }
+  .axis { stroke: var(--axis); stroke-width: 1; }
+  .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ci { stroke-width: 1.5; stroke-linecap: round; }
+  .dot { stroke: var(--surface); stroke-width: 2; }
+  .leader { stroke: var(--muted); stroke-width: 1; }
+  .panel { fill: var(--surface); }
+</style>
+<rect width="100%" height="100%" fill="var(--surface)"/>
+<text class="title" x="24" y="30">Comparisons and moves of the O(n log n) sorts</text>
+<text class="sub" x="24" y="49">Mean counts of one sort divided by n log₂ n.</text>
+<line x1="24.0" x2="38.0" y1="72.0" y2="72.0" style="stroke: var(--quick)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="44.0" y="76.0">Quicksort</text>
+<line x1="125.0" x2="139.0" y1="72.0" y2="72.0" style="stroke: var(--quicki)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="145.0" y="76.0">Quicksort (iterative)</text>
+<line x1="310.0" x2="324.0" y1="72.0" y2="72.0" style="stroke: var(--bfs)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="330.0" y="76.0">BFS (queue) sort</text>
+<line x1="460.0" x2="474.0" y1="72.0" y2="72.0" style="stroke: var(--merge)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="480.0" y="76.0">Merge sort</text>
+<line x1="568.0" x2="582.0" y1="72.0" y2="72.0" style="stroke: var(--heap)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="588.0" y="76.0">Heap sort</text>
+<text class="label" x="96.0" y="100.0" font-weight="600">Comparisons</text>
+<rect class="panel" x="96.0" y="110.0" width="347.0" height="250.0"/>
+<line class="grid" x1="96.0" x2="443.0" y1="360.0" y2="360.0"/>
+<text class="tick" x="88.0" y="364.0" text-anchor="end">0</text>
+<line class="grid" x1="96.0" x2="443.0" y1="280.6" y2="280.6"/>
+<text class="tick" x="88.0" y="284.6" text-anchor="end">1</text>
+<line class="grid" x1="96.0" x2="443.0" y1="201.3" y2="201.3"/>
+<text class="tick" x="88.0" y="205.3" text-anchor="end">2</text>
+<line class="grid" x1="96.0" x2="443.0" y1="121.9" y2="121.9"/>
+<text class="tick" x="88.0" y="125.9" text-anchor="end">3</text>
+<line class="grid" x1="144.3" x2="144.3" y1="110.0" y2="360.0"/>
+<text class="tick" x="144.3" y="376.0" text-anchor="middle">100</text>
+<line class="grid" x1="205.0" x2="205.0" y1="110.0" y2="360.0"/>
+<text class="tick" x="205.0" y="376.0" text-anchor="middle">1K</text>
+<line class="grid" x1="265.6" x2="265.6" y1="110.0" y2="360.0"/>
+<text class="tick" x="265.6" y="376.0" text-anchor="middle">10K</text>
+<line class="grid" x1="326.3" x2="326.3" y1="110.0" y2="360.0"/>
+<text class="tick" x="326.3" y="376.0" text-anchor="middle">100K</text>
+<line class="grid" x1="387.0" x2="387.0" y1="110.0" y2="360.0"/>
+<text class="tick" x="387.0" y="376.0" text-anchor="middle">1M</text>
+<line class="axis" x1="96.0" x2="443.0" y1="360.0" y2="360.0"/>
+<text class="axlabel" x="269.5" y="394.0" text-anchor="middle">Number of keys, n</text>
+<text class="axlabel" transform="translate(38.0,235.0) rotate(-90)" text-anchor="middle">Comparisons / n log₂ n</text>
+<path class="line" d="M96.0,238.6 L105.6,239.3 L114.3,237.6 L123.2,241.2 L132.5,240.7 L141.8,242.7 L150.8,241.6 L159.9,242.8 L169.1,243.2 L178.2,243.3 L187.3,243.5 L196.4,244.7 L205.6,244.6 L214.7,245.7 L223.8,246.0 L233.0,245.9 L242.1,246.1 L251.2,246.9 L260.4,245.4 L269.5,245.8 L278.6,246.2 L287.8,246.6 L296.9,246.0 L306.0,246.7 L315.2,246.6 L324.3,247.4 L333.4,246.8 L342.6,247.0 L351.7,246.3 L360.8,247.3 L369.9,247.4 L379.1,246.7 L388.2,247.1 L397.3,247.7 L406.5,248.0 L415.6,246.9 L424.7,247.7 L433.9,247.4 L443.0,247.6" style="stroke: var(--quick)"/>
+<path class="line" d="M96.0,238.5 L105.6,239.1 L114.3,240.1 L123.2,242.1 L132.5,242.3 L141.8,240.6 L150.8,242.0 L159.9,244.4 L169.1,244.2 L178.2,244.3 L187.3,244.1 L196.4,244.3 L205.6,247.0 L214.7,245.1 L223.8,244.7 L233.0,246.0 L242.1,245.6 L251.2,246.8 L260.4,246.4 L269.5,246.4 L278.6,247.1 L287.8,246.7 L296.9,247.1 L306.0,245.8 L315.2,246.5 L324.3,247.0 L333.4,246.9 L342.6,246.5 L351.7,247.3 L360.8,247.0 L369.9,247.0 L379.1,247.4 L388.2,247.2 L397.3,247.3 L406.5,247.3 L415.6,247.2 L424.7,247.5 L433.9,247.7 L443.0,247.8" style="stroke: var(--quicki)"/>
+<path class="line" d="M96.0,237.5 L105.6,238.5 L114.3,239.8 L123.2,243.0 L132.5,242.4 L141.8,243.2 L150.8,241.8 L159.9,242.9 L169.1,244.0 L178.2,244.6 L187.3,244.3 L196.4,244.0 L205.6,244.1 L214.7,245.1 L223.8,245.4 L233.0,245.0 L242.1,246.1 L251.2,246.2 L260.4,246.2 L269.5,246.1 L278.6,246.0 L287.8,246.8 L296.9,246.4 L306.0,246.5 L315.2,246.2 L324.3,246.5 L333.4,246.9 L342.6,247.5 L351.7,246.8 L360.8,246.5 L369.9,247.2 L379.1,247.4 L388.2,247.1 L397.3,248.0 L406.5,247.7 L415.6,247.3 L424.7,248.0 L433.9,247.9 L443.0,247.7" style="stroke: var(--bfs)"/>
+<path class="line" d="M96.0,280.6 L105.6,279.1 L114.3,280.6 L123.2,279.4 L132.5,280.6 L141.8,279.6 L150.8,280.6 L159.9,279.7 L169.1,280.6 L178.2,279.8 L187.3,280.6 L196.4,279.9 L205.6,280.6 L214.7,280.0 L223.8,280.6 L233.0,280.0 L242.1,280.6 L251.2,280.1 L260.4,280.6 L269.5,280.1 L278.6,280.6 L287.8,280.2 L296.9,280.6 L306.0,280.2 L315.2,280.6 L324.3,280.2 L333.4,280.6 L342.6,280.2 L351.7,280.6 L360.8,280.3 L369.9,280.6 L379.1,280.3 L388.2,280.6 L397.3,280.3 L406.5,280.6 L415.6,280.3 L424.7,280.6 L433.9,280.3 L443.0,280.6" style="stroke: var(--merge)"/>
+<path class="line" d="M96.0,150.0 L105.6,150.0 L114.3,148.0 L123.2,146.7 L132.5,145.9 L141.8,143.8 L150.8,143.0 L159.9,141.4 L169.1,141.0 L178.2,139.1 L187.3,139.2 L196.4,137.4 L205.6,137.5 L214.7,136.0 L223.8,136.1 L233.0,134.8 L242.1,135.0 L251.2,133.8 L260.4,134.0 L269.5,133.0 L278.6,133.1 L287.8,132.2 L296.9,132.4 L306.0,131.5 L315.2,131.7 L324.3,130.9 L333.4,131.1 L342.6,130.4 L351.7,130.6 L360.8,130.0 L369.9,130.2 L379.1,129.5 L388.2,129.7 L397.3,129.2 L406.5,129.4 L415.6,128.8 L424.7,129.0 L433.9,128.5 L443.0,128.7" style="stroke: var(--heap)"/>
+<text class="label" x="513.0" y="100.0" font-weight="600">Moves</text>
+<rect class="panel" x="513.0" y="110.0" width="347.0" height="250.0"/>
+<line class="grid" x1="513.0" x2="860.0" y1="360.0" y2="360.0"/>
+<text class="tick" x="505.0" y="364.0" text-anchor="end">0</text>
+<line class="grid" x1="513.0" x2="860.0" y1="246.4" y2="246.4"/>
+<text class="tick" x="505.0" y="250.4" text-anchor="end">1</text>
+<line class="grid" x1="513.0" x2="860.0" y1="132.8" y2="132.8"/>
+<text class="tick" x="505.0" y="136.8" text-anchor="end">2</text>
+<line class="grid" x1="561.3" x2="561.3" y1="110.0" y2="360.0"/>
+<text class="tick" x="561.3" y="376.0" text-anchor="middle">100</text>
+<line class="grid" x1="622.0" x2="622.0" y1="110.0" y2="360.0"/>
+<text class="tick" x="622.0" y="376.0" text-anchor="middle">1K</text>
+<line class="grid" x1="682.6" x2="682.6" y1="110.0" y2="360.0"/>
+<text class="tick" x="682.6" y="376.0" text-anchor="middle">10K</text>
+<line class="grid" x1="743.3" x2="743.3" y1="110.0" y2="360.0"/>
+<text class="tick" x="743.3" y="376.0" text-anchor="middle">100K</text>
+<line class="grid" x1="804.0" x2="804.0" y1="110.0" y2="360.0"/>
+<text class="tick" x="804.0" y="376.0" text-anchor="middle">1M</text>
+<line class="axis" x1="513.0" x2="860.0" y1="360.0" y2="360.0"/>
+<text class="axlabel" x="686.5" y="394.0" text-anchor="middle">Number of keys, n</text>
+<text class="axlabel" transform="translate(455.0,235.0) rotate(-90)" text-anchor="middle"></text>
+<path class="line" d="M513.0,281.4 L522.6,282.2 L531.3,280.8 L540.2,280.2 L549.5,281.2 L558.8,280.0 L567.8,280.8 L576.9,280.5 L586.1,280.8 L595.2,280.7 L604.3,280.9 L613.4,280.7 L622.6,280.9 L631.7,280.6 L640.8,280.7 L650.0,280.6 L659.1,280.6 L668.2,280.6 L677.4,280.8 L686.5,280.9 L695.6,280.9 L704.8,280.8 L713.9,281.0 L723.0,280.9 L732.2,280.9 L741.3,280.8 L750.4,280.9 L759.6,280.9 L768.7,281.0 L777.8,280.8 L786.9,280.9 L796.1,281.0 L805.2,281.0 L814.3,280.9 L823.5,280.9 L832.6,281.0 L841.7,281.0 L850.9,281.0 L860.0,281.0" style="stroke: var(--quick)"/>
+<path class="line" d="M513.0,282.0 L522.6,281.3 L531.3,280.7 L540.2,280.7 L549.5,280.1 L558.8,280.8 L567.8,280.5 L576.9,280.5 L586.1,280.5 L595.2,280.6 L604.3,280.4 L613.4,280.6 L622.6,280.3 L631.7,280.8 L640.8,280.8 L650.0,280.7 L659.1,280.7 L668.2,280.6 L677.4,280.7 L686.5,280.7 L695.6,280.8 L704.8,280.8 L713.9,280.9 L723.0,281.0 L732.2,280.9 L741.3,280.9 L750.4,281.0 L759.6,281.0 L768.7,280.9 L777.8,281.0 L786.9,281.0 L796.1,280.9 L805.2,281.0 L814.3,281.0 L823.5,281.0 L832.6,281.0 L841.7,281.0 L850.9,281.0 L860.0,280.9" style="stroke: var(--quicki)"/>
+<path class="line" d="M513.0,282.8 L522.6,280.4 L531.3,280.6 L540.2,281.2 L549.5,280.1 L558.8,280.1 L567.8,280.3 L576.9,280.6 L586.1,280.7 L595.2,280.6 L604.3,280.7 L613.4,280.6 L622.6,280.8 L631.7,280.7 L640.8,280.8 L650.0,280.8 L659.1,280.7 L668.2,280.8 L677.4,280.8 L686.5,280.9 L695.6,280.8 L704.8,280.8 L713.9,280.9 L723.0,280.9 L732.2,281.0 L741.3,281.0 L750.4,280.9 L759.6,280.9 L768.7,281.0 L777.8,281.0 L786.9,281.0 L796.1,280.9 L805.2,281.0 L814.3,280.9 L823.5,281.0 L832.6,281.0 L841.7,280.9 L850.9,281.0 L860.0,281.0" style="stroke: var(--bfs)"/>
+<path class="line" d="M513.0,132.8 L522.6,128.5 L531.3,132.8 L540.2,129.2 L549.5,132.8 L558.8,129.8 L567.8,132.8 L576.9,130.2 L586.1,132.8 L595.2,130.5 L604.3,132.8 L613.4,130.7 L622.6,132.8 L631.7,130.9 L640.8,132.8 L650.0,131.1 L659.1,132.8 L668.2,131.2 L677.4,132.8 L686.5,131.4 L695.6,132.8 L704.8,131.5 L713.9,132.8 L723.0,131.5 L732.2,132.8 L741.3,131.6 L750.4,132.8 L759.6,131.7 L768.7,132.8 L777.8,131.7 L786.9,132.8 L796.1,131.8 L805.2,132.8 L814.3,131.8 L823.5,132.8 L832.6,131.9 L841.7,132.8 L850.9,131.9 L860.0,132.8" style="stroke: var(--merge)"/>
+<path class="line" d="M513.0,132.4 L522.6,144.9 L531.3,153.5 L540.2,161.8 L549.5,169.0 L558.8,174.6 L567.8,179.7 L576.9,183.9 L586.1,188.1 L595.2,191.0 L604.3,194.6 L613.4,196.9 L622.6,199.7 L631.7,201.6 L640.8,204.0 L650.0,205.5 L659.1,207.5 L668.2,208.8 L677.4,210.5 L686.5,211.6 L695.6,213.1 L704.8,214.0 L713.9,215.3 L723.0,216.1 L732.2,217.2 L741.3,217.9 L750.4,218.9 L759.6,219.5 L768.7,220.5 L777.8,221.0 L786.9,221.8 L796.1,222.3 L805.2,223.1 L814.3,223.5 L823.5,224.2 L832.6,224.5 L841.7,225.2 L850.9,225.5 L860.0,226.1" style="stroke: var(--heap)"/>
+</svg>

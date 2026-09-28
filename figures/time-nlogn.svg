@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="viz" width="900" height="470" viewBox="0 0 900 470" role="img" aria-labelledby="t d">
+<title id="t">The O(n log n) sorts, per n log2 n</title>
+<desc id="d">Time of one sort divided by n log2 n against n, for five O(n log n) sorts and Shell sort.</desc>
+<style>
+  .viz { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+         --grid: #e1e0d9; --axis: #c3c2b7; --ref: #898781; --quick: #2a78d6; --quicki: #eb6834; --bfs: #1baf7a; --merge: #eda100; --heap: #e87ba4; --shell: #4a3aa7; }
+  @media (prefers-color-scheme: dark) {
+    .viz { --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
+           --grid: #2c2c2a; --axis: #383835; --ref: #898781; --quick: #3987e5; --quicki: #d95926; --bfs: #199e70; --merge: #c98500; --heap: #d55181; --shell: #9085e9; }
+  }
+  .viz text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .title { font-size: 15px; font-weight: 600; fill: var(--ink); }
+  .sub { font-size: 12px; fill: var(--ink2); }
+  .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .axlabel { font-size: 12px; fill: var(--ink2); }
+  .label { font-size: 12px; fill: var(--ink); }
+  .legend { font-size: 12px; fill: var(--ink2); }
+  .grid { stroke: var(--grid); stroke-width: 1; }
+  .axis { stroke: var(--axis); stroke-width: 1; }
+  .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ci { stroke-width: 1.5; stroke-linecap: round; }
+  .dot { stroke: var(--surface); stroke-width: 2; }
+  .leader { stroke: var(--muted); stroke-width: 1; }
+  .panel { fill: var(--surface); }
+</style>
+<rect width="100%" height="100%" fill="var(--surface)"/>
+<text class="title" x="24" y="30">The O(n log n) sorts, per n log₂ n</text>
+<text class="sub" x="24" y="49">Mean time of one sort divided by n log₂ n, with its 95% confidence interval. A line that is flat is n log n.</text>
+<line x1="24.0" x2="38.0" y1="72.0" y2="72.0" style="stroke: var(--quick)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="44.0" y="76.0">Quicksort</text>
+<line x1="125.0" x2="139.0" y1="72.0" y2="72.0" style="stroke: var(--quicki)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="145.0" y="76.0">Quicksort (iterative)</text>
+<line x1="310.0" x2="324.0" y1="72.0" y2="72.0" style="stroke: var(--bfs)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="330.0" y="76.0">BFS (queue) sort</text>
+<line x1="460.0" x2="474.0" y1="72.0" y2="72.0" style="stroke: var(--merge)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="480.0" y="76.0">Merge sort</text>
+<line x1="568.0" x2="582.0" y1="72.0" y2="72.0" style="stroke: var(--heap)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="588.0" y="76.0">Heap sort</text>
+<rect class="panel" x="96.0" y="98.0" width="614.0" height="312.0"/>
+<line class="grid" x1="96.0" x2="710.0" y1="410.0" y2="410.0"/>
+<text class="tick" x="88.0" y="414.0" text-anchor="end">0 ns</text>
+<line class="grid" x1="96.0" x2="710.0" y1="289.9" y2="289.9"/>
+<text class="tick" x="88.0" y="293.9" text-anchor="end">5 ns</text>
+<line class="grid" x1="96.0" x2="710.0" y1="169.8" y2="169.8"/>
+<text class="tick" x="88.0" y="173.8" text-anchor="end">10 ns</text>
+<line class="grid" x1="181.4" x2="181.4" y1="98.0" y2="410.0"/>
+<text class="tick" x="181.4" y="426.0" text-anchor="middle">100</text>
+<line class="grid" x1="288.8" x2="288.8" y1="98.0" y2="410.0"/>
+<text class="tick" x="288.8" y="426.0" text-anchor="middle">1K</text>
+<line class="grid" x1="396.1" x2="396.1" y1="98.0" y2="410.0"/>
+<text class="tick" x="396.1" y="426.0" text-anchor="middle">10K</text>
+<line class="grid" x1="503.5" x2="503.5" y1="98.0" y2="410.0"/>
+<text class="tick" x="503.5" y="426.0" text-anchor="middle">100K</text>
+<line class="grid" x1="610.8" x2="610.8" y1="98.0" y2="410.0"/>
+<text class="tick" x="610.8" y="426.0" text-anchor="middle">1M</text>
+<line class="axis" x1="96.0" x2="710.0" y1="410.0" y2="410.0"/>
+<text class="axlabel" x="403.0" y="444.0" text-anchor="middle">Number of keys, n</text>
+<text class="axlabel" transform="translate(38.0,254.0) rotate(-90)" text-anchor="middle">Time / (n log₂ n)</text>
+<line class="ci" x1="128.3" x2="128.3" y1="263.3" y2="261.3" style="stroke: var(--quick)"/>
+<line class="ci" x1="241.4" x2="241.4" y1="283.2" y2="281.6" style="stroke: var(--quick)"/>
+<line class="ci" x1="338.4" x2="338.4" y1="292.8" y2="290.4" style="stroke: var(--quick)"/>
+<line class="ci" x1="451.5" x2="451.5" y1="298.9" y2="297.2" style="stroke: var(--quick)"/>
+<line class="ci" x1="548.4" x2="548.4" y1="306.1" y2="299.7" style="stroke: var(--quick)"/>
+<line class="ci" x1="580.7" x2="580.7" y1="305.7" y2="303.1" style="stroke: var(--quick)"/>
+<line class="ci" x1="596.9" x2="596.9" y1="307.6" y2="300.4" style="stroke: var(--quick)"/>
+<line class="ci" x1="613.1" x2="613.1" y1="307.9" y2="301.3" style="stroke: var(--quick)"/>
+<line class="ci" x1="629.2" x2="629.2" y1="307.6" y2="303.2" style="stroke: var(--quick)"/>
+<line class="ci" x1="645.4" x2="645.4" y1="308.0" y2="304.2" style="stroke: var(--quick)"/>
+<line class="ci" x1="661.5" x2="661.5" y1="307.8" y2="305.7" style="stroke: var(--quick)"/>
+<line class="ci" x1="677.7" x2="677.7" y1="308.3" y2="305.5" style="stroke: var(--quick)"/>
+<line class="ci" x1="693.8" x2="693.8" y1="308.4" y2="305.1" style="stroke: var(--quick)"/>
+<line class="ci" x1="710.0" x2="710.0" y1="308.7" y2="306.7" style="stroke: var(--quick)"/>
+<path class="line" d="M96.0,263.6 L112.9,262.5 L128.3,262.3 L144.2,267.5 L160.6,270.3 L177.0,273.5 L192.9,275.6 L209.1,278.6 L225.3,281.2 L241.4,282.4 L257.6,284.8 L273.7,286.5 L289.9,288.8 L306.0,290.2 L322.2,291.3 L338.4,291.6 L354.5,293.9 L370.7,295.1 L386.8,295.8 L403.0,297.4 L419.2,298.3 L435.3,299.0 L451.5,298.1 L467.6,300.3 L483.8,301.1 L499.9,302.2 L516.1,302.5 L532.3,303.9 L548.4,302.9 L564.6,304.7 L580.7,304.4 L596.9,304.0 L613.1,304.6 L629.2,305.4 L645.4,306.1 L661.5,306.7 L677.7,306.9 L693.8,306.7 L710.0,307.7" style="stroke: var(--quick)"/>
+<line class="ci" x1="112.9" x2="112.9" y1="202.8" y2="201.0" style="stroke: var(--quicki)"/>
+<line class="ci" x1="160.6" x2="160.6" y1="229.4" y2="227.6" style="stroke: var(--quicki)"/>
+<line class="ci" x1="177.0" x2="177.0" y1="236.8" y2="235.3" style="stroke: var(--quicki)"/>
+<line class="ci" x1="209.1" x2="209.1" y1="249.3" y2="247.0" style="stroke: var(--quicki)"/>
+<line class="ci" x1="289.9" x2="289.9" y1="268.2" y2="266.1" style="stroke: var(--quicki)"/>
+<line class="ci" x1="338.4" x2="338.4" y1="274.6" y2="272.3" style="stroke: var(--quicki)"/>
+<line class="ci" x1="483.8" x2="483.8" y1="291.3" y2="280.9" style="stroke: var(--quicki)"/>
+<line class="ci" x1="629.2" x2="629.2" y1="297.3" y2="294.0" style="stroke: var(--quicki)"/>
+<line class="ci" x1="645.4" x2="645.4" y1="298.0" y2="291.3" style="stroke: var(--quicki)"/>
+<line class="ci" x1="661.5" x2="661.5" y1="298.5" y2="294.5" style="stroke: var(--quicki)"/>
+<line class="ci" x1="693.8" x2="693.8" y1="299.4" y2="297.0" style="stroke: var(--quicki)"/>
+<line class="ci" x1="710.0" x2="710.0" y1="299.6" y2="297.2" style="stroke: var(--quicki)"/>
+<path class="line" d="M96.0,187.9 L112.9,201.9 L128.3,212.6 L144.2,218.1 L160.6,228.5 L177.0,236.1 L192.9,242.4 L209.1,248.2 L225.3,253.6 L241.4,257.8 L257.6,261.3 L273.7,265.0 L289.9,267.1 L306.0,270.0 L322.2,272.1 L338.4,273.5 L354.5,276.7 L370.7,278.1 L386.8,280.4 L403.0,281.8 L419.2,283.4 L435.3,284.6 L451.5,285.6 L467.6,287.2 L483.8,286.1 L499.9,289.9 L516.1,290.7 L532.3,291.7 L548.4,293.0 L564.6,293.5 L580.7,294.3 L596.9,295.4 L613.1,295.9 L629.2,295.7 L645.4,294.6 L661.5,296.5 L677.7,298.3 L693.8,298.2 L710.0,298.4" style="stroke: var(--quicki)"/>
+<line class="ci" x1="112.9" x2="112.9" y1="134.2" y2="130.4" style="stroke: var(--bfs)"/>
+<line class="ci" x1="128.3" x2="128.3" y1="151.9" y2="149.5" style="stroke: var(--bfs)"/>
+<line class="ci" x1="144.2" x2="144.2" y1="165.2" y2="162.8" style="stroke: var(--bfs)"/>
+<line class="ci" x1="160.6" x2="160.6" y1="177.4" y2="175.7" style="stroke: var(--bfs)"/>
+<line class="ci" x1="225.3" x2="225.3" y1="210.3" y2="208.5" style="stroke: var(--bfs)"/>
+<line class="ci" x1="273.7" x2="273.7" y1="228.5" y2="226.7" style="stroke: var(--bfs)"/>
+<line class="ci" x1="306.0" x2="306.0" y1="238.2" y2="236.6" style="stroke: var(--bfs)"/>
+<line class="ci" x1="354.5" x2="354.5" y1="248.9" y2="247.2" style="stroke: var(--bfs)"/>
+<line class="ci" x1="386.8" x2="386.8" y1="252.7" y2="250.4" style="stroke: var(--bfs)"/>
+<line class="ci" x1="483.8" x2="483.8" y1="263.6" y2="261.7" style="stroke: var(--bfs)"/>
+<line class="ci" x1="580.7" x2="580.7" y1="274.5" y2="265.2" style="stroke: var(--bfs)"/>
+<line class="ci" x1="596.9" x2="596.9" y1="274.3" y2="271.5" style="stroke: var(--bfs)"/>
+<line class="ci" x1="613.1" x2="613.1" y1="276.2" y2="268.4" style="stroke: var(--bfs)"/>
+<line class="ci" x1="645.4" x2="645.4" y1="274.3" y2="266.7" style="stroke: var(--bfs)"/>
+<line class="ci" x1="661.5" x2="661.5" y1="274.1" y2="269.3" style="stroke: var(--bfs)"/>
+<line class="ci" x1="677.7" x2="677.7" y1="274.2" y2="271.8" style="stroke: var(--bfs)"/>
+<line class="ci" x1="693.8" x2="693.8" y1="274.9" y2="272.6" style="stroke: var(--bfs)"/>
+<line class="ci" x1="710.0" x2="710.0" y1="275.2" y2="272.8" style="stroke: var(--bfs)"/>
+<path class="line" d="M96.0,121.1 L112.9,132.3 L128.3,150.7 L144.2,164.0 L160.6,176.5 L177.0,187.6 L192.9,196.2 L209.1,203.0 L225.3,209.4 L241.4,217.2 L257.6,223.3 L273.7,227.6 L289.9,233.4 L306.0,237.4 L322.2,241.7 L338.4,244.5 L354.5,248.1 L370.7,251.4 L386.8,251.5 L403.0,254.4 L419.2,258.0 L435.3,256.2 L451.5,258.6 L467.6,261.3 L483.8,262.6 L499.9,264.5 L516.1,266.7 L532.3,268.0 L548.4,269.7 L564.6,271.1 L580.7,269.9 L596.9,272.9 L613.1,272.3 L629.2,273.3 L645.4,270.5 L661.5,271.7 L677.7,273.0 L693.8,273.7 L710.0,274.0" style="stroke: var(--bfs)"/>
+<line class="ci" x1="112.9" x2="112.9" y1="193.4" y2="187.6" style="stroke: var(--merge)"/>
+<line class="ci" x1="144.2" x2="144.2" y1="212.5" y2="194.8" style="stroke: var(--merge)"/>
+<line class="ci" x1="177.0" x2="177.0" y1="221.4" y2="219.0" style="stroke: var(--merge)"/>
+<line class="ci" x1="209.1" x2="209.1" y1="230.4" y2="228.7" style="stroke: var(--merge)"/>
+<line class="ci" x1="225.3" x2="225.3" y1="238.4" y2="236.8" style="stroke: var(--merge)"/>
+<line class="ci" x1="419.2" x2="419.2" y1="265.2" y2="263.5" style="stroke: var(--merge)"/>
+<line class="ci" x1="451.5" x2="451.5" y1="263.5" y2="261.6" style="stroke: var(--merge)"/>
+<line class="ci" x1="564.6" x2="564.6" y1="270.9" y2="259.7" style="stroke: var(--merge)"/>
+<line class="ci" x1="580.7" x2="580.7" y1="272.9" y2="262.1" style="stroke: var(--merge)"/>
+<line class="ci" x1="629.2" x2="629.2" y1="272.1" y2="264.2" style="stroke: var(--merge)"/>
+<line class="ci" x1="661.5" x2="661.5" y1="271.5" y2="269.8" style="stroke: var(--merge)"/>
+<line class="ci" x1="677.7" x2="677.7" y1="273.1" y2="271.5" style="stroke: var(--merge)"/>
+<line class="ci" x1="710.0" x2="710.0" y1="273.6" y2="270.7" style="stroke: var(--merge)"/>
+<path class="line" d="M96.0,187.7 L112.9,190.5 L128.3,204.7 L144.2,203.6 L160.6,219.1 L177.0,220.2 L192.9,229.8 L209.1,229.6 L225.3,237.6 L241.4,238.1 L257.6,245.0 L273.7,243.9 L289.9,249.8 L306.0,249.8 L322.2,254.9 L338.4,254.2 L354.5,258.9 L370.7,257.4 L386.8,262.3 L403.0,260.6 L419.2,264.3 L435.3,259.8 L451.5,262.5 L467.6,263.0 L483.8,267.0 L499.9,266.4 L516.1,267.8 L532.3,267.1 L548.4,268.7 L564.6,265.3 L580.7,267.5 L596.9,269.2 L613.1,271.1 L629.2,268.2 L645.4,272.1 L661.5,270.7 L677.7,272.3 L693.8,271.6 L710.0,272.1" style="stroke: var(--merge)"/>
+<line class="ci" x1="128.3" x2="128.3" y1="274.4" y2="272.2" style="stroke: var(--heap)"/>
+<line class="ci" x1="419.2" x2="419.2" y1="284.5" y2="282.9" style="stroke: var(--heap)"/>
+<line class="ci" x1="435.3" x2="435.3" y1="284.4" y2="282.3" style="stroke: var(--heap)"/>
+<line class="ci" x1="451.5" x2="451.5" y1="283.5" y2="281.8" style="stroke: var(--heap)"/>
+<line class="ci" x1="499.9" x2="499.9" y1="283.7" y2="276.5" style="stroke: var(--heap)"/>
+<line class="ci" x1="532.3" x2="532.3" y1="278.9" y2="275.0" style="stroke: var(--heap)"/>
+<line class="ci" x1="548.4" x2="548.4" y1="277.7" y2="272.0" style="stroke: var(--heap)"/>
+<line class="ci" x1="564.6" x2="564.6" y1="275.5" y2="272.1" style="stroke: var(--heap)"/>
+<line class="ci" x1="596.9" x2="596.9" y1="273.1" y2="267.5" style="stroke: var(--heap)"/>
+<line class="ci" x1="613.1" x2="613.1" y1="271.2" y2="264.0" style="stroke: var(--heap)"/>
+<line class="ci" x1="629.2" x2="629.2" y1="266.3" y2="258.3" style="stroke: var(--heap)"/>
+<line class="ci" x1="645.4" x2="645.4" y1="257.4" y2="252.1" style="stroke: var(--heap)"/>
+<line class="ci" x1="661.5" x2="661.5" y1="243.4" y2="237.7" style="stroke: var(--heap)"/>
+<line class="ci" x1="677.7" x2="677.7" y1="229.0" y2="223.7" style="stroke: var(--heap)"/>
+<line class="ci" x1="693.8" x2="693.8" y1="225.5" y2="221.7" style="stroke: var(--heap)"/>
+<line class="ci" x1="710.0" x2="710.0" y1="220.3" y2="217.7" style="stroke: var(--heap)"/>
+<path class="line" d="M96.0,281.3 L112.9,276.9 L128.3,273.3 L144.2,274.0 L160.6,273.3 L177.0,274.7 L192.9,273.7 L209.1,272.8 L225.3,272.8 L241.4,274.0 L257.6,274.3 L273.7,276.7 L289.9,277.6 L306.0,279.6 L322.2,280.0 L338.4,282.2 L354.5,282.8 L370.7,283.9 L386.8,284.3 L403.0,284.6 L419.2,283.7 L435.3,283.4 L451.5,282.7 L467.6,283.3 L483.8,282.6 L499.9,280.1 L516.1,279.1 L532.3,277.0 L548.4,274.8 L564.6,273.8 L580.7,273.2 L596.9,270.3 L613.1,267.6 L629.2,262.3 L645.4,254.7 L661.5,240.5 L677.7,226.4 L693.8,223.6 L710.0,219.0" style="stroke: var(--heap)"/>
+<line class="leader" x1="716.0" y1="219.0" x2="720.0" y2="219.0"/>
+<text class="label" x="724.0" y="223.0">Heap sort</text>
+<line class="leader" x1="716.0" y1="272.1" x2="720.0" y2="272.1"/>
+<text class="label" x="724.0" y="276.1">Merge sort</text>
+<line class="leader" x1="716.0" y1="274.0" x2="720.0" y2="286.1"/>
+<text class="label" x="724.0" y="290.1">BFS (queue) sort</text>
+<line class="leader" x1="716.0" y1="298.4" x2="720.0" y2="300.1"/>
+<text class="label" x="724.0" y="304.1">Quicksort (iterative)</text>
+<line class="leader" x1="716.0" y1="307.7" x2="720.0" y2="314.1"/>
+<text class="label" x="724.0" y="318.1">Quicksort</text>
+</svg>

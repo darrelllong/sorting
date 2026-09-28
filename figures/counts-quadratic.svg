@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="viz" width="900" height="420" viewBox="0 0 900 420" role="img" aria-labelledby="t d">
+<title id="t">Comparisons and moves of the quadratic sorts</title>
+<desc id="d">Mean counts of one sort divided by n², up to where each sort stopped.</desc>
+<style>
+  .viz { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+         --grid: #e1e0d9; --axis: #c3c2b7; --ref: #898781; --min: #2a78d6; --bubble: #eb6834; --shaker: #1baf7a; --insertion: #eda100; --binsert: #e87ba4; --shell: #4a3aa7; }
+  @media (prefers-color-scheme: dark) {
+    .viz { --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
+           --grid: #2c2c2a; --axis: #383835; --ref: #898781; --min: #3987e5; --bubble: #d95926; --shaker: #199e70; --insertion: #c98500; --binsert: #d55181; --shell: #9085e9; }
+  }
+  .viz text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .title { font-size: 15px; font-weight: 600; fill: var(--ink); }
+  .sub { font-size: 12px; fill: var(--ink2); }
+  .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .axlabel { font-size: 12px; fill: var(--ink2); }
+  .label { font-size: 12px; fill: var(--ink); }
+  .legend { font-size: 12px; fill: var(--ink2); }
+  .grid { stroke: var(--grid); stroke-width: 1; }
+  .axis { stroke: var(--axis); stroke-width: 1; }
+  .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ci { stroke-width: 1.5; stroke-linecap: round; }
+  .dot { stroke: var(--surface); stroke-width: 2; }
+  .leader { stroke: var(--muted); stroke-width: 1; }
+  .panel { fill: var(--surface); }
+</style>
+<rect width="100%" height="100%" fill="var(--surface)"/>
+<text class="title" x="24" y="30">Comparisons and moves of the quadratic sorts</text>
+<text class="sub" x="24" y="49">Mean counts of one sort divided by n², up to where each sort stopped.</text>
+<line x1="24.0" x2="38.0" y1="72.0" y2="72.0" style="stroke: var(--min)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="44.0" y="76.0">Min sort</text>
+<line x1="118.0" x2="132.0" y1="72.0" y2="72.0" style="stroke: var(--bubble)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="138.0" y="76.0">Bubble sort</text>
+<line x1="233.0" x2="247.0" y1="72.0" y2="72.0" style="stroke: var(--shaker)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="253.0" y="76.0">Shaker sort</text>
+<line x1="348.0" x2="362.0" y1="72.0" y2="72.0" style="stroke: var(--insertion)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="368.0" y="76.0">Insertion sort</text>
+<line x1="484.0" x2="498.0" y1="72.0" y2="72.0" style="stroke: var(--binsert)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="504.0" y="76.0">Binary insertion</text>
+<text class="label" x="96.0" y="100.0" font-weight="600">Comparisons</text>
+<rect class="panel" x="96.0" y="110.0" width="347.0" height="250.0"/>
+<line class="grid" x1="96.0" x2="443.0" y1="360.0" y2="360.0"/>
+<text class="tick" x="88.0" y="364.0" text-anchor="end">0</text>
+<line class="grid" x1="96.0" x2="443.0" y1="277.7" y2="277.7"/>
+<text class="tick" x="88.0" y="281.7" text-anchor="end">0.2</text>
+<line class="grid" x1="96.0" x2="443.0" y1="195.4" y2="195.4"/>
+<text class="tick" x="88.0" y="199.4" text-anchor="end">0.4</text>
+<line class="grid" x1="96.0" x2="443.0" y1="113.1" y2="113.1"/>
+<text class="tick" x="88.0" y="117.1" text-anchor="end">0.6</text>
+<line class="grid" x1="161.5" x2="161.5" y1="110.0" y2="360.0"/>
+<text class="tick" x="161.5" y="376.0" text-anchor="middle">10</text>
+<line class="grid" x1="326.2" x2="326.2" y1="110.0" y2="360.0"/>
+<text class="tick" x="326.2" y="376.0" text-anchor="middle">100</text>
+<line class="axis" x1="96.0" x2="443.0" y1="360.0" y2="360.0"/>
+<text class="axlabel" x="269.5" y="394.0" text-anchor="middle">Number of keys, n</text>
+<text class="axlabel" transform="translate(38.0,235.0) rotate(-90)" text-anchor="middle">Comparisons / n²</text>
+<path class="line" d="M96.0,128.5 L125.0,131.4 L145.6,134.9 L168.3,138.9 L195.1,143.0 L221.1,146.1 L244.7,148.2 L269.1,149.9 L294.3,151.1 L319.5,152.0 L343.9,152.7" style="stroke: var(--min)"/>
+<path class="line" d="M96.0,216.4 L125.0,199.7 L145.6,192.0 L168.3,185.9 L195.1,178.6 L221.1,171.8 L244.7,166.2 L269.1,165.1" style="stroke: var(--bubble)"/>
+<path class="line" d="M96.0,175.4 L125.0,180.1 L145.6,179.6 L168.3,182.9 L195.1,184.2 L221.1,185.8 L244.7,190.0 L269.1,191.1" style="stroke: var(--shaker)"/>
+<path class="line" d="M96.0,201.6 L125.0,219.4 L145.6,226.6 L168.3,233.9 L195.1,236.4 L221.1,243.8 L244.7,247.5 L269.1,250.9 L294.3,252.8 L319.5,251.0 L343.9,254.3 L368.6,254.4 L393.4,256.5 L418.2,256.5" style="stroke: var(--insertion)"/>
+<path class="line" d="M96.0,238.1 L125.0,247.3 L145.6,258.4 L168.3,272.2 L195.1,288.0 L221.1,301.4 L244.7,312.0 L269.1,321.7 L294.3,329.9 L319.5,336.6 L343.9,341.8 L368.6,346.0 L393.4,349.3 L418.2,351.9 L443.0,353.9" style="stroke: var(--binsert)"/>
+<text class="label" x="513.0" y="100.0" font-weight="600">Moves</text>
+<rect class="panel" x="513.0" y="110.0" width="347.0" height="250.0"/>
+<line class="grid" x1="513.0" x2="860.0" y1="360.0" y2="360.0"/>
+<text class="tick" x="505.0" y="364.0" text-anchor="end">0</text>
+<line class="grid" x1="513.0" x2="860.0" y1="282.5" y2="282.5"/>
+<text class="tick" x="505.0" y="286.5" text-anchor="end">0.25</text>
+<line class="grid" x1="513.0" x2="860.0" y1="205.1" y2="205.1"/>
+<text class="tick" x="505.0" y="209.1" text-anchor="end">0.5</text>
+<line class="grid" x1="513.0" x2="860.0" y1="127.6" y2="127.6"/>
+<text class="tick" x="505.0" y="131.6" text-anchor="end">0.75</text>
+<line class="grid" x1="578.5" x2="578.5" y1="110.0" y2="360.0"/>
+<text class="tick" x="578.5" y="376.0" text-anchor="middle">10</text>
+<line class="grid" x1="743.2" x2="743.2" y1="110.0" y2="360.0"/>
+<text class="tick" x="743.2" y="376.0" text-anchor="middle">100</text>
+<line class="axis" x1="513.0" x2="860.0" y1="360.0" y2="360.0"/>
+<text class="axlabel" x="686.5" y="394.0" text-anchor="middle">Number of keys, n</text>
+<text class="axlabel" transform="translate(455.0,235.0) rotate(-90)" text-anchor="middle"></text>
+<path class="line" d="M513.0,243.8 L542.0,271.7 L562.6,284.0 L585.3,298.2 L612.1,314.1 L638.1,326.9 L661.7,334.7 L686.1,341.3 L711.3,346.5 L736.5,350.4 L760.9,353.0" style="stroke: var(--min)"/>
+<path class="line" d="M513.0,191.2 L542.0,156.5 L562.6,152.4 L585.3,151.0 L612.1,143.6 L638.1,128.5 L661.7,135.2 L686.1,134.1" style="stroke: var(--bubble)"/>
+<path class="line" d="M513.0,172.4 L542.0,167.9 L562.6,153.0 L585.3,152.9 L612.1,135.1 L638.1,133.3 L661.7,132.6 L686.1,129.4" style="stroke: var(--shaker)"/>
+<path class="line" d="M513.0,240.7 L542.0,254.1 L562.6,259.6 L585.3,265.1 L612.1,267.0 L638.1,272.5 L661.7,275.3 L686.1,277.8 L711.3,279.3 L736.5,277.9 L760.9,280.4 L785.6,280.5 L810.4,282.0 L835.2,282.0" style="stroke: var(--insertion)"/>
+<path class="line" d="M513.0,241.1 L542.0,249.6 L562.6,258.5 L585.3,264.7 L612.1,268.2 L638.1,275.1 L661.7,276.4 L686.1,277.9 L711.3,278.8 L736.5,280.2 L760.9,280.8 L785.6,281.6 L810.4,281.0 L835.2,282.0 L860.0,282.1" style="stroke: var(--binsert)"/>
+</svg>

@@ -14,7 +14,7 @@ typedef struct stack {
 #define MIN_STACK 128
 #define INVALID   0xDeadD00d
 
-stack *newStack();
+stack *newStack(void);
 
 void delStack(stack *);
 

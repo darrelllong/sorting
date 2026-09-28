@@ -179,6 +179,14 @@ them is in `bench/results.csv`, and the tables below are made from it.
 
 ### What the numbers say
 
+The order of each sort is known from its analysis; the benchmark measures
+the constants. The time of a sort is c · f(n) plus terms of lower order,
+where f(n) is n² or n log₂ n, and c is the time per unit of f(n) for that
+sort on this machine. It is never 1, it differs from sort to sort, and it
+can change with n, as the keys outgrow a cache. Time divided by f(n), in
+the figures and in the table at the largest size, is c when n is large
+enough for the terms of lower order not to matter.
+
 - **Where the quadratic sorts stop.** Bubble sort and shaker sort were
   slower than the slowest O(n log n) sort from n = 32, min sort from 91,
   and insertion sort and binary insertion from 362. At those sizes the
@@ -188,19 +196,22 @@ them is in `bench/results.csv`, and the tables below are made from it.
   of all the sorts from n = 2 to 128.
 - **Past where they stop.** The counts are what the analysis says they
   are (see the last item): bubble sort makes n²/2 comparisons at every
-  size. What changes with n is the time that each comparison and move
-  takes, which is a constant of the machine, not the order. From
-  n = 8,192 to 65,536 the time divided by n² hardly changed for insertion sort (0.99 times) and
-  min sort (0.97 times), and rose by 45% for bubble sort and 36% for shaker
-  sort. Those two go over the whole array on every pass, and at n = 65,536
-  the array is 256 KB, as large as the L2 cache of dmz; the counters of the
+  size. What changes with n is c, the time per n². At n = 1,024, 8,192 and
+  65,536 it was 0.19, 0.185 and 0.183 ns for insertion sort, and 0.23,
+  0.185 and 0.179 ns for min sort; for bubble sort it was 0.78, 0.89 and
+  1.29 ns, and for shaker sort 0.66, 0.75 and 1.01 ns. Bubble sort and
+  shaker sort go over the whole array on every pass, and at n = 65,536 the
+  array is 256 KB, as large as the L2 cache of dmz; the counters of the
   cache were not measured for them, so that is not shown to be the cause.
   At n = 65,536 bubble sort takes 5.55 s, where quicksort takes 4.7 ms.
 - **Binary insertion** makes few comparisons, 0.91 n log₂ n at n = 65,536,
   but it still moves about n²/4 keys, as insertion sort does, so it is
   Θ(n²) in time on random keys. It stopped at the same size as insertion
   sort, and past it the difference widens: it is 2.1 times as fast
-  as insertion sort at n = 1,024, and 5.2 times at 65,536.
+  as insertion sort at n = 1,024, and 5.2 times at 65,536. Its time per n²
+  was 0.091, 0.042 and 0.035 ns at n = 1,024, 8,192 and 65,536: the
+  n log₂ n comparisons are of lower order, but at these sizes they are not
+  small beside the n²/4 moves, so time per n² is still falling toward c.
 - **Shell sort** kept up with the O(n log n) sorts until n = 1,024, where it
   took 1.38 times as long as quicksort and was slower than merge sort. It
   makes a pass for every gap of its table below n, and its comparisons

@@ -186,25 +186,28 @@ them is in `bench/results.csv`, and the tables below are made from it.
   is faster up to n = 128, binary insertion up to 23, min sort up to 16 (but not at n = 3),
   and bubble sort and shaker sort up to 11. Insertion sort is the fastest
   of all the sorts from n = 2 to 128.
-- **Past where they stop**, the quadratic sorts grow as n², some faster.
-  From n = 8,192 to 65,536, eight times the keys, insertion sort took 63
-  times as long and min sort 62 times; bubble sort took 93 times and shaker
-  sort 87 times. The last two go over the whole array on every pass, and at
-  n = 65,536 the array is 256 KB, as large as the L2 cache of dmz; the
-  counters of the cache were not measured for them. At n = 65,536 bubble
-  sort takes 5.55 s, where quicksort takes 4.7 ms.
+- **Past where they stop.** The counts are what the analysis says they
+  are (see the last item): bubble sort makes n²/2 comparisons at every
+  size. What changes with n is the time that each comparison and move
+  takes, which is a constant of the machine, not the order. From
+  n = 8,192 to 65,536 the time divided by n² hardly changed for insertion sort (0.99 times) and
+  min sort (0.97 times), and rose by 45% for bubble sort and 36% for shaker
+  sort. Those two go over the whole array on every pass, and at n = 65,536
+  the array is 256 KB, as large as the L2 cache of dmz; the counters of the
+  cache were not measured for them, so that is not shown to be the cause.
+  At n = 65,536 bubble sort takes 5.55 s, where quicksort takes 4.7 ms.
 - **Binary insertion** makes few comparisons, 0.91 n log₂ n at n = 65,536,
   but it still moves about n²/4 keys, as insertion sort does, so it is
-  quadratic in time. It stopped at the same size as insertion sort, but
-  past it the comparisons it saves count for more: it is 2.1 times as fast
+  Θ(n²) in time on random keys. It stopped at the same size as insertion
+  sort, and past it the difference widens: it is 2.1 times as fast
   as insertion sort at n = 1,024, and 5.2 times at 65,536.
 - **Shell sort** kept up with the O(n log n) sorts until n = 1,024, where it
   took 1.38 times as long as quicksort and was slower than merge sort. It
   makes a pass for every gap of its table below n, and its comparisons
   divided by n log₂ n rise from 3.5 at n = 1,024 to 5.4 at 524,288. Past the
-  largest gap, 472,392, the number of passes is fixed at 100, and from
-  n = 524,288 to 8,388,608, sixteen times the keys, its time grew 19.7
-  times, where n log₂ n grows 19.4 times and n log₂² n 23.4 times.
+  largest gap, 472,392, the number of passes is fixed at 100. Its time
+  divided by n log₂ n was 13.5 ns at n = 524,288 and 13.7 ns at 8,388,608.
+  Two sizes do not establish an order.
 - **Quicksort**, the recursive one, is the fastest sort from n = 181 to the
   largest size. The iterative one is 9 to 18% slower from n = 1,024 up, and
   52% slower at n = 16; it keeps its stack in memory that it allocates, and

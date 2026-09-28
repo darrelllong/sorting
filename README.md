@@ -30,19 +30,19 @@ keys the abbreviated sequence is the better one, once n is past a few
 thousand. `pratt.c` is the same sort with all 128 numbers 2ᵖ3ᵍ up to
 472,392, the largest gap of the table. Each row below is two Pilot sessions, one
 for each sequence, on a Cortex-X925 core of an NVIDIA GB10
-(`bench/vinge.txt`, `bench/shell_gaps.csv`). The half-width of every 95%
-confidence interval is at most 0.14% of its mean.
+(`bench/knuth.txt`, `bench/shell_gaps.csv`). The half-width of every 95%
+confidence interval is at most 0.15% of its mean.
 
 | n | Table, time | Table, comparisons | Whole sequence, time | Whole sequence, comparisons |
 |---:|---:|---:|---:|---:|
-| 4,096 | 232 µs | 0.204 × 10⁶ | 229 µs | 0.206 × 10⁶ |
-| 32,768 | 2.61 ms | 2.37 × 10⁶ | 2.71 ms | 2.55 × 10⁶ |
-| 262,144 | 26.9 ms | 24.8 × 10⁶ | 29.9 ms | 29.1 × 10⁶ |
-| 2,097,152 | 256 ms | 231 × 10⁶ | 291 ms | 286 × 10⁶ |
+| 4,096 | 234 µs | 0.204 × 10⁶ | 228 µs | 0.206 × 10⁶ |
+| 32,768 | 2.64 ms | 2.37 × 10⁶ | 2.70 ms | 2.54 × 10⁶ |
+| 262,144 | 27.1 ms | 24.8 × 10⁶ | 29.8 ms | 29.1 × 10⁶ |
+| 2,097,152 | 258 ms | 231 × 10⁶ | 290 ms | 286 × 10⁶ |
 | 8,388,608 | 1.13 s | 981 × 10⁶ | 1.27 s | 1,205 × 10⁶ |
 
-At n = 4,096 the whole sequence is 1.5% faster; at 8,388,608 the table is
-11% faster and makes 19% fewer comparisons. It has fewer gaps, and so makes
+At n = 4,096 the whole sequence is 2.4% faster; at 8,388,608 the table is
+10% faster and makes 19% fewer comparisons. It has fewer gaps, and so makes
 fewer passes. Pratt's O(n log² n) bound on the worst case is proved for the
 whole sequence and does not carry over to the abbreviated one.
 
@@ -434,7 +434,7 @@ takes, and both were set back afterwards.
 `bench_pilot.py` runs the sweep and then the sessions past the stops for
 the tables. It can be stopped and started again: it does not repeat a
 session that is already in `bench/results.csv`. Pin it to a core of the
-kind that you want to measure; on vinge, CPU 9 is a Cortex-X925. `graph.sh` is the older script,
+kind that you want to measure; on knuth, CPU 9 is a Cortex-X925. `graph.sh` is the older script,
 which counts comparisons and moves with `sorting` and plots them with
 gnuplot.
 

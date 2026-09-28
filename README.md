@@ -153,8 +153,7 @@ them is in `bench/results.csv`, and the tables below are made from it.
 - **Where the quadratic sorts stop.** Bubble sort and shaker sort were
   slower than the slowest O(n log n) sort from n = 45, min sort from 128,
   insertion sort from 362, and binary insertion from 512. At those sizes the
-  slowest O(n log n) sort is BFS sort, which allocates its queue on every
-  call. Against quicksort, the fastest, insertion sort is faster up to
+  slowest O(n log n) sort is BFS sort (see below). Against quicksort, the fastest, insertion sort is faster up to
   n = 128 and min sort up to n = 11.
 - **Binary insertion** makes few comparisons, about n log₂ n, but it still
   moves about n²/4 keys, as insertion sort does, so it is quadratic in time.
@@ -165,9 +164,20 @@ them is in `bench/results.csv`, and the tables below are made from it.
   slower than BFS sort.
 - **Quicksort**, the recursive one, is the fastest sort from n = 128 to the
   largest size. The iterative one is 9 to 18% slower from n = 1,024 up, and
-  52% slower at n = 16, for the stack that it allocates and grows on the
-  heap; BFS sort is slower again, for its queue.
-  All three make the same 1.41 n log₂ n comparisons.
+  52% slower at n = 16; it keeps its stack in memory that it allocates, and
+  pushes and pops two entries for every partition. All three quicksorts
+  make the same 1.41 n log₂ n comparisons.
+- **BFS sort** is 1.3 to 1.9 times as slow as quicksort, and it is not for
+  the allocation of its queue, which it does once for each sort: allocating
+  and freeing the queue takes 27 ns at n = 16, at most 7% of the difference,
+  and about 1% from n = 128 up. More than half of the difference is the
+  integer division in `succ`, `(n + 1) % q->size`, which runs for every
+  `enqueue` and `dequeue`, four times for each partition. With a comparison
+  in its place, in a copy that was only measured, BFS sort took 1.41 times
+  as long as quicksort at n = 16 in place of 1.88, and 1.16 times at
+  n = 65,536 in place of 1.33. The rest is the other work of the queue, and
+  the breadth-first order, which goes over the whole array at every level
+  where quicksort finishes one part of it while that part is in the cache.
 - **Heap sort** is the fastest from n = 3 to 91, and the slowest from about a
   million keys. It makes the most comparisons, 2.9 n log₂ n, but that
   number hardly changes with n; its time per n log₂ n rises from 5.3 ns at

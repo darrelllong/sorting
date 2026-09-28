@@ -170,14 +170,28 @@ them is in `bench/results.csv`, and the tables below are made from it.
 - **BFS sort** is 1.3 to 1.9 times as slow as quicksort, and it is not for
   the allocation of its queue, which it does once for each sort: allocating
   and freeing the queue takes 27 ns at n = 16, at most 7% of the difference,
-  and about 1% from n = 128 up. More than half of the difference is the
-  integer division in `succ`, `(n + 1) % q->size`, which runs for every
-  `enqueue` and `dequeue`, four times for each partition. With a comparison
-  in its place, in a copy that was only measured, BFS sort took 1.41 times
-  as long as quicksort at n = 16 in place of 1.88, and 1.16 times at
-  n = 65,536 in place of 1.33. The rest is the other work of the queue, and
-  the breadth-first order, which goes over the whole array at every level
-  where quicksort finishes one part of it while that part is in the cache.
+  and about 1% from n = 128 up. The hardware counters of dmz (`perf stat`)
+  divide the difference in two.
+
+  | n | Cycles, quicksort | Cycles, BFS sort | Saved without the division | Cycles the divider is busy | L1 misses, quicksort / BFS | L2 misses, quicksort / BFS |
+  |---:|---:|---:|---:|---:|---:|---:|
+  | 16 | 1,576 | 3,007 | 761 (53%) | 613 | 1 / 1 | 2 / 2 |
+  | 2,048 | 434 K | 616 K | 102 K (56%) | 83 K | 163 / 248 | 190 / 233 |
+  | 65,536 | 18.4 M | 24.5 M | 3.2 M (52%) | 2.7 M | 24 K / 127 K | 14 K / 108 K |
+
+  About half is the integer division in `succ`, `(n + 1) % q->size`, which
+  runs for every `enqueue` and `dequeue`, four times for each partition. The
+  divisions cannot overlap, since each index is computed from the one before
+  it, and each takes about 26 cycles. With `n + 1 == q->size ? 0 : n + 1` in
+  its place, in a copy that was only measured, BFS sort took 1.41 times as
+  long as quicksort at n = 16 in place of 1.88, and 1.16 times at
+  n = 65,536 in place of 1.33. The other half depends on n. Up to
+  n = 2,048 the array is in the L1 cache and the misses are about the same;
+  the other half is the work of the queue, 1,600 more instructions for each
+  sort at n = 16. At n = 65,536 the array is as large as the L2 cache, and
+  BFS sort, which goes over the whole array at every level, has five times
+  the L1 misses and eight times the L2 misses of quicksort, which finishes
+  one part of the array while that part is in the cache.
 - **Heap sort** is the fastest from n = 3 to 91, and the slowest from about a
   million keys. It makes the most comparisons, 2.9 n log₂ n, but that
   number hardly changes with n; its time per n log₂ n rises from 5.3 ns at

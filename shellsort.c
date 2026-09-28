@@ -15,7 +15,7 @@
 
 void shellSort(uint32_t data[], int length) {
 
-    // Platt sequence
+    // Numbers 2^p 3^q, from the sequence of Pratt
 
     const int hl = 100;
     const int h[] = { 1, 2, 3, 4, 6, 8, 9, 12, 16, 18, 24, 27, 32, 36, 48, 54, 64, 72, 81, 96, 108,

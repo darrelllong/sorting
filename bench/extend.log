@@ -1,0 +1,23 @@
+min        n=128           50 rounds          8186.6 ns  +- 0.5%  converged, extended
+min        n=1024         125 rounds        241437.0 ns  +- 0.3%  converged, extended
+min        n=8192          73 rounds      12432400.0 ns  +- 0.2%  converged, extended
+min        n=65536         50 rounds     768897000.0 ns  +- 0.5%  converged, extended
+bubble     n=128           58 rounds         19536.6 ns  +- 0.1%  converged, extended
+bubble     n=1024          50 rounds        813262.0 ns  +- 0.3%  converged, extended
+bubble     n=8192          50 rounds      59717000.0 ns  +- 0.3%  converged, extended
+Terminated
+bubble     n=65536        200 rounds    5546540000.0 ns  +- 0.0%  converged, extended
+shaker     n=128          103 rounds         16392.6 ns  +- 0.4%  converged, extended
+shaker     n=1024         172 rounds        691686.0 ns  +- 0.2%  converged, extended
+shaker     n=8192         102 rounds      50009500.0 ns  +- 0.1%  converged, extended
+shaker     n=65536         50 rounds    4342570000.0 ns  +- 0.2%  converged, extended
+insertion  n=1024         100 rounds        199190.0 ns  +- 0.3%  converged, extended
+insertion  n=8192          50 rounds      12391900.0 ns  +- 0.4%  converged, extended
+insertion  n=65536         50 rounds     786852000.0 ns  +- 0.6%  converged, extended
+binsert    n=1024         100 rounds         95810.6 ns  +- 0.3%  converged, extended
+binsert    n=8192         128 rounds       2850520.0 ns  +- 0.2%  converged, extended
+binsert    n=65536         55 rounds     151383000.0 ns  +- 2.5%  converged, extended
+shell      n=8192         130 rounds       1212990.0 ns  +- 0.2%  converged, extended
+shell      n=65536        106 rounds      13343200.0 ns  +- 0.6%  converged, extended
+shell      n=524288        50 rounds     134182000.0 ns  +- 0.2%  converged, extended
+shell      n=8388608       50 rounds    2643420000.0 ns  +- 0.4%  converged, extended

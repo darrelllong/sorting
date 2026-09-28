@@ -22,15 +22,29 @@ The quicksorts are O(n²) in the worst case, but the benchmark gives them
 random keys, on which they are O(n log n), so they are counted with the
 O(n log n) sorts.
 
-**Shell sort.** The gaps are numbers of the form 2ᵖ3ᵍ, as in the sequence of
-Pratt, for which Shell sort is O(n log² n). The table in `shellsort.c` is
-not the whole sequence: it leaves out 32 of those numbers below 629,856,
-from 2,048 on (2,048, 4,096, 6,144, 8,192, …), and the loop uses the first
-100 of its 102 entries. Pratt's bound needs all of them. On random keys the
-table as it is does less work than the whole sequence: in one run each at
-n = 8,388,608 on an Apple M4, it made 0.98 × 10⁹ comparisons in 1.07 s, against 1.51 × 10⁹
-in 1.48 s for the whole sequence, because fewer gaps are fewer passes. It
-is kept as it is.
+**Shell sort.** The gaps are numbers of the form 2ᵖ3ᵍ, from the sequence of
+Pratt. The table in `shellsort.c` is an abbreviated sequence: it leaves out
+32 of Pratt's numbers below 629,856, from 2,048 on (2,048, 4,096, 6,144,
+8,192, …), and the loop uses the first 100 of its 102 entries. On random
+keys the abbreviated sequence is the better one, once n is past a few
+thousand. `pratt.c` is the same sort with all 128 numbers 2ᵖ3ᵍ up to
+472,392, the largest gap of the table. Each row below is two Pilot sessions, one
+for each sequence, on a Cortex-X925 core of an NVIDIA GB10
+(`bench/vinge.txt`, `bench/shell_gaps.csv`). The half-width of every 95%
+confidence interval is at most 0.14% of its mean.
+
+| n | Table, time | Table, comparisons | Whole sequence, time | Whole sequence, comparisons |
+|---:|---:|---:|---:|---:|
+| 4,096 | 232 µs | 0.204 × 10⁶ | 229 µs | 0.206 × 10⁶ |
+| 32,768 | 2.61 ms | 2.37 × 10⁶ | 2.71 ms | 2.55 × 10⁶ |
+| 262,144 | 26.9 ms | 24.8 × 10⁶ | 29.9 ms | 29.1 × 10⁶ |
+| 2,097,152 | 256 ms | 231 × 10⁶ | 291 ms | 286 × 10⁶ |
+| 8,388,608 | 1.13 s | 981 × 10⁶ | 1.27 s | 1,205 × 10⁶ |
+
+At n = 4,096 the whole sequence is 1.5% faster; at 8,388,608 the table is
+11% faster and makes 19% fewer comparisons. It has fewer gaps, and so makes
+fewer passes. Pratt's O(n log² n) bound on the worst case is proved for the
+whole sequence and does not carry over to the abbreviated one.
 
 ## Building
 
@@ -46,12 +60,19 @@ make pilot_sort      # the program that the benchmark runs
 Every sort was timed with Pilot on random keys from n = 2 to n = 2²³
 (8,388,608), at two sizes for every power of two.
 
-**One measurement.** `pilot_sort` fills an array with n random 30-bit keys
-from a fresh seed, sorts it, counts its comparisons and moves, and checks
-the result against `qsort` of the same keys; a sort that does not sort ends
-the session. A sort of a few keys is too fast to time, so it then times a
-batch of sorts, each of other random keys, doubling the batch until it takes
-at least 2 ms, and prints the mean time of one sort in the batch.
+**One measurement.** A sort of a few keys is too fast to time, so
+`pilot_sort` times a batch of sorts, each of other random 30-bit keys from a
+fresh seed, doubling the batch until it takes at least 2 ms. It prints the
+mean time of one sort in the batch, and the mean numbers of comparisons and
+moves, which the sorts count as they are timed. After the timing it checks
+that every array of the batch is in order; a sort that does not sort ends
+the session.
+
+In the sweep, `pilot_sort` also sorted one more array before the batch,
+outside the timing, and took the comparisons and moves from it. When the
+batch is one sort, as it is for the slow sorts at large n, that doubled the
+cost of every reading. It was taken out for the sessions that were run after
+the sweep for the tables (see below), whose counts are means over the batch.
 
 Each sort in the batch has to be of other keys. A first version of
 `pilot_sort` sorted copies of the same keys, and the branch predictor
@@ -74,6 +95,13 @@ size, and at no larger size. Slower means that the lower end of the sort's
 confidence interval is above the upper end of the interval of the slowest
 O(n log n) sort, so that a difference within the noise does not stop it.
 
+The figures show the sweep, and no more. For the tables, each sort that
+stopped was timed again, after the sweep, at the sizes of the table of
+times that are past where it stopped: the O(n²) sorts up to n = 65,536, where
+bubble sort takes 5.55 s, and Shell sort up to n = 8,388,608. Those sessions
+are marked `extended` in `bench/results.csv`, and are in italics in the
+table.
+
 **The machine.** A benchmark can be no steadier than the machine it runs on.
 These results are from `dmz`:
 
@@ -83,7 +111,7 @@ system: Ubuntu 26.04.1 LTS, Linux 7.0.0-31-generic
 compiler: Ubuntu clang version 21.1.8 (6ubuntu1), -O3
 pilot: f01eec4 Replace the changepoint detection; document the revisions since 2016, preset normal
 pinned: taskset -c 3; frequency governor powersave, turbo on
-date: 2026-09-27
+date: 2026-09-27 and 2026-09-28
 ```
 
 The whole session ran on one core (`taskset -c 3`), with nothing else on the
@@ -107,71 +135,89 @@ them is in `bench/results.csv`, and the tables below are made from it.
 
 <!-- tables -->
 
-**Where each sort stopped.** It was slower than the slowest O(n log n) sort at this n, and was not run at larger n.
+**Where each sort stopped.** It was slower than the slowest O(n log n) sort at this n, and the sweep went no further with it. It was timed again at the larger sizes of the next table, for that table only.
 
 | Sort | Stopped at n | Its time | Slowest O(n log n) sort at n | Its time |
 |---|---:|---:|---|---:|
-| Min sort | 128 | 8.11 µs | BFS (queue) sort | 7.98 µs |
-| Bubble sort | 45 | 2.91 µs | BFS (queue) sort | 2.53 µs |
-| Shaker sort | 45 | 2.76 µs | BFS (queue) sort | 2.53 µs |
-| Insertion sort | 362 | 27.4 µs | BFS (queue) sort | 24.7 µs |
-| Binary insertion | 512 | 37.4 µs | BFS (queue) sort | 35.8 µs |
-| Shell sort | 2,048 | 167 µs | BFS (queue) sort | 158 µs |
+| Min sort | 91 | 4.95 µs | Merge sort | 4.67 µs |
+| Bubble sort | 32 | 1.54 µs | Merge sort | 1.36 µs |
+| Shaker sort | 32 | 1.48 µs | Merge sort | 1.36 µs |
+| Insertion sort | 362 | 27.4 µs | Merge sort | 22 µs |
+| Binary insertion | 362 | 23.9 µs | Merge sort | 22 µs |
+| Shell sort | 1,024 | 71.6 µs | Merge sort | 68.2 µs |
 
-**Mean time of one sort**, with the half-width of its 95% confidence interval. A blank is a size at which the sort was not run.
+**Mean time of one sort**, with the half-width of its 95% confidence interval. A time in italics is past the size at which the sort stopped: it was measured for this table, after the sweep. A blank is a size at which the sort was not run.
 
 | Sort | n = 16 | n = 128 | n = 1,024 | n = 8,192 | n = 65,536 | n = 524,288 | n = 8,388,608 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Quicksort | 390 ns ± 0.4% | 5.01 µs ± 0.5% | 51.7 µs ± 0.2% | 506 µs ± 0.4% | 4.75 ms ± 0.6% | 43.8 ms ± 1.2% | 821 ms ± 1.0% |
-| Quicksort (iterative) | 592 ns ± 0.2% | 6.25 µs ± 0.3% | 60.9 µs ± 0.7% | 574 µs ± 0.3% | 5.41 ms ± 4.2% | 48 ms ± 0.2% | 896 ms ± 1.1% |
-| BFS (queue) sort | 770 ns ± 0.2% | 7.98 µs ± 0.3% | 75.3 µs ± 0.3% | 703 µs ± 0.7% | 6.43 ms ± 0.6% | 58.1 ms ± 3.3% | 1.09 s ± 0.9% |
-| Merge sort | 592 ns ± 0.2% | 6.72 µs ± 0.2% | 68.3 µs ± 0.4% | 655 µs ± 0.2% | 6.24 ms ± 0.2% | 59.1 ms ± 3.8% | 1.11 s ± 1.1% |
-| Heap sort | 343 ns ± 0.2% | 5.08 µs ± 0.3% | 56.4 µs ± 0.4% | 557 µs ± 0.2% | 5.56 ms ± 0.1% | 56.7 ms ± 0.1% | 1.53 s ± 0.7% |
-| Min sort | 389 ns ± 0.2% | 8.11 µs ± 0.3% |  |  |  |  |  |
-| Bubble sort | 425 ns ± 0.5% |  |  |  |  |  |  |
-| Shaker sort | 421 ns ± 0.1% |  |  |  |  |  |  |
-| Insertion sort | 183 ns ± 0.5% | 4.17 µs ± 0.1% |  |  |  |  |  |
-| Binary insertion | 344 ns ± 0.2% | 6.46 µs ± 0.1% |  |  |  |  |  |
-| Shell sort | 368 ns ± 0.2% | 5.16 µs ± 0.3% | 71.1 µs ± 0.6% |  |  |  |  |
+| Quicksort | 390 ns ± 0.3% | 4.99 µs ± 0.3% | 51.9 µs ± 0.5% | 505 µs ± 0.1% | 4.74 ms ± 0.2% | 43.5 ms ± 0.3% | 820 ms ± 0.8% |
+| Quicksort (iterative) | 591 ns ± 0.2% | 6.25 µs ± 0.3% | 61 µs ± 0.4% | 577 µs ± 0.3% | 5.29 ms ± 0.3% | 47.9 ms ± 0.3% | 894 ms ± 0.7% |
+| BFS (queue) sort | 570 ns ± 1.4% | 6.22 µs ± 0.5% | 61.1 µs ± 0.2% | 586 µs ± 0.1% | 5.52 ms ± 0.2% | 50.4 ms ± 1.8% | 975 ms ± 0.6% |
+| Merge sort | 592 ns ± 0.1% | 6.72 µs ± 0.2% | 68.2 µs ± 0.4% | 654 µs ± 0.1% | 6.29 ms ± 0.5% | 58.1 ms ± 0.2% | 1.1 s ± 0.7% |
+| Heap sort | 343 ns ± 0.3% | 5.07 µs ± 0.2% | 57.1 µs ± 1.0% | 559 µs ± 0.6% | 5.57 ms ± 0.3% | 57 ms ± 1.0% | 1.53 s ± 0.6% |
+| Min sort | 388 ns ± 0.2% | *8.19 µs ± 0.5%* | *241 µs ± 0.3%* | *12.4 ms ± 0.2%* | *769 ms ± 0.5%* |  |  |
+| Bubble sort | 425 ns ± 0.3% | *19.5 µs ± 0.1%* | *813 µs ± 0.3%* | *59.7 ms ± 0.3%* | *5.55 s ± 0.04%* |  |  |
+| Shaker sort | 428 ns ± 0.6% | *16.4 µs ± 0.4%* | *692 µs ± 0.2%* | *50 ms ± 0.1%* | *4.34 s ± 0.2%* |  |  |
+| Insertion sort | 183 ns ± 0.2% | 4.18 µs ± 0.3% | *199 µs ± 0.3%* | *12.4 ms ± 0.4%* | *787 ms ± 0.6%* |  |  |
+| Binary insertion | 346 ns ± 0.4% | 6.5 µs ± 0.7% | *95.8 µs ± 0.3%* | *2.85 ms ± 0.2%* | *151 ms ± 2.5%* |  |  |
+| Shell sort | 369 ns ± 0.2% | 5.17 µs ± 0.6% | 71.6 µs ± 0.5% | *1.21 ms ± 0.2%* | *13.3 ms ± 0.6%* | *134 ms ± 0.2%* | *2.64 s ± 0.4%* |
 
 **At n = 8,388,608**, the largest size: time and counts divided by n log₂ n.
 
 | Sort | Time / (n log₂ n) | Comparisons / (n log₂ n) | Moves / (n log₂ n) | Rounds |
 |---|---:|---:|---:|---:|
-| Quicksort | 4.26 ns | 1.416 | 0.695 | 50 |
-| Quicksort (iterative) | 4.64 ns | 1.414 | 0.696 | 50 |
-| BFS (queue) sort | 5.66 ns | 1.415 | 0.696 | 50 |
-| Merge sort | 5.74 ns | 1.000 | 2.000 | 50 |
-| Heap sort | 7.95 ns | 2.914 | 1.179 | 58 |
+| Quicksort | 4.25 ns | 1.416 | 0.695 | 50 |
+| Quicksort (iterative) | 4.63 ns | 1.412 | 0.696 | 50 |
+| BFS (queue) sort | 5.05 ns | 1.412 | 0.695 | 50 |
+| Merge sort | 5.72 ns | 1.000 | 2.000 | 50 |
+| Heap sort | 7.93 ns | 2.914 | 1.179 | 50 |
+| Shell sort | 13.70 ns | 5.083 | 9.409 | 50 |
 
-312 Pilot sessions, 28,111 rounds, 0.9 hours. Every session converged.
+328 Pilot sessions, 26,558 rounds, 1.4 hours. Every session converged.
 
 <!-- /tables -->
 
 ### What the numbers say
 
 - **Where the quadratic sorts stop.** Bubble sort and shaker sort were
-  slower than the slowest O(n log n) sort from n = 45, min sort from 128,
-  insertion sort from 362, and binary insertion from 512. At those sizes the
-  slowest O(n log n) sort is BFS sort (see below). Against quicksort, the fastest, insertion sort is faster up to
-  n = 128 and min sort up to n = 11.
-- **Binary insertion** makes few comparisons, about n log₂ n, but it still
-  moves about n²/4 keys, as insertion sort does, so it is quadratic in time.
-  The comparisons it saves let it run a little further than insertion sort.
-- **Shell sort** kept up with the O(n log n) sorts until n = 2,048. With
-  these gaps it makes a pass for every 2ᵖ3ᵍ below n, so its time grows as
-  n log² n; at n = 2,048 it took 1.5 times as long as quicksort, and was
-  slower than BFS sort.
-- **Quicksort**, the recursive one, is the fastest sort from n = 128 to the
+  slower than the slowest O(n log n) sort from n = 32, min sort from 91,
+  and insertion sort and binary insertion from 362. At those sizes the
+  slowest O(n log n) sort is merge sort. Against quicksort, insertion sort
+  is faster up to n = 128, binary insertion up to 23, min sort up to 16 (but not at n = 3),
+  and bubble sort and shaker sort up to 11. Insertion sort is the fastest
+  of all the sorts from n = 2 to 128.
+- **Past where they stop**, the quadratic sorts grow as n², some faster.
+  From n = 8,192 to 65,536, eight times the keys, insertion sort took 63
+  times as long and min sort 62 times; bubble sort took 93 times and shaker
+  sort 87 times. The last two go over the whole array on every pass, and at
+  n = 65,536 the array is 256 KB, as large as the L2 cache of dmz; the
+  counters of the cache were not measured for them. At n = 65,536 bubble
+  sort takes 5.55 s, where quicksort takes 4.7 ms.
+- **Binary insertion** makes few comparisons, 0.91 n log₂ n at n = 65,536,
+  but it still moves about n²/4 keys, as insertion sort does, so it is
+  quadratic in time. It stopped at the same size as insertion sort, but
+  past it the comparisons it saves count for more: it is 2.1 times as fast
+  as insertion sort at n = 1,024, and 5.2 times at 65,536.
+- **Shell sort** kept up with the O(n log n) sorts until n = 1,024, where it
+  took 1.38 times as long as quicksort and was slower than merge sort. It
+  makes a pass for every gap of its table below n, and its comparisons
+  divided by n log₂ n rise from 3.5 at n = 1,024 to 5.4 at 524,288. Past the
+  largest gap, 472,392, the number of passes is fixed at 100, and from
+  n = 524,288 to 8,388,608, sixteen times the keys, its time grew 19.7
+  times, where n log₂ n grows 19.4 times and n log₂² n 23.4 times.
+- **Quicksort**, the recursive one, is the fastest sort from n = 181 to the
   largest size. The iterative one is 9 to 18% slower from n = 1,024 up, and
   52% slower at n = 16; it keeps its stack in memory that it allocates, and
   pushes and pops two entries for every partition. All three quicksorts
   make the same 1.41 n log₂ n comparisons.
-- **BFS sort** is 1.3 to 1.9 times as slow as quicksort, and it is not for
-  the allocation of its queue, which it does once for each sort: allocating
-  and freeing the queue takes 27 ns at n = 16, at most 7% of the difference,
-  and about 1% from n = 128 up. The hardware counters of dmz (`perf stat`)
-  divide the difference in two.
+- **BFS sort** takes 1.14 to 1.20 times as long as quicksort from n = 1,024
+  up, and 1.46 times at n = 16. Before the change to `succ` (see below) it
+  took 1.33 to 1.97 times as long, and it was the slowest of the O(n log n)
+  sorts at every size at which a quadratic sort stopped. The time is not
+  in the allocation of its queue, which it does once for each sort:
+  allocating and freeing the queue takes 27 ns at n = 16, at most 7% of
+  the difference, and about 1% from n = 128 up. The hardware counters of
+  dmz (`perf stat`), with `succ` as it was, divide the difference in two.
 
   | n | Cycles, quicksort | Cycles, BFS sort | Saved without the division | Cycles the divider is busy | L1 misses, quicksort / BFS | L2 misses, quicksort / BFS |
   |---:|---:|---:|---:|---:|---:|---:|
@@ -179,32 +225,35 @@ them is in `bench/results.csv`, and the tables below are made from it.
   | 2,048 | 434 K | 616 K | 102 K (56%) | 83 K | 163 / 248 | 190 / 233 |
   | 65,536 | 18.4 M | 24.5 M | 3.2 M (52%) | 2.7 M | 24 K / 127 K | 14 K / 108 K |
 
-  About half is the integer division in `succ`, `(n + 1) % q->size`, which
-  runs for every `enqueue` and `dequeue`, four times for each partition. The
+  About half was the integer division in `succ`, `(n + 1) % q->size`, which
+  ran for every `enqueue` and `dequeue`, four times for each partition. The
   divisions cannot overlap, since each index is computed from the one before
-  it, and each takes about 26 cycles. With `n + 1 == q->size ? 0 : n + 1` in
-  its place, in a copy that was only measured, BFS sort took 1.41 times as
-  long as quicksort at n = 16 in place of 1.88, and 1.16 times at
-  n = 65,536 in place of 1.33. The other half depends on n. Up to
-  n = 2,048 the array is in the L1 cache and the misses are about the same;
-  the other half is the work of the queue, 1,600 more instructions for each
-  sort at n = 16. At n = 65,536 the array is as large as the L2 cache, and
-  BFS sort, which goes over the whole array at every level, has five times
-  the L1 misses and eight times the L2 misses of quicksort, which finishes
-  one part of the array while that part is in the cache.
-- **Heap sort** is the fastest from n = 3 to 91, and the slowest from about a
-  million keys. It makes the most comparisons, 2.9 n log₂ n, but that
-  number hardly changes with n; its time per n log₂ n rises from 5.3 ns at
-  n = 65,536 to 8.0 ns at 8,388,608. The array is larger than the 6 MB cache
-  from 1.5 million keys, and heap sort goes from a parent to its children,
-  far away in the array, where the others go through it in order.
-- **Merge sort** makes the fewest comparisons, n log₂ n, and 2 n log₂ n moves,
-  because it copies both halves at every level, and it allocates them with
-  `malloc`. It is in the middle.
-- **The counts agree with the theory.** Divided by n², insertion sort's
-  comparisons and moves go to 1/4, min sort's comparisons to 1/2 and its
-  moves to 0, and bubble sort's comparisons to 1/2 and its moves to 3/4, three
-  moves for each of the n²/4 swaps.
+  it, and each takes about 26 cycles. `succ` now compares with the size and
+  wraps to 0, `n + 1 == q->size ? 0 : n + 1`, which is what the sweep
+  measured. The other half depends on n. Up to n = 2,048 the array is in
+  the L1 cache and the misses are about the same; the other half is the work
+  of the queue, 1,600 more instructions for each sort at n = 16. At
+  n = 65,536 the array is as large as the L2 cache, and BFS sort, which goes
+  over the whole array at every level, has five times the L1 misses and
+  eight times the L2 misses of quicksort, which finishes one part of the
+  array while that part is in the cache.
+- **Heap sort** is the fastest of the O(n log n) sorts from n = 3 to 91, and
+  the slowest from n = 1,048,576. It makes the most comparisons,
+  2.9 n log₂ n, but that number hardly changes with n; its time per
+  n log₂ n rises from 5.3 ns at n = 65,536 to 7.9 ns at 8,388,608. The
+  array is larger than the 6 MB cache from 1.5 million keys, and heap sort
+  goes from a parent to its children, far away in the array, where the
+  others go through it in order.
+- **Merge sort** makes the fewest comparisons, n log₂ n, and 2 n log₂ n
+  moves, because it copies both halves at every level, and it allocates
+  them with `malloc`. It takes 1.30 to 1.38 times as long as quicksort from
+  n = 128 up, and is the slowest of the O(n log n) sorts from n = 16 to
+  741,455.
+- **The counts agree with the theory.** At n = 65,536, divided by n²,
+  insertion sort's comparisons and moves are 1/4, min sort's comparisons
+  1/2 and its moves 0, and bubble sort's comparisons 1/2 and its moves 3/4,
+  three moves for each of the n²/4 swaps. Shaker sort makes the same moves
+  as bubble sort, and 3/8 n² comparisons.
 
 ## Reproducing
 
@@ -218,10 +267,13 @@ make pilot_sort
 taskset -c 3 scripts/bench_pilot.py      # writes bench/results.csv
 scripts/plot.py                          # writes figures/*.svg
 scripts/tables.py                        # writes the tables of README.md
+taskset -c 9 scripts/bench_shell_gaps.py # writes bench/shell_gaps.csv
 ```
 
-The sweep can be stopped and started again: it does not repeat a session
-that is already in `bench/results.csv`. `graph.sh` is the older script,
+`bench_pilot.py` runs the sweep and then the sessions past the stops for
+the tables. It can be stopped and started again: it does not repeat a
+session that is already in `bench/results.csv`. Pin it to a core of the
+kind that you want to measure; on vinge, CPU 9 is a Cortex-X925. `graph.sh` is the older script,
 which counts comparisons and moves with `sorting` and plots them with
 gnuplot.
 
@@ -239,4 +291,10 @@ gnuplot.
 - `sorting.c`, `stack.h`, `stack.c`: prototypes, which C23 requires and
   clang 21 enforces. `heapSort` takes a `uint32_t` length and the table of
   sorts an `int`, so it is called through a wrapper that converts it.
+- `queue.c`: `succ` found the next slot with `%`, a division on every
+  enqueue and dequeue; it now compares with the size and wraps to 0.
+- `shellsort.c`: the comment named the sequence for Platt; it is Pratt's.
+- `pratt.c` is new: Shell sort with the whole sequence of Pratt, which
+  `pilot_sort` times as `pratt`, for comparison with the table of
+  `shellsort.c`.
 - `pilot_sort.c`, `scripts/`, `bench/`, and `figures/` are new.

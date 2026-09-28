@@ -3,10 +3,10 @@
 //
 // Usage: pilot_sort sort n
 //
-// Each run fills an array of n random 30-bit keys from a fresh seed, sorts
-// it, checks that the result is the input in order, and prints one line:
+// Each run sorts arrays of n random 30-bit keys from a fresh seed, checks
+// that each is in order, and prints one line:
 //
-//     nanoseconds per sort,compares,moves
+//     nanoseconds per sort,compares per sort,moves per sort
 //
 // Pilot runs it again and again, and each run is one reading, until the
 // confidence interval of the mean is as narrow as it was asked to be.
@@ -19,6 +19,10 @@
 // n = 181 on an Intel i5-8259U, quicksort and heap sort took a third as
 // long, and insertion sort 91% as long.
 //
+// The compares and moves are counted by the sorts as they are timed, and are
+// the means over the batch. Each array is checked to be in order after the
+// timing.
+//
 
 #include "bfssort.h"
 #include "binsert.h"
@@ -27,6 +31,7 @@
 #include "insertionsort.h"
 #include "mergesort.h"
 #include "minsort.h"
+#include "pratt.h"
 #include "quicksort.h"
 #include "shakersort.h"
 #include "shellsort.h"
@@ -59,6 +64,7 @@ static const struct {
     { "insertion", insertionSort },
     { "binsert", binaryInsertionSort },
     { "shell", shellSort },
+    { "pratt", shellSortPratt },
     { "quick", qSort },
     { "quicki", qSortI },
     { "bfs", BFSSort },
@@ -70,11 +76,6 @@ static double now_ns(void) {
     struct timespec t;
     clock_gettime(CLOCK_MONOTONIC, &t);
     return t.tv_sec * 1e9 + t.tv_nsec;
-}
-
-static int cmp_u32(const void *a, const void *b) {
-    uint32_t x = *(const uint32_t *) a, y = *(const uint32_t *) b;
-    return (x > y) - (x < y);
 }
 
 int main(int argc, char **argv) {
@@ -101,30 +102,6 @@ int main(int argc, char **argv) {
     }
     srandom(seed);
 
-    uint32_t *input = malloc(n * sizeof(uint32_t));
-    uint32_t *work = malloc(n * sizeof(uint32_t));
-    uint32_t *check = malloc(n * sizeof(uint32_t));
-    if (!input || !work || !check) {
-        fprintf(stderr, "%s: out of memory\n", argv[0]);
-        return 1;
-    }
-    for (int i = 0; i < n; i += 1) {
-        input[i] = random() & MASK;
-    }
-
-    // One sort, which is counted and checked
-    memcpy(work, input, n * sizeof(uint32_t));
-    compares = moves = 0;
-    sort(work, n);
-    uint64_t c = compares, m = moves;
-    memcpy(check, input, n * sizeof(uint32_t));
-    qsort(check, n, sizeof(uint32_t), cmp_u32);
-    if (memcmp(check, work, n * sizeof(uint32_t)) != 0) {
-        fprintf(stderr, "%s: %s did not sort %d elements (seed %" PRIu32 ")\n", argv[0], argv[1],
-            n, seed);
-        return 1;
-    }
-
     // As many sorts, each of other keys, as take at least BATCH_NS
     long reps = 1;
     double elapsed;
@@ -138,6 +115,7 @@ int main(int argc, char **argv) {
         for (size_t i = 0; i < (size_t) reps * n; i += 1) {
             pool[i] = random() & MASK;
         }
+        compares = moves = 0;
         double start = now_ns();
         for (long r = 0; r < reps; r += 1) {
             sort(pool + (size_t) r * n, n);
@@ -148,11 +126,19 @@ int main(int argc, char **argv) {
         }
         reps *= 2;
     }
+
+    for (long r = 0; r < reps; r += 1) {
+        const uint32_t *a = pool + (size_t) r * n;
+        for (int i = 1; i < n; i += 1) {
+            if (a[i - 1] > a[i]) {
+                fprintf(stderr, "%s: %s did not sort %d elements (seed %" PRIu32 ")\n", argv[0],
+                    argv[1], n, seed);
+                return 1;
+            }
+        }
+    }
     free(pool);
 
-    printf("%.3f,%" PRIu64 ",%" PRIu64 "\n", elapsed / reps, c, m);
-    free(input);
-    free(work);
-    free(check);
+    printf("%.3f,%.3f,%.3f\n", elapsed / reps, (double) compares / reps, (double) moves / reps);
     return 0;
 }

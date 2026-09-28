@@ -44,7 +44,8 @@ def main():
     out = []
 
     out.append('**Where each sort stopped.** It was slower than the slowest O(n log n) sort at '
-               'this n, and was not run at larger n.\n')
+               'this n, and the sweep went no further with it. It was timed again at the larger sizes of the '
+               'next table, for that table only.\n')
     out.append('| Sort | Stopped at n | Its time | Slowest O(n log n) sort at n | Its time |')
     out.append('|---|---:|---:|---|---:|')
     for s in OTHERS:
@@ -62,7 +63,8 @@ def main():
 
     picks = [n for n in sizes if n in (16, 128, 1024, 8192, 65536, 524288) or n == sizes[-1]]
     out.append('**Mean time of one sort**, with the half-width of its 95% confidence interval. '
-               'A blank is a size at which the sort was not run.\n')
+               'A time in italics is past the size at which the sort stopped: it was measured '
+               'for this table, after the sweep. A blank is a size at which the sort was not run.\n')
     out.append('| Sort | ' + ' | '.join('n = %s' % fmt_n(n) for n in picks) + ' |')
     out.append('|---|' + '---:|' * len(picks))
     for s in NLOGN + OTHERS:
@@ -73,7 +75,9 @@ def main():
                 cells.append('')
             else:
                 t, ci = float(r['time_ns']), float(r['time_ci_ns'])
-                cells.append('%s ± %.1f%%' % (fmt_time(t), 50 * ci / t))
+                h = 50 * ci / t
+                cell = '%s ± %s%%' % (fmt_time(t), '%.1f' % h if h >= 0.05 else '%.2f' % h)
+                cells.append('*%s*' % cell if r['status'].endswith('extended') else cell)
         out.append('| %s | %s |' % (NAMES[s], ' | '.join(cells)))
     out.append('')
 

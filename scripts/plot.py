@@ -64,7 +64,7 @@ def load(path):
     rows = {}
     with open(path) as f:
         for r in csv.DictReader(f):
-            if r['status'].startswith('error'):
+            if r['status'].startswith('error') or r['status'].endswith('extended'):
                 continue
             rows.setdefault(r['sort'], []).append({
                 'n': int(r['n']), 't': float(r['time_ns']), 'tci': float(r['time_ci_ns']),
@@ -278,7 +278,7 @@ def figure_quadratic(rows, path):
 
 
 def figure_nlogn(rows, path):
-    """Time per n log2 n of the O(n log n) sorts and Shell sort"""
+    """Time per n log2 n of the O(n log n) sorts"""
     group = NLOGN
     cmap = colors(NLOGN)
     width, height = 900, 470
@@ -306,7 +306,7 @@ def figure_nlogn(rows, path):
     end_labels(body, labels, p.x0 + p.w + 14, p.y0 + 6, p.y0 + p.h)
     with open(path, 'w') as f:
         f.write(svg(width, height, cmap, body, 'The O(n log n) sorts, per n log2 n',
-                    'Time of one sort divided by n log2 n against n, for five O(n log n) sorts and Shell sort.'))
+                    'Time of one sort divided by n log2 n against n, for the five O(n log n) sorts.'))
 
 
 def figure_counts(rows, path, group, cmap, norm, norm_label, title, sub, nmin):

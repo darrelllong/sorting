@@ -1,0 +1,4 @@
+vinge: NVIDIA GB10, 10 Cortex-X925 cores (CPUs 5-9, 15-19, 3.9 GHz) and
+10 Cortex-A725 cores (2.8 GHz), 128 GB, Ubuntu 24.04.5, gcc 13.3.0,
+governor performance. bench/shell_gaps.csv was run by
+scripts/bench_shell_gaps.py under taskset -c 9, a Cortex-X925 core.

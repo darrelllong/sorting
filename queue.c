@@ -5,7 +5,7 @@
 static int depth = 0, max_depth = 0;
 
 static uint32_t succ(queue *q, uint32_t n) {
-    return (n + 1) % q->size;
+    return n + 1 == q->size ? 0 : n + 1; // no division: see README.md
 }
 
 queue *newQueue(uint32_t size) {

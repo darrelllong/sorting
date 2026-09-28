@@ -11,6 +11,11 @@ the O(n log n) sorts at the same size, and then no more. Slower means that
 the lower end of the sort's confidence interval is above the upper end of
 the interval of the slowest O(n log n) sort.
 
+After the sweep, the sorts that stopped are timed at the sizes of the
+tables of README.md that are past where they stopped: the O(n^2) sorts up
+to EXTEND_QUADRATIC, and Shell sort up to the largest size. These sessions
+are marked "extended". They are in the tables and not in the figures.
+
 Usage: scripts/bench_pilot.py [results.csv]
 
 The results are appended to bench/results.csv, and sessions that are
@@ -22,6 +27,8 @@ Environment:
     PILOT_PRESET      the preset of Pilot (default normal)
     PILOT_SESSION_LIMIT  seconds that a session may take (default 900)
     MAX_LOG2_N        the largest size is 2^MAX_LOG2_N (default 23)
+    EXTEND_QUADRATIC  the largest size at which the O(n^2) sorts are timed
+                      after they stop (default 65536)
 """
 
 import csv
@@ -37,6 +44,10 @@ BENCH = os.environ.get('PILOT_BENCH_CLI', os.path.expanduser('~/pilot-bench/buil
 PRESET = os.environ.get('PILOT_PRESET', 'normal')
 SESSION_LIMIT = int(os.environ.get('PILOT_SESSION_LIMIT', '900'))
 MAX_LOG2_N = int(os.environ.get('MAX_LOG2_N', '23'))
+EXTEND_QUADRATIC = int(os.environ.get('EXTEND_QUADRATIC', '65536'))
+
+# The sizes of the tables of README.md, which scripts/tables.py shows
+TABLE_SIZES = [16, 128, 1024, 8192, 65536, 524288, 2 ** MAX_LOG2_N]
 
 NLOGN = ['quick', 'quicki', 'bfs', 'merge', 'heap']
 OTHERS = ['min', 'bubble', 'shaker', 'insertion', 'binsert', 'shell']
@@ -101,11 +112,13 @@ def main():
         writer.writeheader()
         out.flush()
 
-    def measure(sort, n):
+    def measure(sort, n, status=None):
         if (sort, n) in done:
             r = done[(sort, n)]
             return {k: (float(v) if k not in ('sort', 'status') else v) for k, v in r.items()}
         r = run_session(sort, n)
+        if status:
+            r['status'] += ', ' + status
         writer.writerow(r)
         out.flush()
         print('%-10s n=%-8d %7d rounds  %14.1f ns  +- %.1f%%  %s' % (
@@ -145,6 +158,16 @@ def main():
                 out = open(path, 'a', newline='')
                 writer = csv.DictWriter(out, FIELDS)
                 done[(sort, n)] = dict(r, status=r['status'] + ', stopped')
+
+    # Past where they stopped, at the sizes of the tables
+    for sort in OTHERS:
+        stops = [n for (s, n), r in done.items() if s == sort and r['status'].endswith('stopped')]
+        if not stops:
+            continue
+        limit = 2 ** MAX_LOG2_N if sort == 'shell' else EXTEND_QUADRATIC
+        for n in TABLE_SIZES:
+            if stops[0] < n <= limit:
+                measure(sort, n, 'extended')
     out.close()
 
 

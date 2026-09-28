@@ -27,17 +27,17 @@
 <text class="title" x="24" y="30">When the quadratic sorts stop</text>
 <text class="sub" x="24" y="49">Mean time of one sort of n random keys, with its 95% confidence interval. A sort stops when it is slower than the slowest O(n log n) sort.</text>
 <line x1="24.0" x2="38.0" y1="72.0" y2="72.0" style="stroke: var(--min)" stroke-width="2" stroke-linecap="round"/>
-<text class="legend" x="44.0" y="76.0">Min sort, stopped at n = 128</text>
-<line x1="258.0" x2="272.0" y1="72.0" y2="72.0" style="stroke: var(--bubble)" stroke-width="2" stroke-linecap="round"/>
-<text class="legend" x="278.0" y="76.0">Bubble sort, stopped at n = 45</text>
-<line x1="506.0" x2="520.0" y1="72.0" y2="72.0" style="stroke: var(--shaker)" stroke-width="2" stroke-linecap="round"/>
-<text class="legend" x="526.0" y="76.0">Shaker sort, stopped at n = 45</text>
+<text class="legend" x="44.0" y="76.0">Min sort, stopped at n = 91</text>
+<line x1="251.0" x2="265.0" y1="72.0" y2="72.0" style="stroke: var(--bubble)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="271.0" y="76.0">Bubble sort, stopped at n = 32</text>
+<line x1="499.0" x2="513.0" y1="72.0" y2="72.0" style="stroke: var(--shaker)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="519.0" y="76.0">Shaker sort, stopped at n = 32</text>
 <line x1="24.0" x2="38.0" y1="90.0" y2="90.0" style="stroke: var(--insertion)" stroke-width="2" stroke-linecap="round"/>
 <text class="legend" x="44.0" y="94.0">Insertion sort, stopped at n = 362</text>
 <line x1="300.0" x2="314.0" y1="90.0" y2="90.0" style="stroke: var(--binsert)" stroke-width="2" stroke-linecap="round"/>
-<text class="legend" x="320.0" y="94.0">Binary insertion, stopped at n = 512</text>
+<text class="legend" x="320.0" y="94.0">Binary insertion, stopped at n = 362</text>
 <line x1="590.0" x2="604.0" y1="90.0" y2="90.0" style="stroke: var(--shell)" stroke-width="2" stroke-linecap="round"/>
-<text class="legend" x="610.0" y="94.0">Shell sort, stopped at n = 2,048</text>
+<text class="legend" x="610.0" y="94.0">Shell sort, stopped at n = 1,024</text>
 <line x1="24.0" x2="38.0" y1="108.0" y2="108.0" style="stroke: var(--ref)" stroke-width="2" stroke-linecap="round" stroke-dasharray="5 3"/>
 <text class="legend" x="44.0" y="112.0">Slowest O(n log n) sort</text>
 <rect class="panel" x="96.0" y="134.0" width="614.0" height="306.0"/>
@@ -55,28 +55,28 @@
 <text class="tick" x="88.0" y="189.0" text-anchor="end">100 µs</text>
 <line class="grid" x1="96.0" x2="710.0" y1="134.0" y2="134.0"/>
 <text class="tick" x="88.0" y="138.0" text-anchor="end">1 ms</text>
-<line class="grid" x1="214.8" x2="214.8" y1="134.0" y2="440.0"/>
-<text class="tick" x="214.8" y="456.0" text-anchor="middle">10</text>
-<line class="grid" x1="384.8" x2="384.8" y1="134.0" y2="440.0"/>
-<text class="tick" x="384.8" y="456.0" text-anchor="middle">100</text>
-<line class="grid" x1="554.7" x2="554.7" y1="134.0" y2="440.0"/>
-<text class="tick" x="554.7" y="456.0" text-anchor="middle">1K</text>
+<line class="grid" x1="225.6" x2="225.6" y1="134.0" y2="440.0"/>
+<text class="tick" x="225.6" y="456.0" text-anchor="middle">10</text>
+<line class="grid" x1="411.0" x2="411.0" y1="134.0" y2="440.0"/>
+<text class="tick" x="411.0" y="456.0" text-anchor="middle">100</text>
+<line class="grid" x1="596.5" x2="596.5" y1="134.0" y2="440.0"/>
+<text class="tick" x="596.5" y="456.0" text-anchor="middle">1K</text>
 <line class="axis" x1="96.0" x2="710.0" y1="440.0" y2="440.0"/>
 <text class="axlabel" x="403.0" y="474.0" text-anchor="middle">Number of keys, n</text>
 <text class="axlabel" transform="translate(38.0,287.0) rotate(-90)" text-anchor="middle">Time of one sort</text>
-<path class="line" d="M96.0,338.0 L125.9,333.2 L147.2,330.0 L177.1,322.6 L198.3,313.0 L221.8,303.1 L249.5,292.8 L276.3,282.9 L300.7,274.9 L325.8,266.4 L351.8,257.8 L377.8,249.3 L403.0,241.0 L428.6,232.5 L454.2,224.1 L479.7,216.0 L505.3,207.7 L530.9,199.4 L556.5,191.3 L582.1,183.0 L607.7,174.9 L633.2,166.6 L658.8,158.5 L684.4,150.3 L710.0,141.8" style="stroke: var(--ref)" stroke-dasharray="5 3"/>
-<path class="line" d="M96.0,382.9 L125.9,367.4 L147.2,360.9 L177.1,348.1 L198.3,337.7 L221.8,323.7 L249.5,307.9 L276.3,294.9 L300.7,284.2 L325.8,273.6 L351.8,262.6 L377.8,251.6 L403.0,240.6" style="stroke: var(--min)"/>
-<circle class="dot" cx="403.0" cy="240.6" r="4.5" style="fill: var(--min)"/>
-<path class="line" d="M96.0,393.2 L125.9,379.2 L147.2,369.7 L177.1,351.3 L198.3,337.1 L221.8,322.4 L249.5,305.9 L276.3,290.9 L300.7,277.4 L325.8,263.4" style="stroke: var(--bubble)"/>
-<circle class="dot" cx="325.8" cy="263.4" r="4.5" style="fill: var(--bubble)"/>
-<path class="line" d="M96.0,388.6 L125.9,375.0 L147.2,363.7 L177.1,348.9 L198.3,336.5 L221.8,321.6 L249.5,306.2 L276.3,291.5 L300.7,278.2 L325.8,264.5" style="stroke: var(--shaker)"/>
-<circle class="dot" cx="325.8" cy="264.5" r="4.5" style="fill: var(--shaker)"/>
-<path class="line" d="M96.0,396.2 L125.9,380.6 L147.2,370.3 L177.1,355.6 L198.3,345.6 L221.8,335.9 L249.5,324.6 L276.3,313.7 L300.7,303.5 L325.8,292.5 L351.8,280.6 L377.8,268.1 L403.0,255.4 L428.6,241.9 L454.2,228.1 L479.7,213.7" style="stroke: var(--insertion)"/>
-<circle class="dot" cx="479.7" cy="213.7" r="4.5" style="fill: var(--insertion)"/>
-<path class="line" d="M96.0,390.3 L125.9,374.1 L147.2,362.6 L177.1,348.1 L198.3,336.4 L221.8,324.6 L249.5,310.7 L276.3,297.0 L300.7,286.2 L325.8,275.8 L351.8,265.3 L377.8,255.2 L403.0,245.7 L428.6,236.0 L454.2,226.2 L479.7,216.7 L505.3,206.8" style="stroke: var(--binsert)"/>
-<circle class="dot" cx="505.3" cy="206.8" r="4.5" style="fill: var(--binsert)"/>
-<path class="line" d="M96.0,346.5 L125.9,343.6 L147.2,340.8 L177.1,335.1 L198.3,327.9 L221.8,319.3 L249.5,309.2 L276.3,299.0 L300.7,290.0 L325.8,280.2 L351.8,270.4 L377.8,260.3 L403.0,250.6 L428.6,240.8 L454.2,231.1 L479.7,221.2 L505.3,211.6 L530.9,201.5 L556.5,192.5 L582.1,183.1 L607.7,173.7" style="stroke: var(--shell)"/>
-<circle class="dot" cx="607.7" cy="173.7" r="4.5" style="fill: var(--shell)"/>
-<line class="leader" x1="716.0" y1="141.8" x2="720.0" y2="141.8"/>
-<text class="label" x="724.0" y="145.8">Slowest O(n log n)</text>
+<path class="line" d="M96.0,338.0 L128.7,333.4 L151.8,330.1 L184.5,322.9 L207.6,316.3 L233.3,307.9 L263.5,298.6 L292.7,288.6 L319.3,280.2 L346.7,271.0 L375.1,262.3 L403.4,252.9 L430.9,244.8 L458.8,235.5 L486.7,227.2 L514.6,218.5 L542.5,210.4 L570.4,201.5 L598.4,193.5 L626.3,184.2 L654.2,176.7 L682.1,167.9 L710.0,160.0" style="stroke: var(--ref)" stroke-dasharray="5 3"/>
+<path class="line" d="M96.0,382.9 L128.7,367.5 L151.8,361.0 L184.5,348.0 L207.6,337.7 L233.3,323.8 L263.5,308.0 L292.7,295.1 L319.3,284.3 L346.7,273.7 L375.1,262.7 L403.4,251.6" style="stroke: var(--min)"/>
+<circle class="dot" cx="403.4" cy="251.6" r="4.5" style="fill: var(--min)"/>
+<path class="line" d="M96.0,393.2 L128.7,379.1 L151.8,369.7 L184.5,351.3 L207.6,337.1 L233.3,322.3 L263.5,306.0 L292.7,291.0 L319.3,277.4" style="stroke: var(--bubble)"/>
+<circle class="dot" cx="319.3" cy="277.4" r="4.5" style="fill: var(--bubble)"/>
+<path class="line" d="M96.0,388.6 L128.7,374.9 L151.8,363.8 L184.5,349.1 L207.6,336.5 L233.3,321.6 L263.5,305.8 L292.7,291.5 L319.3,278.3" style="stroke: var(--shaker)"/>
+<circle class="dot" cx="319.3" cy="278.3" r="4.5" style="fill: var(--shaker)"/>
+<path class="line" d="M96.0,396.4 L128.7,380.7 L151.8,370.3 L184.5,355.6 L207.6,345.6 L233.3,335.9 L263.5,324.6 L292.7,313.7 L319.3,303.5 L346.7,292.6 L375.1,280.6 L403.4,267.8 L430.9,255.3 L458.8,241.7 L486.7,227.9 L514.6,213.7" style="stroke: var(--insertion)"/>
+<circle class="dot" cx="514.6" cy="213.7" r="4.5" style="fill: var(--insertion)"/>
+<path class="line" d="M96.0,390.4 L128.7,374.1 L151.8,362.5 L184.5,348.1 L207.6,336.6 L233.3,324.6 L263.5,310.5 L292.7,297.2 L319.3,286.4 L346.7,275.8 L375.1,265.4 L403.4,255.1 L430.9,245.6 L458.8,236.1 L486.7,226.1 L514.6,216.7" style="stroke: var(--binsert)"/>
+<circle class="dot" cx="514.6" cy="216.7" r="4.5" style="fill: var(--binsert)"/>
+<path class="line" d="M96.0,346.5 L128.7,343.7 L151.8,340.8 L184.5,335.0 L207.6,327.9 L233.3,319.4 L263.5,309.1 L292.7,299.2 L319.3,289.9 L346.7,280.3 L375.1,270.5 L403.4,260.2 L430.9,250.6 L458.8,240.7 L486.7,231.1 L514.6,221.3 L542.5,211.7 L570.4,202.2 L598.4,192.4" style="stroke: var(--shell)"/>
+<circle class="dot" cx="598.4" cy="192.4" r="4.5" style="fill: var(--shell)"/>
+<line class="leader" x1="716.0" y1="160.0" x2="720.0" y2="160.0"/>
+<text class="label" x="724.0" y="164.0">Slowest O(n log n)</text>
 </svg>

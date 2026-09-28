@@ -15,10 +15,10 @@ sorting	: Makefile $(OBJS)
 sorting.o	:	sorting.c
 	$(CC) $(CFLAGS) -c sorting.c
 
-pilot_sort	: Makefile pilot_sort.o $(SORTS)
-	$(CC) -o pilot_sort pilot_sort.o $(SORTS)
+pilot_sort	: Makefile pilot_sort.o pratt.o $(SORTS)
+	$(CC) -o pilot_sort pilot_sort.o pratt.o $(SORTS)
 
 clean	:
-	rm -rf $(OBJS) pilot_sort.o sorting pilot_sort infer-out *.png
+	rm -rf $(OBJS) pilot_sort.o pratt.o sorting pilot_sort infer-out *.png
 infer	:
 	make clean; infer-capture -- make; infer-analyze -- make

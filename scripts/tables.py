@@ -34,6 +34,11 @@ def fmt_n(n):
     return '{:,}'.format(n)
 
 
+def tex_n(n):
+    """n = 65,536 in LaTeX, with the commas as {,} so that they do not space"""
+    return '$n = %s$' % fmt_n(n).replace(',', '{,}')
+
+
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'bench', 'results.csv')
     rows = {}
@@ -43,10 +48,10 @@ def main():
     sizes = sorted({n for s in NLOGN for n in rows.get(s, {})})
     out = []
 
-    out.append('**Where each sort stopped.** It was slower than the slowest O(n log n) sort at '
-               'this n, and the sweep went no further with it. It was timed again at the larger sizes of the '
+    out.append('**Where each sort stopped.** It was slower than the slowest $O(n \\log n)$ sort at '
+               'this $n$, and the sweep went no further with it. It was timed again at the larger sizes of the '
                'next table, for that table only.\n')
-    out.append('| Sort | Stopped at n | Its time | Slowest O(n log n) sort at n | Its time |')
+    out.append('| Sort | Stopped at $n$ | Its time | Slowest $O(n \\log n)$ sort at $n$ | Its time |')
     out.append('|---|---:|---:|---|---:|')
     for s in OTHERS:
         stop = [n for n, r in rows.get(s, {}).items() if r['status'].endswith('stopped')]
@@ -65,7 +70,7 @@ def main():
     out.append('**Mean time of one sort**, with the half-width of its 95% confidence interval. '
                'A time in italics is past the size at which the sort stopped: it was measured '
                'for this table, after the sweep. A blank is a size at which the sort was not run.\n')
-    out.append('| Sort | ' + ' | '.join('n = %s' % fmt_n(n) for n in picks) + ' |')
+    out.append('| Sort | ' + ' | '.join(tex_n(n) for n in picks) + ' |')
     out.append('|---|' + '---:|' * len(picks))
     for s in NLOGN + OTHERS:
         cells = []
@@ -76,14 +81,14 @@ def main():
             else:
                 t, ci = float(r['time_ns']), float(r['time_ci_ns'])
                 h = 50 * ci / t
-                cell = '%s ± %s%%' % (fmt_time(t), '%.1f' % h if h >= 0.05 else '%.2f' % h)
+                cell = '%s $\\pm$ %s%%' % (fmt_time(t), '%.1f' % h if h >= 0.05 else '%.2f' % h)
                 cells.append('*%s*' % cell if r['status'].endswith('extended') else cell)
         out.append('| %s | %s |' % (NAMES[s], ' | '.join(cells)))
     out.append('')
 
     n = sizes[-1]
-    out.append('**At n = %s**, the largest size: time and counts divided by n log₂ n.\n' % fmt_n(n))
-    out.append('| Sort | Time / (n log₂ n) | Comparisons / (n log₂ n) | Moves / (n log₂ n) | Rounds |')
+    out.append('**At %s**, the largest size: time and counts divided by $n \\log_2 n$.\n' % tex_n(n))
+    out.append('| Sort | Time / $(n \\log_2 n)$ | Comparisons / $(n \\log_2 n)$ | Moves / $(n \\log_2 n)$ | Rounds |')
     out.append('|---|---:|---:|---:|---:|')
     for s in sorted(NLOGN + ['shell'], key=lambda s: float(rows.get(s, {}).get(n, {'time_ns': 'inf'})['time_ns'])):
         r = rows.get(s, {}).get(n)
@@ -100,7 +105,7 @@ def main():
     rounds = sum(int(r['rounds']) for s in rows for r in rows[s].values())
     out.append('%d Pilot sessions, %s rounds, %.1f hours. ' % (sessions, fmt_n(rounds), total / 3600) +
                ('Every session converged.' if not limited else
-                'These did not converge: ' + ', '.join('%s at n = %s' % (NAMES[s], fmt_n(n)) for s, n in limited) + '.'))
+                'These did not converge: ' + ', '.join('%s at %s' % (NAMES[s], tex_n(n)) for s, n in limited) + '.'))
 
     readme = os.path.join(ROOT, 'README.md')
     text = open(readme).read()

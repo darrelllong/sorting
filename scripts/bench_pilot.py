@@ -66,16 +66,21 @@ def sizes():
     return out
 
 
-def run_session(sort, n):
+def run_session(sort, n, events=(), program=None):
+    """One Pilot session; events are (name, event) pairs for PILOT_SORT_EVENTS,
+    and program is the pilot_sort to run, if not the one in ROOT"""
     work = tempfile.mkdtemp(prefix='pilot_sort_')
+    pi = 'time,ns,0,0,1:compares,,1,0,0:moves,,2,0,0' + ''.join(
+        ':%s,,%d,0,0' % (name, 3 + i) for i, (name, _) in enumerate(events))
+    env = dict(os.environ, PILOT_SORT_EVENTS=','.join(e for _, e in events))
     try:
         start = time.time()
         rc = subprocess.run(
             [BENCH, 'run_program', '--preset', PRESET, '--session-limit', str(SESSION_LIMIT),
-             '--pi', 'time,ns,0,0,1:compares,,1,0,0:moves,,2,0,0',
+             '--pi', pi,
              '-o', os.path.join(work, 'out'), '-q', '--',
-             os.path.join(ROOT, 'pilot_sort'), sort, str(n)],
-            cwd=work, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode
+             program or os.path.join(ROOT, 'pilot_sort'), sort, str(n)],
+            cwd=work, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode
         elapsed = time.time() - start
         with open(os.path.join(work, 'out', 'pi_results.csv')) as f:
             rows = {int(r['piid']): r for r in csv.DictReader(f)}
@@ -83,7 +88,11 @@ def run_session(sort, n):
         shutil.rmtree(work, ignore_errors=True)
     status = {0: 'converged', 13: 'session limit'}.get(rc, 'error %d' % rc)
     t, c, m = rows[0], rows[1], rows[2]
-    return {
+    extra = {}
+    for i, (name, _) in enumerate(events):
+        extra[name] = float(rows[3 + i]['readings_mean'])
+        extra[name + '_ci'] = float(rows[3 + i]['readings_subsession_ci'])
+    return extra | {
         'sort': sort, 'n': n, 'rounds': int(t['readings_num']),
         'time_ns': float(t['readings_mean']), 'time_ci_ns': float(t['readings_subsession_ci']),
         'compares': float(c['readings_mean']), 'compares_ci': float(c['readings_subsession_ci']),

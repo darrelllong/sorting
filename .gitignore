@@ -1,5 +1,7 @@
-*.o
-sorting
-pilot_sort
-infer-out/
 __pycache__/
+.render/
+*.o
+bench/layout/
+infer-out/
+pilot_sort
+sorting

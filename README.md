@@ -196,14 +196,13 @@ enough for the terms of lower order not to matter.
   of all the sorts from n = 2 to 128.
 - **Past where they stop.** The counts are what the analysis says they
   are (see the last item): bubble sort makes n²/2 comparisons at every
-  size. What changes with n is c, the time per n². At n = 1,024, 8,192 and
-  65,536 it was 0.19, 0.185 and 0.183 ns for insertion sort, and 0.23,
-  0.185 and 0.179 ns for min sort; for bubble sort it was 0.78, 0.89 and
-  1.29 ns, and for shaker sort 0.66, 0.75 and 1.01 ns. Bubble sort and
-  shaker sort go over the whole array on every pass, and at n = 65,536 the
-  array is 256 KB, as large as the L2 cache of dmz; the counters of the
-  cache were not measured for them, so that is not shown to be the cause.
-  At n = 65,536 bubble sort takes 5.55 s, where quicksort takes 4.7 ms.
+  size. What changes with n is c. In cycles, which do not depend on the
+  clock rate, and from one build (see [the counters](#what-the-counters-say)),
+  bubble sort takes 1.95 cycles per n² at n = 1,024, 2.97 at 8,192 and 4.84
+  at 65,536; insertion sort takes 0.72, 0.70 and 0.69, and min sort 0.97,
+  0.79 and 0.76. The times per n² in the table above cannot show this: at
+  those sizes they come from two builds, and the build moves the constants
+  (see [where the code is](#where-the-code-is)).
 - **Binary insertion** makes few comparisons, 0.91 n log₂ n at n = 65,536,
   but it still moves about n²/4 keys, as insertion sort does, so it is
   Θ(n²) in time on random keys. It stopped at the same size as insertion
@@ -269,6 +268,144 @@ enough for the terms of lower order not to matter.
   three moves for each of the n²/4 swaps. Shaker sort makes the same moves
   as bubble sort, and 3/8 n² comparisons.
 
+### What the counters say
+
+`pilot_sort` can count hardware events over its timed batch (see
+`PILOT_SORT_EVENTS` in `pilot_sort.c`), and Pilot then gives each count a
+mean and a 95% confidence interval, as it does the time.
+`scripts/bench_cache.py` ran every sort at the powers of two from 1,024 to
+4,194,304 (to 65,536 for the O(n²) sorts), counting cycles, instructions,
+branch misses, lines brought into the L1 data cache (`l1d.replacement`),
+misses of the L2 cache (`l2_rqsts.miss`) and of the L3 cache
+(`longest_lat_cache.miss`), in user mode, on dmz, all from one build. All
+113 sessions converged; the results are in `bench/cache.csv`. The counts
+are compared in cycles and not in time: with turbo on, the sessions ran at
+3.56 to 3.80 GHz, and Pilot's interval, which is of the readings of one
+session, does not include that.
+
+The caches of dmz hold 8,192 keys (L1, 32 KB), 65,536 (L2, 256 KB) and
+1.5 million (L3, 6 MB).
+
+| Sort | n | Cycles / n² | Instructions / n² | Branch misses / n² | L1 lines / n² | L2 misses / n² |
+|---|---:|---:|---:|---:|---:|---:|
+| Bubble sort | 1,024 | 1.95 | 6.00 | 0.023 | 0.00007 | 0.00005 |
+| | 8,192 | 2.97 | 6.00 | 0.061 | 0.0006 | 0.00003 |
+| | 65,536 | 4.84 | 6.00 | 0.137 | 0.031 | 0.010 |
+| Min sort | 1,024 | 0.97 | 2.80 | 0.0076 | 0.00007 | 0.00005 |
+| | 8,192 | 0.79 | 2.76 | 0.0012 | 0.00007 | 0.00002 |
+| | 65,536 | 0.76 | 2.75 | 0.0002 | 0.031 | 0.010 |
+| Insertion sort | 1,024 | 0.72 | 3.27 | 0.0010 | 0.00007 | 0.00005 |
+| | 8,192 | 0.70 | 3.25 | 0.0001 | 0.00006 | 0.00002 |
+| | 65,536 | 0.69 | 3.25 | 0.0000 | 0.014 | 0.002 |
+
+- **Bubble sort's c rises because of the branch predictor, not the
+  caches.** It runs the same 6 n² instructions at every size, and its
+  branch misses per n² rise six times from n = 1,024 to 65,536. Min sort,
+  at n = 65,536, takes as many L1 and L2 misses per n² as bubble sort, 0.031
+  and 0.010, and its c still falls: both go through the array in order, and
+  the hardware prefetcher hides the misses. Shaker sort is the same, less
+  so: its branch misses per n² rise from 0.029 to 0.084.
+- **Quicksort's largest cost is its branch misses**, 0.47 to 0.56 per
+  n log₂ n, one for every 2.6 to 3 comparisons, at every size; its L2 and
+  L3 misses stay below 0.04 per n log₂ n.
+- **Heap sort's c rises because of the caches.** It runs 29.0 to 29.8
+  instructions per n log₂ n at every size, but its cycles per n log₂ n rise
+  from 24 at n = 65,536 to 33 at 4,194,304, as its L2 misses per n log₂ n
+  rise from 0.10 to 1.12 and its L3 misses from 0.0003 to 0.27, and the
+  instructions per cycle fall from 1.22 to 0.89.
+- **BFS sort** takes 0.13 L2 misses per n log₂ n from n = 131,072, 3.5 to 8
+  times as many as quicksort, and at n = 4,194,304 it takes 0.14 L3
+  misses per n log₂ n, seven times as many; it runs 19.6 cycles per
+  n log₂ n there, and quicksort 16.4.
+- **Merge sort** has more branch misses from n = 8,192 to 32,768, 0.65 to
+  0.83 per n log₂ n in place of 0.5, and wider intervals there, up to ±4.8%.
+  Its branch misses also change with where the code is (below); this is
+  not explained.
+
+### Where the code is
+
+The times of the first build and of the build with the counters did not
+agree: heap sort was 18 to 22% slower in the second, Shell sort at
+n = 1,024 39% slower, and bubble sort at n = 1,024 30% faster, where the
+intervals were about ±0.5%. The source of the sorts was the same; the second build had more code
+in front of them, so each sort was at another address.
+
+`scripts/bench_layout.py` links the same object files with 0, 16, …, 112
+bytes of padding in front of the sorts, so that nothing but the address of
+each sort changes, and runs a Pilot session with counters for each sort at
+n = 1,024 and 8,192 in each build. It then does the same with the sorts
+compiled with `-mbranches-within-32B-boundaries`, which pads the code so
+that no jump crosses or ends at a 32-byte boundary, and counts the micro-ops
+that come from the decoded micro-op cache (`idq.dsb_uops`) and from the
+legacy decoders (`idq.mite_uops`). All 384 sessions converged; the results
+are in `bench/layout.csv` and `bench/layout_jcc.csv`.
+
+![Cycles of one sort of 1,024 keys relative to the fewest, against the bytes of padding in front of the sorts, as compiled and with -mbranches-within-32B-boundaries](figures/layout.svg)
+
+The instructions are the same in every build of a kind, within 0.4%, and
+for every sort but merge sort the cycles repeat with a period of 32 bytes.
+
+| Sort | Cycles, slowest / fastest padding, n = 1,024 | n = 8,192 | Cause |
+|---|---:|---:|---|
+| Bubble sort | 1.50 | 1.14 | branch misses: 24.3 K or 65.5 K at n = 1,024 |
+| Shell sort | 1.39 | 1.41 | micro-op cache: 23% or 100% of micro-ops from it |
+| Heap sort | 1.17 | 1.20 | micro-op cache: 53 to 66% or 88% |
+| Min sort | 1.14 | 1.13 | micro-op cache: 43% or 99% |
+| Merge sort | 1.16 | 1.42 | both |
+| Quicksort, BFS sort, insertion sort | 1.01 to 1.06 | 1.00 to 1.06 | |
+
+Two things move the constants.
+
+- **The micro-op cache.** The i5-8259U has the erratum of Intel's Skylake
+  cores in jumps that cross or end at a 32-byte boundary, and the microcode
+  that fixes it keeps the code of such a jump out of the decoded micro-op
+  cache, so that it has to be decoded again each time (Intel, 2019). Where
+  a loop of Shell sort, heap sort or min sort has such a jump, it runs from
+  the legacy decoders, which deliver fewer micro-ops per cycle. With
+  `-mbranches-within-32B-boundaries`, every micro-op of those sorts comes
+  from the micro-op cache, and their cycles vary by 1% or less with the
+  padding. Heap sort is then faster than in either build as compiled; min
+  sort and Shell sort run 9% and 4% more instructions, the nops of the
+  padding, and take 9% and 3% more cycles than at their best as compiled.
+- **The branch predictor.** Bubble sort runs from the micro-op cache in
+  every build. What changes is how often its branches are mispredicted,
+  2.7 times as often at the slow addresses. A branch predictor looks a
+  branch up by its address, among other things, so that moving the code
+  changes which branches share its entries; that is the likely reason, but
+  Intel does not document the predictor, and it is not shown here. The
+  padded build does not change it, and in that build bubble sort is at a
+  slow address wherever it is put.
+
+The constants in this README are those of one build. The sweep's build had
+bubble sort at a slow address and Shell sort and heap sort at fast ones:
+their times at n = 1,024 in the sweep, at the clock rates above, are those
+of the slow and the fast builds here. The times of the table in italics
+come from two builds: those of min sort, and of bubble sort up to
+n = 8,192, from the sweep's build, and the rest from a build that had
+`pratt.o` in front of the sorts. A difference between two sorts that is
+smaller than the factors above is a property of this build, not of the
+sorts; heap sort against quicksort for small n is one. Pilot's interval,
+for most of these sessions ±0.1 to ±0.5% of the mean, is the precision of a session of one build;
+the placement of the code changes the constant by up to 50%, a hundred
+times as much. Mytkowicz, Diwan, Hauswirth and Sweeney (2009) found the
+same with the order of linking and the size of the environment, and
+Curtsinger and Berger (2013) randomize the placement of code as the program
+runs, so that a benchmark can measure over it.
+
+### References
+
+- Intel Corporation. *Mitigations for Jump Conditional Code Erratum.*
+  White paper, November 2019.
+- Todd Mytkowicz, Amer Diwan, Matthias Hauswirth, and Peter F. Sweeney.
+  "Producing Wrong Data Without Doing Anything Obviously Wrong!" In
+  *Proceedings of the 14th International Conference on Architectural
+  Support for Programming Languages and Operating Systems (ASPLOS XIV)*,
+  pages 265–276, 2009.
+- Charlie Curtsinger and Emery D. Berger. "Stabilizer: Statistically Sound
+  Performance Evaluation." In *Proceedings of the 18th International
+  Conference on Architectural Support for Programming Languages and
+  Operating Systems (ASPLOS XVIII)*, pages 219–228, 2013.
+
 ## Reproducing
 
 You need [Pilot](https://github.com/darrelllong/pilot-bench), at commit
@@ -282,7 +419,17 @@ taskset -c 3 scripts/bench_pilot.py      # writes bench/results.csv
 scripts/plot.py                          # writes figures/*.svg
 scripts/tables.py                        # writes the tables of README.md
 taskset -c 9 scripts/bench_shell_gaps.py # writes bench/shell_gaps.csv
+taskset -c 3 scripts/bench_cache.py      # writes bench/cache.csv
+taskset -c 3 scripts/bench_layout.py     # writes bench/layout.csv
+LAYOUT_JCC=1 taskset -c 3 scripts/bench_layout.py  # bench/layout_jcc.csv
+scripts/plot_layout.py                   # writes figures/layout.svg
 ```
+
+The last three need Linux, the raw events of an Intel Skylake or one of
+its successors, and the counters to themselves: they were run with
+`kernel.perf_event_paranoid=2`, which lets a program count its own events,
+and `kernel.nmi_watchdog=0`, which frees the counter that the watchdog
+takes, and both were set back afterwards.
 
 `bench_pilot.py` runs the sweep and then the sessions past the stops for
 the tables. It can be stopped and started again: it does not repeat a
@@ -312,3 +459,4 @@ gnuplot.
   `pilot_sort` times as `pratt`, for comparison with the table of
   `shellsort.c`.
 - `pilot_sort.c`, `scripts/`, `bench/`, and `figures/` are new.
+  `pilot_sort` counts hardware events if `PILOT_SORT_EVENTS` is set.

@@ -1,0 +1,192 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="viz" width="900" height="440" viewBox="0 0 900 440" role="img" aria-labelledby="t d">
+<title id="t">Where the code is</title>
+<desc id="d">Cycles of one sort of 1,024 keys relative to the fewest, against the bytes of padding in front of the sorts, for five sorts, as compiled and with -mbranches-within-32B-boundaries.</desc>
+<style>
+  .viz { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
+         --grid: #e1e0d9; --axis: #c3c2b7; --ref: #898781; --min: #2a78d6; --bubble: #eb6834; --merge: #eda100; --heap: #e87ba4; --shell: #4a3aa7; }
+  @media (prefers-color-scheme: dark) {
+    .viz { --surface: #1a1a19; --ink: #ffffff; --ink2: #c3c2b7; --muted: #898781;
+           --grid: #2c2c2a; --axis: #383835; --ref: #898781; --min: #3987e5; --bubble: #d95926; --merge: #c98500; --heap: #d55181; --shell: #9085e9; }
+  }
+  .viz text { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .title { font-size: 15px; font-weight: 600; fill: var(--ink); }
+  .sub { font-size: 12px; fill: var(--ink2); }
+  .tick { font-size: 11px; fill: var(--muted); font-variant-numeric: tabular-nums; }
+  .axlabel { font-size: 12px; fill: var(--ink2); }
+  .label { font-size: 12px; fill: var(--ink); }
+  .legend { font-size: 12px; fill: var(--ink2); }
+  .grid { stroke: var(--grid); stroke-width: 1; }
+  .axis { stroke: var(--axis); stroke-width: 1; }
+  .line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+  .ci { stroke-width: 1.5; stroke-linecap: round; }
+  .dot { stroke: var(--surface); stroke-width: 2; }
+  .leader { stroke: var(--muted); stroke-width: 1; }
+  .panel { fill: var(--surface); }
+</style>
+<rect width="100%" height="100%" fill="var(--surface)"/>
+<text class="title" x="24" y="30">Where the code is</text>
+<text class="sub" x="24" y="49">Cycles of one sort of 1,024 keys, relative to the fewest for that sort, in builds that differ only in the bytes of padding in front of the sorts.</text>
+<line x1="24.0" x2="38.0" y1="72.0" y2="72.0" style="stroke: var(--min)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="44.0" y="76.0">Min sort</text>
+<line x1="118.0" x2="132.0" y1="72.0" y2="72.0" style="stroke: var(--bubble)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="138.0" y="76.0">Bubble sort</text>
+<line x1="233.0" x2="247.0" y1="72.0" y2="72.0" style="stroke: var(--merge)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="253.0" y="76.0">Merge sort</text>
+<line x1="341.0" x2="355.0" y1="72.0" y2="72.0" style="stroke: var(--heap)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="361.0" y="76.0">Heap sort</text>
+<line x1="442.0" x2="456.0" y1="72.0" y2="72.0" style="stroke: var(--shell)" stroke-width="2" stroke-linecap="round"/>
+<text class="legend" x="462.0" y="76.0">Shell sort</text>
+<text class="label" x="96.0" y="106.0" font-weight="600">As compiled</text>
+<rect class="panel" x="96.0" y="116.0" width="300.0" height="264.0"/>
+<line class="grid" x1="96.0" x2="396.0" y1="342.3" y2="342.3"/>
+<text class="tick" x="88.0" y="346.3" text-anchor="end">1.0×</text>
+<line class="grid" x1="96.0" x2="396.0" y1="304.6" y2="304.6"/>
+<text class="tick" x="88.0" y="308.6" text-anchor="end">1.1×</text>
+<line class="grid" x1="96.0" x2="396.0" y1="266.9" y2="266.9"/>
+<text class="tick" x="88.0" y="270.9" text-anchor="end">1.2×</text>
+<line class="grid" x1="96.0" x2="396.0" y1="229.1" y2="229.1"/>
+<text class="tick" x="88.0" y="233.1" text-anchor="end">1.3×</text>
+<line class="grid" x1="96.0" x2="396.0" y1="191.4" y2="191.4"/>
+<text class="tick" x="88.0" y="195.4" text-anchor="end">1.4×</text>
+<line class="grid" x1="96.0" x2="396.0" y1="153.7" y2="153.7"/>
+<text class="tick" x="88.0" y="157.7" text-anchor="end">1.5×</text>
+<line class="grid" x1="96.0" x2="396.0" y1="116.0" y2="116.0"/>
+<text class="tick" x="88.0" y="120.0" text-anchor="end">1.6×</text>
+<text class="tick" x="96.0" y="396.0" text-anchor="middle">0</text>
+<text class="tick" x="138.9" y="396.0" text-anchor="middle">16</text>
+<text class="tick" x="181.7" y="396.0" text-anchor="middle">32</text>
+<text class="tick" x="224.6" y="396.0" text-anchor="middle">48</text>
+<text class="tick" x="267.4" y="396.0" text-anchor="middle">64</text>
+<text class="tick" x="310.3" y="396.0" text-anchor="middle">80</text>
+<text class="tick" x="353.1" y="396.0" text-anchor="middle">96</text>
+<text class="tick" x="396.0" y="396.0" text-anchor="middle">112</text>
+<line class="axis" x1="96.0" x2="396.0" y1="380.0" y2="380.0"/>
+<text class="axlabel" x="246.0" y="414.0" text-anchor="middle">Bytes of padding</text>
+<text class="axlabel" transform="translate(44.0,248.0) rotate(-90)" text-anchor="middle">Cycles / fewest</text>
+<path class="line" d="M96.0,290.6 L138.9,338.7 L181.7,293.1 L224.6,342.2 L267.4,291.5 L310.3,337.3 L353.1,292.5 L396.0,342.3" style="stroke: var(--min)"/>
+<circle class="dot" cx="96.0" cy="290.6" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="138.9" cy="338.7" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="181.7" cy="293.1" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="224.6" cy="342.2" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="267.4" cy="291.5" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="310.3" cy="337.3" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="353.1" cy="292.5" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="396.0" cy="342.3" r="4" style="fill: var(--min)"/>
+<path class="line" d="M96.0,342.3 L138.9,153.7 L181.7,338.4 L224.6,178.0 L267.4,341.5 L310.3,153.7 L353.1,336.3 L396.0,179.4" style="stroke: var(--bubble)"/>
+<circle class="dot" cx="96.0" cy="342.3" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="138.9" cy="153.7" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="181.7" cy="338.4" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="224.6" cy="178.0" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="267.4" cy="341.5" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="310.3" cy="153.7" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="353.1" cy="336.3" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="396.0" cy="179.4" r="4" style="fill: var(--bubble)"/>
+<path class="line" d="M96.0,331.4 L138.9,340.0 L181.7,281.7 L224.6,337.3 L267.4,331.4 L310.3,333.7 L353.1,277.5 L396.0,327.6" style="stroke: var(--merge)"/>
+<circle class="dot" cx="96.0" cy="331.4" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="138.9" cy="340.0" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="181.7" cy="281.7" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="224.6" cy="337.3" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="267.4" cy="331.4" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="310.3" cy="333.7" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="353.1" cy="277.5" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="396.0" cy="327.6" r="4" style="fill: var(--merge)"/>
+<path class="line" d="M96.0,250.5 L138.9,313.1 L181.7,244.8 L224.6,310.3 L267.4,251.7 L310.3,311.6 L353.1,245.5 L396.0,311.8" style="stroke: var(--heap)"/>
+<circle class="dot" cx="96.0" cy="250.5" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="138.9" cy="313.1" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="181.7" cy="244.8" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="224.6" cy="310.3" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="267.4" cy="251.7" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="310.3" cy="311.6" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="353.1" cy="245.5" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="396.0" cy="311.8" r="4" style="fill: var(--heap)"/>
+<path class="line" d="M96.0,198.0 L138.9,341.9 L181.7,207.8 L224.6,340.4 L267.4,196.0 L310.3,342.3 L353.1,207.9 L396.0,340.4" style="stroke: var(--shell)"/>
+<circle class="dot" cx="96.0" cy="198.0" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="138.9" cy="341.9" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="181.7" cy="207.8" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="224.6" cy="340.4" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="267.4" cy="196.0" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="310.3" cy="342.3" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="353.1" cy="207.9" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="396.0" cy="340.4" r="4" style="fill: var(--shell)"/>
+<text class="label" x="456.0" y="106.0" font-weight="600">With -mbranches-within-32B-boundaries</text>
+<rect class="panel" x="456.0" y="116.0" width="300.0" height="264.0"/>
+<line class="grid" x1="456.0" x2="756.0" y1="342.3" y2="342.3"/>
+<text class="tick" x="448.0" y="346.3" text-anchor="end">1.0×</text>
+<line class="grid" x1="456.0" x2="756.0" y1="304.6" y2="304.6"/>
+<text class="tick" x="448.0" y="308.6" text-anchor="end">1.1×</text>
+<line class="grid" x1="456.0" x2="756.0" y1="266.9" y2="266.9"/>
+<text class="tick" x="448.0" y="270.9" text-anchor="end">1.2×</text>
+<line class="grid" x1="456.0" x2="756.0" y1="229.1" y2="229.1"/>
+<text class="tick" x="448.0" y="233.1" text-anchor="end">1.3×</text>
+<line class="grid" x1="456.0" x2="756.0" y1="191.4" y2="191.4"/>
+<text class="tick" x="448.0" y="195.4" text-anchor="end">1.4×</text>
+<line class="grid" x1="456.0" x2="756.0" y1="153.7" y2="153.7"/>
+<text class="tick" x="448.0" y="157.7" text-anchor="end">1.5×</text>
+<line class="grid" x1="456.0" x2="756.0" y1="116.0" y2="116.0"/>
+<text class="tick" x="448.0" y="120.0" text-anchor="end">1.6×</text>
+<text class="tick" x="456.0" y="396.0" text-anchor="middle">0</text>
+<text class="tick" x="498.9" y="396.0" text-anchor="middle">16</text>
+<text class="tick" x="541.7" y="396.0" text-anchor="middle">32</text>
+<text class="tick" x="584.6" y="396.0" text-anchor="middle">48</text>
+<text class="tick" x="627.4" y="396.0" text-anchor="middle">64</text>
+<text class="tick" x="670.3" y="396.0" text-anchor="middle">80</text>
+<text class="tick" x="713.1" y="396.0" text-anchor="middle">96</text>
+<text class="tick" x="756.0" y="396.0" text-anchor="middle">112</text>
+<line class="axis" x1="456.0" x2="756.0" y1="380.0" y2="380.0"/>
+<text class="axlabel" x="606.0" y="414.0" text-anchor="middle">Bytes of padding</text>
+<path class="line" d="M456.0,310.2 L498.9,309.7 L541.7,308.8 L584.6,308.3 L627.4,310.2 L670.3,310.6 L713.1,309.3 L756.0,308.7" style="stroke: var(--min)"/>
+<circle class="dot" cx="456.0" cy="310.2" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="498.9" cy="309.7" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="541.7" cy="308.8" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="584.6" cy="308.3" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="627.4" cy="310.2" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="670.3" cy="310.6" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="713.1" cy="309.3" r="4" style="fill: var(--min)"/>
+<circle class="dot" cx="756.0" cy="308.7" r="4" style="fill: var(--min)"/>
+<path class="line" d="M456.0,154.1 L498.9,153.0 L541.7,178.3 L584.6,178.0 L627.4,151.7 L670.3,153.0 L713.1,179.1 L756.0,180.0" style="stroke: var(--bubble)"/>
+<circle class="dot" cx="456.0" cy="154.1" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="498.9" cy="153.0" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="541.7" cy="178.3" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="584.6" cy="178.0" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="627.4" cy="151.7" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="670.3" cy="153.0" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="713.1" cy="179.1" r="4" style="fill: var(--bubble)"/>
+<circle class="dot" cx="756.0" cy="180.0" r="4" style="fill: var(--bubble)"/>
+<path class="line" d="M456.0,334.0 L498.9,342.3 L541.7,335.8 L584.6,339.5 L627.4,330.1 L670.3,322.2 L713.1,326.0 L756.0,330.6" style="stroke: var(--merge)"/>
+<circle class="dot" cx="456.0" cy="334.0" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="498.9" cy="342.3" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="541.7" cy="335.8" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="584.6" cy="339.5" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="627.4" cy="330.1" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="670.3" cy="322.2" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="713.1" cy="326.0" r="4" style="fill: var(--merge)"/>
+<circle class="dot" cx="756.0" cy="330.6" r="4" style="fill: var(--merge)"/>
+<path class="line" d="M456.0,341.5 L498.9,341.5 L541.7,339.6 L584.6,339.5 L627.4,342.3 L670.3,341.1 L713.1,340.3 L756.0,339.8" style="stroke: var(--heap)"/>
+<circle class="dot" cx="456.0" cy="341.5" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="498.9" cy="341.5" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="541.7" cy="339.6" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="584.6" cy="339.5" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="627.4" cy="342.3" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="670.3" cy="341.1" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="713.1" cy="340.3" r="4" style="fill: var(--heap)"/>
+<circle class="dot" cx="756.0" cy="339.8" r="4" style="fill: var(--heap)"/>
+<path class="line" d="M456.0,332.1 L498.9,332.4 L541.7,330.9 L584.6,331.1 L627.4,331.0 L670.3,331.4 L713.1,330.1 L756.0,330.4" style="stroke: var(--shell)"/>
+<circle class="dot" cx="456.0" cy="332.1" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="498.9" cy="332.4" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="541.7" cy="330.9" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="584.6" cy="331.1" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="627.4" cy="331.0" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="670.3" cy="331.4" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="713.1" cy="330.1" r="4" style="fill: var(--shell)"/>
+<circle class="dot" cx="756.0" cy="330.4" r="4" style="fill: var(--shell)"/>
+<line class="leader" x1="762.0" y1="180.0" x2="766.0" y2="180.0"/>
+<text class="label" x="770.0" y="184.0">Bubble sort</text>
+<line class="leader" x1="762.0" y1="308.7" x2="766.0" y2="308.7"/>
+<text class="label" x="770.0" y="312.7">Min sort</text>
+<line class="leader" x1="762.0" y1="330.4" x2="766.0" y2="330.4"/>
+<text class="label" x="770.0" y="334.4">Shell sort</text>
+<line class="leader" x1="762.0" y1="330.6" x2="766.0" y2="344.4"/>
+<text class="label" x="770.0" y="348.4">Merge sort</text>
+<line class="leader" x1="762.0" y1="339.8" x2="766.0" y2="358.4"/>
+<text class="label" x="770.0" y="362.4">Heap sort</text>
+</svg>

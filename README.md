@@ -156,11 +156,11 @@ them is in `bench/results.csv`, and the tables below are made from it.
 | Merge sort | 592 ns $\pm$ 0.1% | 6.72 µs $\pm$ 0.2% | 68.2 µs $\pm$ 0.4% | 654 µs $\pm$ 0.1% | 6.29 ms $\pm$ 0.5% | 58.1 ms $\pm$ 0.2% | 1.1 s $\pm$ 0.7% |
 | Heap sort | 343 ns $\pm$ 0.3% | 5.07 µs $\pm$ 0.2% | 57.1 µs $\pm$ 1.0% | 559 µs $\pm$ 0.6% | 5.57 ms $\pm$ 0.3% | 57 ms $\pm$ 1.0% | 1.53 s $\pm$ 0.6% |
 | Min sort | 388 ns $\pm$ 0.2% | *8.19 µs $\pm$ 0.5%* | *241 µs $\pm$ 0.3%* | *12.4 ms $\pm$ 0.2%* | *769 ms $\pm$ 0.5%* |  |  |
-| Bubble sort | 425 ns $\pm$ 0.3% | *19.5 µs $\pm$ 0.1%* | *813 µs $\pm$ 0.3%* | *59.7 ms $\pm$ 0.3%* | *5.55 s $\pm$ 0.04%* |  |  |
-| Shaker sort | 428 ns $\pm$ 0.6% | *16.4 µs $\pm$ 0.4%* | *692 µs $\pm$ 0.2%* | *50 ms $\pm$ 0.1%* | *4.34 s $\pm$ 0.2%* |  |  |
-| Insertion sort | 183 ns $\pm$ 0.2% | 4.18 µs $\pm$ 0.3% | *199 µs $\pm$ 0.3%* | *12.4 ms $\pm$ 0.4%* | *787 ms $\pm$ 0.6%* |  |  |
-| Binary insertion | 346 ns $\pm$ 0.4% | 6.5 µs $\pm$ 0.7% | *95.8 µs $\pm$ 0.3%* | *2.85 ms $\pm$ 0.2%* | *151 ms $\pm$ 2.5%* |  |  |
-| Shell sort | 369 ns $\pm$ 0.2% | 5.17 µs $\pm$ 0.6% | 71.6 µs $\pm$ 0.5% | *1.21 ms $\pm$ 0.2%* | *13.3 ms $\pm$ 0.6%* | *134 ms $\pm$ 0.2%* | *2.64 s $\pm$ 0.4%* |
+| Bubble sort | 425 ns $\pm$ 0.3% | 19.5 µs $\pm$ 0.1% | 813 µs $\pm$ 0.3% | 59.7 ms $\pm$ 0.3% | 5.55 s $\pm$ 0.04% |  |  |
+| Shaker sort | 428 ns $\pm$ 0.6% | 16.4 µs $\pm$ 0.4% | 692 µs $\pm$ 0.2% | 50 ms $\pm$ 0.1% | 4.34 s $\pm$ 0.2% |  |  |
+| Insertion sort | 183 ns $\pm$ 0.2% | 4.18 µs $\pm$ 0.3% | 199 µs $\pm$ 0.3% | 12.4 ms $\pm$ 0.4% | 787 ms $\pm$ 0.6% |  |  |
+| Binary insertion | 346 ns $\pm$ 0.4% | 6.5 µs $\pm$ 0.7% | 95.8 µs $\pm$ 0.3% | 2.85 ms $\pm$ 0.2% | 151 ms $\pm$ 2.5% |  |  |
+| Shell sort | 369 ns $\pm$ 0.2% | 5.17 µs $\pm$ 0.6% | 71.6 µs $\pm$ 0.5% | 1.21 ms $\pm$ 0.2% | 13.3 ms $\pm$ 0.6% | 134 ms $\pm$ 0.2% | 2.64 s $\pm$ 0.4% |
 
 **At $n = 8{,}388{,}608$**, the largest size: time and counts divided by $n \log_2 n$.
 

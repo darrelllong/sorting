@@ -35,8 +35,8 @@ def fmt_n(n):
 
 
 def tex_n(n):
-    """n = 65,536 in LaTeX, with the commas as {,} so that they do not space"""
-    return '$n = %s$' % fmt_n(n).replace(',', '{,}')
+    """$n$ = 65,536: only the variable is math, so that the number renders the same everywhere"""
+    return '$n$ = %s' % fmt_n(n)
 
 
 def main():
@@ -68,7 +68,7 @@ def main():
 
     picks = [n for n in sizes if n in (16, 128, 1024, 8192, 65536, 524288) or n == sizes[-1]]
     out.append('**Mean time of one sort**, with the half-width of its 95% confidence interval. '
-               'A time in italics is past the size at which the sort stopped: it was measured '
+               'The times of a sort at sizes past where it stopped (the table above) were measured '
                'for this table, after the sweep. A blank is a size at which the sort was not run.\n')
     out.append('| Sort | ' + ' | '.join(tex_n(n) for n in picks) + ' |')
     out.append('|---|' + '---:|' * len(picks))
@@ -81,8 +81,7 @@ def main():
             else:
                 t, ci = float(r['time_ns']), float(r['time_ci_ns'])
                 h = 50 * ci / t
-                cell = '%s $\\pm$ %s%%' % (fmt_time(t), '%.1f' % h if h >= 0.05 else '%.2f' % h)
-                cells.append('*%s*' % cell if r['status'].endswith('extended') else cell)
+                cells.append('%s $\\pm$ %s%%' % (fmt_time(t), '%.1f' % h if h >= 0.05 else '%.2f' % h))
         out.append('| %s | %s |' % (NAMES[s], ' | '.join(cells)))
     out.append('')
 

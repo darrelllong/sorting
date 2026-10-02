@@ -64,7 +64,7 @@ def load(path):
     rows = {}
     with open(path) as f:
         for r in csv.DictReader(f):
-            if r['status'].startswith('error') or r['status'].endswith('extended'):
+            if r['status'].startswith('error'):
                 continue
             rows.setdefault(r['sort'], []).append({
                 'n': int(r['n']), 't': float(r['time_ns']), 'tci': float(r['time_ci_ns']),
@@ -227,13 +227,14 @@ def figure_quadratic(rows, path):
     group = QUADRATIC + ['shell']
     cmap = colors(QUADRATIC)
     width, height = 900, 500
-    body = ['<text class="title" x="24" y="30">When the quadratic sorts stop</text>',
-            '<text class="sub" x="24" y="49">Mean time of one sort of n random keys, with its 95% '
-            'confidence interval. A sort stops when it is slower than the slowest O(n log n) sort.</text>']
+    body = ['<text class="title" x="24" y="30">The quadratic sorts and Shell sort against the slowest '
+            'O(n log n) sort</text>',
+            '<text class="sub" x="24" y="49">Mean time of one sort of n random keys. A dot is the first '
+            'size at which a sort was slower than the slowest O(n log n) sort.</text>']
     def stop(s):
-        rs = rows.get(s, [])
-        return rs[-1]['n'] if rs and rs[-1]['stopped'] else None
-    entries = [(NAMES[s] + (', stopped at n = {:,}'.format(stop(s)) if stop(s) else ''), '--' + s, False)
+        ns = [r['n'] for r in rows.get(s, []) if r['stopped']]
+        return ns[0] if ns else None
+    entries = [(NAMES[s] + (', slower from n = {:,}'.format(stop(s)) if stop(s) else ''), '--' + s, False)
                for s in group] + [('Slowest O(n log n) sort', '--ref', True)]
     ly = legend(body, entries, 24, 76, width - 48)
     sizes = sorted({r['n'] for s in NLOGN for r in rows.get(s, [])})
@@ -242,11 +243,8 @@ def figure_quadratic(rows, path):
         ts = [r for s in NLOGN for r in rows.get(s, []) if r['n'] == n]
         if len(ts) == len(NLOGN):
             slowest.append((n, max(r['t'] for r in ts)))
-    # up to a little beyond where the last of them stopped
-    stops = [stop(s) for s in group if stop(s)]
-    xmax = max(n for n, _ in slowest)
-    if stops:
-        xmax = min(xmax, 4 * max(stops))
+    # up to the largest size at which the quadratic sorts were timed
+    xmax = min(max(n for n, _ in slowest), max(r['n'] for s in QUADRATIC for r in rows.get(s, [])))
     slowest = [(n, t) for n, t in slowest if n <= xmax]
     ymax = max([t for _, t in slowest] + [r['t'] for s in group for r in rows.get(s, []) if r['n'] <= xmax])
     ymin = min(r['t'] for s in group + NLOGN for r in rows.get(s, []))
@@ -262,17 +260,15 @@ def figure_quadratic(rows, path):
         if not rs:
             continue
         p.line(body, [(r['n'], r['t']) for r in rs], '--' + s)
-        last = rs[-1]
-        if last['stopped']:
-            # where it stopped is in the legend, and the dot marks it
-            p.dot(body, last['n'], last['t'], '--' + s)
-        else:
-            labels.append((NAMES[s], p.y(last['t']), p.x(last['n'])))
+        for r in rs:
+            if r['stopped']:
+                p.dot(body, r['n'], r['t'], '--' + s)
+        labels.append((NAMES[s], p.y(rs[-1]['t']), p.x(rs[-1]['n'])))
     labels.append(('Slowest O(n log n)', pts[-1][1], pts[-1][0]))
     end_labels(body, labels, p.x0 + p.w + 14, p.y0 + 6, p.y0 + p.h)
     with open(path, 'w') as f:
         f.write(svg(width, height, dict(cmap, ref=('#898781', '#898781')), body,
-                    'When the quadratic sorts stop',
+                    'The quadratic sorts and Shell sort against the slowest O(n log n) sort',
                     'Log-log plot of the time of one sort against n for five quadratic sorts, Shell sort, '
                     'and the slowest O(n log n) sort at each n.'))
 
@@ -325,7 +321,7 @@ def figure_counts(rows, path, group, cmap, norm, norm_label, title, sub, nmin):
         body.append('<text class="label" x="%.1f" y="%.1f" font-weight="600">%s</text>' % (
             p.x0, p.y0 - 10, name))
         p.axes(body, nice_linear(0, p.yhi, 4), lambda v: '%g' % v, 'Number of keys, n',
-               '%s / %s' % (name, norm_label) if i == 0 else '')
+               '%s / %s' % (name, norm_label))
         for s in group:
             if series[s]:
                 p.line(body, series[s], '--' + s)
@@ -346,7 +342,7 @@ def main():
                   'Mean counts of one sort divided by n log₂ n.', 16)
     figure_counts(rows, os.path.join(fig, 'counts-quadratic.svg'), QUADRATIC, colors(QUADRATIC),
                   lambda n: n * n, 'n²', 'Comparisons and moves of the quadratic sorts',
-                  'Mean counts of one sort divided by n², up to where each sort stopped.', 4)
+                  'Mean counts of one sort divided by n².', 4)
 
 
 if __name__ == '__main__':

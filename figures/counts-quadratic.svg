@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" class="viz" width="900" height="420" viewBox="0 0 900 420" role="img" aria-labelledby="t d">
 <title id="t">Comparisons and moves of the quadratic sorts</title>
-<desc id="d">Mean counts of one sort divided by n², up to where each sort stopped.</desc>
+<desc id="d">Mean counts of one sort divided by n².</desc>
 <style>
   .viz { --surface: #fcfcfb; --ink: #0b0b0b; --ink2: #52514e; --muted: #898781;
          --grid: #e1e0d9; --axis: #c3c2b7; --ref: #898781; --min: #2a78d6; --bubble: #eb6834; --shaker: #1baf7a; --insertion: #eda100; --binsert: #e87ba4; --shell: #4a3aa7; }
@@ -25,7 +25,7 @@
 </style>
 <rect width="100%" height="100%" fill="var(--surface)"/>
 <text class="title" x="24" y="30">Comparisons and moves of the quadratic sorts</text>
-<text class="sub" x="24" y="49">Mean counts of one sort divided by n², up to where each sort stopped.</text>
+<text class="sub" x="24" y="49">Mean counts of one sort divided by n².</text>
 <line x1="24.0" x2="38.0" y1="72.0" y2="72.0" style="stroke: var(--min)" stroke-width="2" stroke-linecap="round"/>
 <text class="legend" x="44.0" y="76.0">Min sort</text>
 <line x1="118.0" x2="132.0" y1="72.0" y2="72.0" style="stroke: var(--bubble)" stroke-width="2" stroke-linecap="round"/>
@@ -46,38 +46,46 @@
 <text class="tick" x="88.0" y="199.4" text-anchor="end">0.4</text>
 <line class="grid" x1="96.0" x2="443.0" y1="113.1" y2="113.1"/>
 <text class="tick" x="88.0" y="117.1" text-anchor="end">0.6</text>
-<line class="grid" x1="166.6" x2="166.6" y1="110.0" y2="360.0"/>
-<text class="tick" x="166.6" y="376.0" text-anchor="middle">10</text>
-<line class="grid" x1="343.9" x2="343.9" y1="110.0" y2="360.0"/>
-<text class="tick" x="343.9" y="376.0" text-anchor="middle">100</text>
+<line class="grid" x1="128.8" x2="128.8" y1="110.0" y2="360.0"/>
+<text class="tick" x="128.8" y="376.0" text-anchor="middle">10</text>
+<line class="grid" x1="211.1" x2="211.1" y1="110.0" y2="360.0"/>
+<text class="tick" x="211.1" y="376.0" text-anchor="middle">100</text>
+<line class="grid" x1="293.4" x2="293.4" y1="110.0" y2="360.0"/>
+<text class="tick" x="293.4" y="376.0" text-anchor="middle">1K</text>
+<line class="grid" x1="375.8" x2="375.8" y1="110.0" y2="360.0"/>
+<text class="tick" x="375.8" y="376.0" text-anchor="middle">10K</text>
 <line class="axis" x1="96.0" x2="443.0" y1="360.0" y2="360.0"/>
 <text class="axlabel" x="269.5" y="394.0" text-anchor="middle">Number of keys, n</text>
 <text class="axlabel" transform="translate(38.0,235.0) rotate(-90)" text-anchor="middle">Comparisons / n²</text>
-<path class="line" d="M96.0,128.5 L127.2,131.4 L149.4,134.9 L173.9,138.9 L202.8,143.0 L230.7,146.1 L256.2,148.2 L282.4,149.9 L309.5,151.1 L336.7,152.0" style="stroke: var(--min)"/>
-<path class="line" d="M96.0,217.7 L127.2,199.0 L149.4,194.0 L173.9,186.7 L202.8,178.2 L230.7,172.7 L256.2,167.2" style="stroke: var(--bubble)"/>
-<path class="line" d="M96.0,179.0 L127.2,179.8 L149.4,182.3 L173.9,184.2 L202.8,185.9 L230.7,187.8 L256.2,192.2" style="stroke: var(--shaker)"/>
-<path class="line" d="M96.0,207.5 L127.2,214.1 L149.4,219.3 L173.9,232.9 L202.8,238.8 L230.7,247.0 L256.2,247.8 L282.4,251.9 L309.5,252.7 L336.7,252.5 L362.9,255.5 L389.6,254.9 L416.3,254.5 L443.0,256.4" style="stroke: var(--insertion)"/>
-<path class="line" d="M96.0,240.1 L127.2,248.5 L149.4,260.2 L173.9,272.3 L202.8,287.7 L230.7,301.5 L256.2,312.0 L282.4,321.6 L309.5,329.9 L336.7,336.7 L362.9,341.8 L389.6,346.0 L416.3,349.3 L443.0,351.9" style="stroke: var(--binsert)"/>
+<path class="line" d="M96.0,128.5 L110.5,131.4 L120.8,134.9 L132.2,138.9 L145.6,143.0 L158.5,146.1 L170.4,148.2 L182.5,149.9 L195.1,151.1 L207.7,152.0 L219.9,152.7 L294.3,154.0 L368.6,154.2 L443.0,154.2" style="stroke: var(--min)"/>
+<path class="line" d="M96.0,217.7 L110.5,199.0 L120.8,194.0 L132.2,186.7 L145.6,178.2 L158.5,172.7 L170.4,167.2 L219.9,157.5 L294.3,154.7 L368.6,154.3 L443.0,154.2" style="stroke: var(--bubble)"/>
+<path class="line" d="M96.0,179.0 L110.5,179.8 L120.8,182.3 L132.2,184.2 L145.6,185.9 L158.5,187.8 L170.4,192.2 L219.9,198.9 L294.3,203.8 L368.6,205.2 L443.0,205.6" style="stroke: var(--shaker)"/>
+<path class="line" d="M96.0,207.5 L110.5,214.1 L120.8,219.3 L132.2,232.9 L145.6,238.8 L158.5,247.0 L170.4,247.8 L182.5,251.9 L195.1,252.7 L207.7,252.5 L219.9,255.5 L232.3,254.9 L244.7,254.5 L257.1,256.4 L294.3,256.8 L368.6,257.1 L443.0,257.2" style="stroke: var(--insertion)"/>
+<path class="line" d="M96.0,240.1 L110.5,248.5 L120.8,260.2 L132.2,272.3 L145.6,287.7 L158.5,301.5 L170.4,312.0 L182.5,321.6 L195.1,329.9 L207.7,336.7 L219.9,341.8 L232.3,346.0 L244.7,349.3 L257.1,351.9 L294.3,356.5 L368.6,359.4 L443.0,359.9" style="stroke: var(--binsert)"/>
 <text class="label" x="513.0" y="100.0" font-weight="600">Moves</text>
 <rect class="panel" x="513.0" y="110.0" width="347.0" height="250.0"/>
 <line class="grid" x1="513.0" x2="860.0" y1="360.0" y2="360.0"/>
 <text class="tick" x="505.0" y="364.0" text-anchor="end">0</text>
-<line class="grid" x1="513.0" x2="860.0" y1="297.1" y2="297.1"/>
-<text class="tick" x="505.0" y="301.1" text-anchor="end">0.2</text>
-<line class="grid" x1="513.0" x2="860.0" y1="234.3" y2="234.3"/>
-<text class="tick" x="505.0" y="238.3" text-anchor="end">0.4</text>
-<line class="grid" x1="513.0" x2="860.0" y1="171.4" y2="171.4"/>
-<text class="tick" x="505.0" y="175.4" text-anchor="end">0.6</text>
-<line class="grid" x1="583.6" x2="583.6" y1="110.0" y2="360.0"/>
-<text class="tick" x="583.6" y="376.0" text-anchor="middle">10</text>
-<line class="grid" x1="760.9" x2="760.9" y1="110.0" y2="360.0"/>
-<text class="tick" x="760.9" y="376.0" text-anchor="middle">100</text>
+<line class="grid" x1="513.0" x2="860.0" y1="283.0" y2="283.0"/>
+<text class="tick" x="505.0" y="287.0" text-anchor="end">0.25</text>
+<line class="grid" x1="513.0" x2="860.0" y1="205.9" y2="205.9"/>
+<text class="tick" x="505.0" y="209.9" text-anchor="end">0.5</text>
+<line class="grid" x1="513.0" x2="860.0" y1="128.9" y2="128.9"/>
+<text class="tick" x="505.0" y="132.9" text-anchor="end">0.75</text>
+<line class="grid" x1="545.8" x2="545.8" y1="110.0" y2="360.0"/>
+<text class="tick" x="545.8" y="376.0" text-anchor="middle">10</text>
+<line class="grid" x1="628.1" x2="628.1" y1="110.0" y2="360.0"/>
+<text class="tick" x="628.1" y="376.0" text-anchor="middle">100</text>
+<line class="grid" x1="710.4" x2="710.4" y1="110.0" y2="360.0"/>
+<text class="tick" x="710.4" y="376.0" text-anchor="middle">1K</text>
+<line class="grid" x1="792.8" x2="792.8" y1="110.0" y2="360.0"/>
+<text class="tick" x="792.8" y="376.0" text-anchor="middle">10K</text>
 <line class="axis" x1="513.0" x2="860.0" y1="360.0" y2="360.0"/>
 <text class="axlabel" x="686.5" y="394.0" text-anchor="middle">Number of keys, n</text>
-<text class="axlabel" transform="translate(455.0,235.0) rotate(-90)" text-anchor="middle"></text>
-<path class="line" d="M513.0,247.1 L544.2,266.5 L566.4,282.2 L590.9,299.2 L619.8,313.6 L647.7,325.5 L673.2,334.2 L699.4,341.1 L726.5,346.4 L753.7,350.2" style="stroke: var(--min)"/>
-<path class="line" d="M513.0,185.2 L544.2,149.4 L566.4,165.5 L590.9,159.7 L619.8,136.7 L647.7,134.8 L673.2,128.5" style="stroke: var(--bubble)"/>
-<path class="line" d="M513.0,178.2 L544.2,175.1 L566.4,160.5 L590.9,157.4 L619.8,143.7 L647.7,136.1 L673.2,135.0" style="stroke: var(--shaker)"/>
-<path class="line" d="M513.0,243.5 L544.2,248.6 L566.4,252.6 L590.9,262.9 L619.8,267.4 L647.7,273.7 L673.2,274.3 L699.4,277.4 L726.5,278.1 L753.7,277.9 L779.9,280.2 L806.6,279.7 L833.3,279.5 L860.0,280.9" style="stroke: var(--insertion)"/>
-<path class="line" d="M513.0,238.2 L544.2,249.0 L566.4,252.3 L590.9,264.8 L619.8,268.5 L647.7,271.0 L673.2,274.9 L699.4,277.1 L726.5,276.8 L753.7,278.6 L779.9,279.0 L806.6,280.4 L833.3,280.5 L860.0,281.3" style="stroke: var(--binsert)"/>
+<text class="axlabel" transform="translate(455.0,235.0) rotate(-90)" text-anchor="middle">Moves / n²</text>
+<path class="line" d="M513.0,249.3 L527.5,268.3 L537.8,283.7 L549.2,300.4 L562.6,314.5 L575.5,326.2 L587.4,334.7 L599.5,341.4 L612.1,346.7 L624.7,350.4 L636.9,353.1 L711.3,359.1 L785.6,359.9 L860.0,360.0" style="stroke: var(--min)"/>
+<path class="line" d="M513.0,188.6 L527.5,153.5 L537.8,169.3 L549.2,163.7 L562.6,141.1 L575.5,139.2 L587.4,133.0 L636.9,130.5 L711.3,129.0 L785.6,128.5 L860.0,128.9" style="stroke: var(--bubble)"/>
+<path class="line" d="M513.0,181.8 L527.5,178.7 L537.8,164.4 L549.2,161.4 L562.6,147.9 L575.5,140.5 L587.4,139.4 L636.9,130.6 L711.3,129.1 L785.6,128.9 L860.0,129.0" style="stroke: var(--shaker)"/>
+<path class="line" d="M513.0,245.8 L527.5,250.8 L537.8,254.7 L549.2,264.8 L562.6,269.2 L575.5,275.4 L587.4,276.0 L599.5,279.0 L612.1,279.7 L624.7,279.5 L636.9,281.8 L649.3,281.3 L661.7,281.0 L674.1,282.4 L711.3,282.7 L785.6,282.9 L860.0,283.0" style="stroke: var(--insertion)"/>
+<path class="line" d="M513.0,240.6 L527.5,251.2 L537.8,254.4 L549.2,266.6 L562.6,270.3 L575.5,272.7 L587.4,276.5 L599.5,278.7 L612.1,278.4 L624.7,280.2 L636.9,280.6 L649.3,282.0 L661.7,282.1 L674.1,282.8 L711.3,282.7 L785.6,282.9 L860.0,283.0" style="stroke: var(--binsert)"/>
 </svg>

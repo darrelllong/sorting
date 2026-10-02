@@ -6,21 +6,36 @@ their comparisons and moves, and a benchmark of all of them made with the
 
 | Sort | Flag | Comparisons, on average | Worst case | Notes |
 |---|---|---|---|---|
-| Min sort | `-m` | $n^2/2$ | $O(n^2)$ | At most $n$ swaps |
-| Bubble sort | `-b` | about $n^2/2$ | $O(n^2)$ | Stops after a pass with no swap |
-| Shaker sort | `-S` | about $n^2/2$ | $O(n^2)$ | Bubble sort in both directions |
-| Insertion sort | `-i` | about $n^2/4$ | $O(n^2)$ | |
-| Binary insertion sort | `-B` | about $n \log_2 n$ | $O(n^2)$ | The search is binary; the moves are still about $n^2/4$ |
+| Min sort | `-m` | <i>n</i><sup>2</sup>/2 | O(<i>n</i><sup>2</sup>) | At most <i>n</i> swaps |
+| Bubble sort | `-b` | about <i>n</i><sup>2</sup>/2 | O(<i>n</i><sup>2</sup>) | Stops after a pass with no swap |
+| Shaker sort | `-S` | about <i>n</i><sup>2</sup>/2 | O(<i>n</i><sup>2</sup>) | Bubble sort in both directions |
+| Insertion sort | `-i` | about <i>n</i><sup>2</sup>/4 | O(<i>n</i><sup>2</sup>) | |
+| Binary insertion sort | `-B` | about <i>n</i> log<sub>2</sub> <i>n</i> | O(<i>n</i><sup>2</sup>) | The search is binary; the moves are still about <i>n</i><sup>2</sup>/4 |
 | Shell sort | `-s` | | | Gaps that are products of 2 and 3; see below |
-| Quicksort | `-q` | about $1.39\, n \log_2 n$ | $O(n^2)$ | Hoare's partition, the middle element as the pivot |
-| Quicksort (iterative) | `-Q` | the same | $O(n^2)$ | The same, with an explicit stack |
-| BFS (queue) sort | `-X` | the same | $O(n^2)$ | Quicksort that takes the subarrays breadth first, from a queue |
-| Merge sort | `-M` | about $n \log_2 n$ | $O(n \log n)$ | Top down; copies both halves at every level |
-| Heap sort | `-h` | about $2 n \log_2 n$ | $O(n \log n)$ | After Sara Baase, *Computer Algorithms* |
+| Quicksort | `-q` | about 1.39 <i>n</i> log<sub>2</sub> <i>n</i> | O(<i>n</i><sup>2</sup>) | Hoare's partition, the middle element as the pivot |
+| Quicksort (iterative) | `-Q` | the same | O(<i>n</i><sup>2</sup>) | The same, with an explicit stack |
+| BFS (queue) sort | `-X` | the same | O(<i>n</i><sup>2</sup>) | Quicksort that takes the subarrays breadth first, from a queue |
+| Merge sort | `-M` | about <i>n</i> log<sub>2</sub> <i>n</i> | O(<i>n</i> log <i>n</i>) | Top down; copies both halves at every level |
+| Heap sort | `-h` | about 2 <i>n</i> log<sub>2</sub> <i>n</i> | O(<i>n</i> log <i>n</i>) | After Sara Baase, *Computer Algorithms* |
 
 The quicksorts are $O(n^2)$ in the worst case, but the benchmark gives them
 random keys, on which they are $O(n \log n)$, so they are counted with the
 $O(n \log n)$ sorts.
+
+**Terms and units.** A key is a 32-bit unsigned integer, and $n$ is the
+number of keys in the array. A comparison is one comparison of two keys; a
+move is one assignment of a key, so a swap is three moves. A time is the
+elapsed time of one sort (`CLOCK_MONOTONIC`), in ns, µs, ms or s. Every
+count in a table (comparisons, moves, cycles, instructions, misses) is the
+mean for one sort of $n$ keys; K is $10^3$ and M is $10^6$. A column headed
+with a division, such as cycles / $n^2$, is that count divided by $n^2$ or
+by $n \log_2 n$.
+
+**Machines.** Every measurement is from `dmz`, an Intel Core i5-8259U (four
+Skylake-family cores, 2.3 GHz, turbo to 3.8 GHz) running Linux, with clang
+21 at `-O3`, except the comparison of Shell sort's gaps just below, which is
+from `knuth`, an NVIDIA GB10 (Cortex-X925, 3.9 GHz), with gcc 13. The
+details are under [The benchmark](#the-benchmark).
 
 **Shell sort.** The gaps are numbers of the form $2^p 3^q$, from the sequence of
 Pratt. The table in `shellsort.c` is an abbreviated sequence: it leaves out
@@ -29,17 +44,18 @@ Pratt. The table in `shellsort.c` is an abbreviated sequence: it leaves out
 keys the abbreviated sequence is the better one, once $n$ is past a few
 thousand. `pratt.c` is the same sort with all 128 numbers $2^p 3^q$ up to
 472,392, the largest gap of the table. Each row below is two Pilot sessions, one
-for each sequence, on a Cortex-X925 core of an NVIDIA GB10
-(`bench/knuth.txt`, `bench/shell_gaps.csv`). The half-width of every 95%
+for each sequence, on a Cortex-X925 core of `knuth`
+(`bench/knuth.txt`, `bench/shell_gaps.csv`): the mean time and the mean
+number of comparisons of one sort of $n$ keys. The half-width of every 95%
 confidence interval is at most 0.15% of its mean.
 
-| $n$ | Table, time | Table, comparisons | Whole sequence, time | Whole sequence, comparisons |
+| <i>n</i> | Table, time | Table, comparisons | Whole sequence, time | Whole sequence, comparisons |
 |---:|---:|---:|---:|---:|
-| 4,096 | 234 µs | $0.204 \times 10^6$ | 228 µs | $0.206 \times 10^6$ |
-| 32,768 | 2.64 ms | $2.37 \times 10^6$ | 2.70 ms | $2.54 \times 10^6$ |
-| 262,144 | 27.1 ms | $24.8 \times 10^6$ | 29.8 ms | $29.1 \times 10^6$ |
-| 2,097,152 | 258 ms | $231 \times 10^6$ | 290 ms | $286 \times 10^6$ |
-| 8,388,608 | 1.13 s | $981 \times 10^6$ | 1.27 s | $1{,}205 \times 10^6$ |
+| 4,096 | 234 µs | 0.204 × 10<sup>6</sup> | 228 µs | 0.206 × 10<sup>6</sup> |
+| 32,768 | 2.64 ms | 2.37 × 10<sup>6</sup> | 2.70 ms | 2.54 × 10<sup>6</sup> |
+| 262,144 | 27.1 ms | 24.8 × 10<sup>6</sup> | 29.8 ms | 29.1 × 10<sup>6</sup> |
+| 2,097,152 | 258 ms | 231 × 10<sup>6</sup> | 290 ms | 286 × 10<sup>6</sup> |
+| 8,388,608 | 1.13 s | 981 × 10<sup>6</sup> | 1.27 s | 1,205 × 10<sup>6</sup> |
 
 At $n = 4{,}096$ the whole sequence is 2.4% faster; at 8,388,608 the table is
 10% faster and makes 19% fewer comparisons. It has fewer gaps, and so makes
@@ -95,15 +111,19 @@ size, and at no larger size. Slower means that the lower end of the sort's
 confidence interval is above the upper end of the interval of the slowest
 $O(n \log n)$ sort, so that a difference within the noise does not stop it.
 
-The figures show the sweep, and no more. For the tables, each sort that
-stopped was timed again, after the sweep, at the sizes of the table of
-times that are past where it stopped: the $O(n^2)$ sorts up to $n = 65{,}536$, where
-bubble sort takes 5.55 s, and Shell sort up to $n = 8{,}388{,}608$. Those sessions
-are marked `extended` in `bench/results.csv`, and are in italics in the
-table.
+A sort that stops at $n = 32$ or 362 has not shown how it grows. So each
+sort that stopped was timed again, after the sweep, at the sizes of the
+table of times that are past where it stopped: the $O(n^2)$ sorts at
+$n = 128$, 1,024, 8,192 and 65,536, where bubble sort takes 5.55 s, and
+Shell sort up to $n = 8{,}388{,}608$. Those sessions are marked `extended`
+in `bench/results.csv`. The figures of the quadratic sorts and the table
+of times include them.
 
 **The machine.** A benchmark can be no steadier than the machine it runs on.
-These results are from `dmz`:
+These results are from `dmz`, whose processor is an Intel Core i5-8259U:
+four cores of the Skylake family (Coffee Lake), two threads to a core, with
+a 32 KB L1 data cache and a 256 KB L2 cache for each core and a 6 MB L3
+cache for all of them.
 
 ```
 machine: dmz, Intel(R) Core(TM) i5-8259U CPU @ 2.30GHz, 8 threads, 30 GB
@@ -122,22 +142,24 @@ that could not converge.
 
 ## Results
 
-![Time of one sort against n, log-log, for the five O(n^2) sorts and Shell sort, and the slowest O(n log n) sort at each n; each quadratic sort ends with a dot where it became slower than that](figures/time-quadratic.svg)
+Everything in this section was measured on `dmz`.
+
+![Time of one sort against n, log-log, from n = 2 to 65,536, for the five O(n^2) sorts and Shell sort, and the slowest O(n log n) sort at each n; a dot on each line marks the first size at which that sort was slower](figures/time-quadratic.svg)
 
 ![Time of one sort divided by n log2 n, against n, for the five O(n log n) sorts](figures/time-nlogn.svg)
 
 ![Comparisons and moves of one sort divided by n log2 n, for the five O(n log n) sorts](figures/counts-nlogn.svg)
 
-![Comparisons and moves of one sort divided by n^2, for the five O(n^2) sorts](figures/counts-quadratic.svg)
+![Comparisons and moves of one sort divided by n^2, from n = 4 to 65,536, for the five O(n^2) sorts](figures/counts-quadratic.svg)
 
 The figures follow the light or dark setting of the page. Every number in
 them is in `bench/results.csv`, and the tables below are made from it.
 
 <!-- tables -->
 
-**Where each sort stopped.** It was slower than the slowest $O(n \log n)$ sort at this $n$, and the sweep went no further with it. It was timed again at the larger sizes of the next table, for that table only.
+**Where each sort stopped.** It was slower than the slowest $O(n \log n)$ sort at this $n$, and the sweep went no further with it. The times are the mean elapsed time of one sort of $n$ keys.
 
-| Sort | Stopped at $n$ | Its time | Slowest $O(n \log n)$ sort at $n$ | Its time |
+| Sort | Stopped at <i>n</i> | Its time | Slowest O(<i>n</i> log <i>n</i>) sort at <i>n</i> | Its time |
 |---|---:|---:|---|---:|
 | Min sort | 91 | 4.95 µs | Merge sort | 4.67 µs |
 | Bubble sort | 32 | 1.54 µs | Merge sort | 1.36 µs |
@@ -146,25 +168,25 @@ them is in `bench/results.csv`, and the tables below are made from it.
 | Binary insertion | 362 | 23.9 µs | Merge sort | 22 µs |
 | Shell sort | 1,024 | 71.6 µs | Merge sort | 68.2 µs |
 
-**Mean time of one sort**, with the half-width of its 95% confidence interval. The times of a sort at sizes past where it stopped (the table above) were measured for this table, after the sweep. A blank is a size at which the sort was not run.
+**Mean elapsed time of one sort** of $n$ keys, $\pm$ the half-width of its 95% confidence interval as a percentage of the mean. A time at a size past the one at which the sort stopped (the table above) was measured after the sweep. A blank is a size at which the sort was not run.
 
-| Sort | $n$ = 16 | $n$ = 128 | $n$ = 1,024 | $n$ = 8,192 | $n$ = 65,536 | $n$ = 524,288 | $n$ = 8,388,608 |
+| Sort | <i>n</i> = 16 | <i>n</i> = 128 | <i>n</i> = 1,024 | <i>n</i> = 8,192 | <i>n</i> = 65,536 | <i>n</i> = 524,288 | <i>n</i> = 8,388,608 |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| Quicksort | 390 ns $\pm$ 0.3% | 4.99 µs $\pm$ 0.3% | 51.9 µs $\pm$ 0.5% | 505 µs $\pm$ 0.1% | 4.74 ms $\pm$ 0.2% | 43.5 ms $\pm$ 0.3% | 820 ms $\pm$ 0.8% |
-| Quicksort (iterative) | 591 ns $\pm$ 0.2% | 6.25 µs $\pm$ 0.3% | 61 µs $\pm$ 0.4% | 577 µs $\pm$ 0.3% | 5.29 ms $\pm$ 0.3% | 47.9 ms $\pm$ 0.3% | 894 ms $\pm$ 0.7% |
-| BFS (queue) sort | 570 ns $\pm$ 1.4% | 6.22 µs $\pm$ 0.5% | 61.1 µs $\pm$ 0.2% | 586 µs $\pm$ 0.1% | 5.52 ms $\pm$ 0.2% | 50.4 ms $\pm$ 1.8% | 975 ms $\pm$ 0.6% |
-| Merge sort | 592 ns $\pm$ 0.1% | 6.72 µs $\pm$ 0.2% | 68.2 µs $\pm$ 0.4% | 654 µs $\pm$ 0.1% | 6.29 ms $\pm$ 0.5% | 58.1 ms $\pm$ 0.2% | 1.1 s $\pm$ 0.7% |
-| Heap sort | 343 ns $\pm$ 0.3% | 5.07 µs $\pm$ 0.2% | 57.1 µs $\pm$ 1.0% | 559 µs $\pm$ 0.6% | 5.57 ms $\pm$ 0.3% | 57 ms $\pm$ 1.0% | 1.53 s $\pm$ 0.6% |
-| Min sort | 388 ns $\pm$ 0.2% | 8.19 µs $\pm$ 0.5% | 241 µs $\pm$ 0.3% | 12.4 ms $\pm$ 0.2% | 769 ms $\pm$ 0.5% |  |  |
-| Bubble sort | 425 ns $\pm$ 0.3% | 19.5 µs $\pm$ 0.1% | 813 µs $\pm$ 0.3% | 59.7 ms $\pm$ 0.3% | 5.55 s $\pm$ 0.04% |  |  |
-| Shaker sort | 428 ns $\pm$ 0.6% | 16.4 µs $\pm$ 0.4% | 692 µs $\pm$ 0.2% | 50 ms $\pm$ 0.1% | 4.34 s $\pm$ 0.2% |  |  |
-| Insertion sort | 183 ns $\pm$ 0.2% | 4.18 µs $\pm$ 0.3% | 199 µs $\pm$ 0.3% | 12.4 ms $\pm$ 0.4% | 787 ms $\pm$ 0.6% |  |  |
-| Binary insertion | 346 ns $\pm$ 0.4% | 6.5 µs $\pm$ 0.7% | 95.8 µs $\pm$ 0.3% | 2.85 ms $\pm$ 0.2% | 151 ms $\pm$ 2.5% |  |  |
-| Shell sort | 369 ns $\pm$ 0.2% | 5.17 µs $\pm$ 0.6% | 71.6 µs $\pm$ 0.5% | 1.21 ms $\pm$ 0.2% | 13.3 ms $\pm$ 0.6% | 134 ms $\pm$ 0.2% | 2.64 s $\pm$ 0.4% |
+| Quicksort | 390 ns ± 0.3% | 4.99 µs ± 0.3% | 51.9 µs ± 0.5% | 505 µs ± 0.1% | 4.74 ms ± 0.2% | 43.5 ms ± 0.3% | 820 ms ± 0.8% |
+| Quicksort (iterative) | 591 ns ± 0.2% | 6.25 µs ± 0.3% | 61 µs ± 0.4% | 577 µs ± 0.3% | 5.29 ms ± 0.3% | 47.9 ms ± 0.3% | 894 ms ± 0.7% |
+| BFS (queue) sort | 570 ns ± 1.4% | 6.22 µs ± 0.5% | 61.1 µs ± 0.2% | 586 µs ± 0.1% | 5.52 ms ± 0.2% | 50.4 ms ± 1.8% | 975 ms ± 0.6% |
+| Merge sort | 592 ns ± 0.1% | 6.72 µs ± 0.2% | 68.2 µs ± 0.4% | 654 µs ± 0.1% | 6.29 ms ± 0.5% | 58.1 ms ± 0.2% | 1.1 s ± 0.7% |
+| Heap sort | 343 ns ± 0.3% | 5.07 µs ± 0.2% | 57.1 µs ± 1.0% | 559 µs ± 0.6% | 5.57 ms ± 0.3% | 57 ms ± 1.0% | 1.53 s ± 0.6% |
+| Min sort | 388 ns ± 0.2% | 8.19 µs ± 0.5% | 241 µs ± 0.3% | 12.4 ms ± 0.2% | 769 ms ± 0.5% |  |  |
+| Bubble sort | 425 ns ± 0.3% | 19.5 µs ± 0.1% | 813 µs ± 0.3% | 59.7 ms ± 0.3% | 5.55 s ± 0.04% |  |  |
+| Shaker sort | 428 ns ± 0.6% | 16.4 µs ± 0.4% | 692 µs ± 0.2% | 50 ms ± 0.1% | 4.34 s ± 0.2% |  |  |
+| Insertion sort | 183 ns ± 0.2% | 4.18 µs ± 0.3% | 199 µs ± 0.3% | 12.4 ms ± 0.4% | 787 ms ± 0.6% |  |  |
+| Binary insertion | 346 ns ± 0.4% | 6.5 µs ± 0.7% | 95.8 µs ± 0.3% | 2.85 ms ± 0.2% | 151 ms ± 2.5% |  |  |
+| Shell sort | 369 ns ± 0.2% | 5.17 µs ± 0.6% | 71.6 µs ± 0.5% | 1.21 ms ± 0.2% | 13.3 ms ± 0.6% | 134 ms ± 0.2% | 2.64 s ± 0.4% |
 
-**At $n$ = 8,388,608**, the largest size: time and counts divided by $n \log_2 n$.
+**At $n$ = 8,388,608**, the largest size: the time, comparisons and moves of one sort divided by $n \log_2 n$. The time is in nanoseconds; the counts have no unit. The last column is the number of readings (Pilot calls them rounds) in the session.
 
-| Sort | Time / $(n \log_2 n)$ | Comparisons / $(n \log_2 n)$ | Moves / $(n \log_2 n)$ | Rounds |
+| Sort | Time / (<i>n</i> log<sub>2</sub> <i>n</i>) | Comparisons / (<i>n</i> log<sub>2</sub> <i>n</i>) | Moves / (<i>n</i> log<sub>2</sub> <i>n</i>) | Readings |
 |---|---:|---:|---:|---:|
 | Quicksort | 4.25 ns | 1.416 | 0.695 | 50 |
 | Quicksort (iterative) | 4.63 ns | 1.412 | 0.696 | 50 |
@@ -173,7 +195,7 @@ them is in `bench/results.csv`, and the tables below are made from it.
 | Heap sort | 7.93 ns | 2.914 | 1.179 | 50 |
 | Shell sort | 13.70 ns | 5.083 | 9.409 | 50 |
 
-328 Pilot sessions, 26,558 rounds, 1.4 hours. Every session converged.
+328 Pilot sessions, 26,558 readings, 1.4 hours. Every session converged.
 
 <!-- /tables -->
 
@@ -231,12 +253,16 @@ enough for the terms of lower order not to matter.
   allocating and freeing the queue takes 27 ns at $n = 16$, at most 7% of
   the difference, and about 1% from $n = 128$ up. The hardware counters of
   dmz (`perf stat`), with `succ` as it was, divide the difference in two.
+  Every entry below is a count for one sort of $n$ keys: processor cycles,
+  or cache misses. The cycles saved are those that BFS sort no longer took
+  when `succ` did not divide, and the share is of the difference between
+  the two sorts.
 
-  | $n$ | Cycles, quicksort | Cycles, BFS sort | Saved without the division | Cycles the divider is busy | L1 misses, quicksort / BFS | L2 misses, quicksort / BFS |
-  |---:|---:|---:|---:|---:|---:|---:|
-  | 16 | 1,576 | 3,007 | 761 (53%) | 613 | 1 / 1 | 2 / 2 |
-  | 2,048 | 434 K | 616 K | 102 K (56%) | 83 K | 163 / 248 | 190 / 233 |
-  | 65,536 | 18.4 M | 24.5 M | 3.2 M (52%) | 2.7 M | 24 K / 127 K | 14 K / 108 K |
+  | <i>n</i> | Quicksort, cycles | BFS sort, cycles | Cycles saved without the division | Share of the difference | Cycles the divider is busy | L1 misses, quicksort | L1 misses, BFS sort | L2 misses, quicksort | L2 misses, BFS sort |
+  |---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+  | 16 | 1,576 | 3,007 | 761 | 53% | 613 | 1 | 1 | 2 | 2 |
+  | 2,048 | 434 K | 616 K | 102 K | 56% | 83 K | 163 | 248 | 190 | 233 |
+  | 65,536 | 18.4 M | 24.5 M | 3.2 M | 52% | 2.7 M | 24 K | 127 K | 14 K | 108 K |
 
   About half was the integer division in `succ`, `(n + 1) % q->size`, which
   ran for every `enqueue` and `dequeue`, four times for each partition. The
@@ -283,10 +309,11 @@ are compared in cycles and not in time: with turbo on, the sessions ran at
 3.56 to 3.80 GHz, and Pilot's interval, which is of the readings of one
 session, does not include that.
 
-The caches of dmz hold 8,192 keys (L1, 32 KB), 65,536 (L2, 256 KB) and
-1.5 million (L3, 6 MB).
+A key is 4 bytes, so the caches of dmz hold 8,192 keys (L1, 32 KB), 65,536
+(L2, 256 KB) and 1.5 million (L3, 6 MB). Each entry of the table is the
+mean count for one sort of $n$ keys, divided by $n^2$.
 
-| Sort | $n$ | Cycles / $n^2$ | Instructions / $n^2$ | Branch misses / $n^2$ | L1 lines / $n^2$ | L2 misses / $n^2$ |
+| Sort | <i>n</i> | Cycles / <i>n</i><sup>2</sup> | Instructions / <i>n</i><sup>2</sup> | Branch misses / <i>n</i><sup>2</sup> | L1 lines / <i>n</i><sup>2</sup> | L2 misses / <i>n</i><sup>2</sup> |
 |---|---:|---:|---:|---:|---:|---:|
 | Bubble sort | 1,024 | 1.95 | 6.00 | 0.023 | 0.00007 | 0.00005 |
 | | 8,192 | 2.97 | 6.00 | 0.061 | 0.0006 | 0.00003 |
@@ -330,11 +357,22 @@ $n = 1{,}024$ 39% slower, and bubble sort at $n = 1{,}024$ 30% faster, where the
 intervals were about $\pm 0.5\%$. The source of the sorts was the same; the second build had more code
 in front of them, so each sort was at another address.
 
-`scripts/bench_layout.py` links the same object files with 0, 16, …, 112
-bytes of padding in front of the sorts, so that nothing but the address of
-each sort changes, and runs a Pilot session with counters for each sort at
-$n = 1{,}024$ and 8,192 in each build. It then does the same with the sorts
-compiled with `-mbranches-within-32B-boundaries`, which pads the code so
+To find out whether the address alone can change the time that much, the
+address has to be changed and nothing else. That is done with padding:
+bytes that are never executed, put into the program just in front of the
+code of the sorts. With $p$ bytes of padding every instruction of every
+sort is at an address $p$ higher than with none, and the instructions
+themselves are the same. `scripts/bench_layout.py` makes eight builds, with
+0, 16, 32, …, 112 bytes of padding (an object file that holds only
+`.skip p`, linked in front of the same object files of the sorts), and runs
+a Pilot session with counters for each sort at $n = 1{,}024$ and 8,192 in
+each build. The steps are of 16 bytes, the alignment of a function, and
+the eight builds cover 128 bytes: two 64-byte cache lines, or four of the
+32-byte blocks that matter below.
+
+It then does the same with the sorts
+compiled with `-mbranches-within-32B-boundaries`, which has the compiler
+put nops into the code so
 that no jump crosses or ends at a 32-byte boundary, and counts the micro-ops
 that come from the decoded micro-op cache (`idq.dsb_uops`) and from the
 legacy decoders (`idq.mite_uops`). All 384 sessions converged; the results
@@ -344,15 +382,19 @@ are in `bench/layout.csv` and `bench/layout_jcc.csv`.
 
 The instructions are the same in every build of a kind, within 0.4%, and
 for every sort but merge sort the cycles repeat with a period of 32 bytes.
+The table gives, for each sort, the cycles of one sort in the build where
+it was slowest divided by those in the build where it was fastest, among
+the eight builds as compiled; it is a ratio, and 1.00 would mean that the
+padding made no difference.
 
-| Sort | Cycles, slowest / fastest padding, $n = 1{,}024$ | $n = 8{,}192$ | Cause |
+| Sort | Slowest / fastest build, <i>n</i> = 1,024 | Slowest / fastest build, <i>n</i> = 8,192 | Cause |
 |---|---:|---:|---|
-| Bubble sort | 1.50 | 1.14 | branch misses: 24.3 K or 65.5 K at $n = 1{,}024$ |
+| Bubble sort | 1.50 | 1.14 | branch misses: 24.3 K or 65.5 K in one sort at <i>n</i> = 1,024 |
 | Shell sort | 1.39 | 1.41 | micro-op cache: 23% or 100% of micro-ops from it |
 | Heap sort | 1.17 | 1.20 | micro-op cache: 53 to 66% or 88% |
 | Min sort | 1.14 | 1.13 | micro-op cache: 43% or 99% |
 | Merge sort | 1.16 | 1.42 | both |
-| Quicksort, BFS sort, insertion sort | 1.01 to 1.06 | 1.00 to 1.06 | |
+| Quicksort, BFS sort, insertion sort | 1.01 to 1.06 | 1.00 to 1.06 | little or no effect |
 
 Two things move the constants.
 
@@ -379,8 +421,8 @@ Two things move the constants.
 The constants in this README are those of one build. The sweep's build had
 bubble sort at a slow address and Shell sort and heap sort at fast ones:
 their times at $n = 1{,}024$ in the sweep, at the clock rates above, are those
-of the slow and the fast builds here. The times of the table in italics
-come from two builds: those of min sort, and of bubble sort up to
+of the slow and the fast builds here. The times of the table that were
+measured after the sweep come from two builds: those of min sort, and of bubble sort up to
 $n = 8{,}192$, from the sweep's build, and the rest from a build that had
 `pratt.o` in front of the sorts. A difference between two sorts that is
 smaller than the factors above is a property of this build, not of the

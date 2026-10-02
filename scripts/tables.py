@@ -10,6 +10,7 @@ README.md, which is rewritten.
 import csv
 import math
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,6 +40,19 @@ def tex_n(n):
     return '$n$ = %s' % fmt_n(n)
 
 
+def plain(row):
+    """A row of a table with its math in HTML and not LaTeX: GitHub crops the
+    right edge of math in a table cell, and the closing parenthesis with it"""
+    def one(m):
+        t = m.group(1).replace('{,}', ',').replace('\\,', '').replace('\\times', '×').replace('\\pm', '±')
+        t = re.sub(r'\\log_(\d)', r'log<sub>\1</sub>', t).replace('\\log', 'log')
+        t = re.sub(r'\^(\d+)', r'<sup>\1</sup>', t)
+        t = re.sub(r'\bn\b', '<i>n</i>', t)
+        assert '\\' not in t and '{' not in t, t
+        return re.sub(r'  +', ' ', t)
+    return re.sub(r'\$([^$]+)\$', one, row)
+
+
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, 'bench', 'results.csv')
     rows = {}
@@ -49,8 +63,8 @@ def main():
     out = []
 
     out.append('**Where each sort stopped.** It was slower than the slowest $O(n \\log n)$ sort at '
-               'this $n$, and the sweep went no further with it. It was timed again at the larger sizes of the '
-               'next table, for that table only.\n')
+               'this $n$, and the sweep went no further with it. The times are the mean elapsed time of '
+               'one sort of $n$ keys.\n')
     out.append('| Sort | Stopped at $n$ | Its time | Slowest $O(n \\log n)$ sort at $n$ | Its time |')
     out.append('|---|---:|---:|---|---:|')
     for s in OTHERS:
@@ -67,9 +81,10 @@ def main():
     out.append('')
 
     picks = [n for n in sizes if n in (16, 128, 1024, 8192, 65536, 524288) or n == sizes[-1]]
-    out.append('**Mean time of one sort**, with the half-width of its 95% confidence interval. '
-               'The times of a sort at sizes past where it stopped (the table above) were measured '
-               'for this table, after the sweep. A blank is a size at which the sort was not run.\n')
+    out.append('**Mean elapsed time of one sort** of $n$ keys, $\\pm$ the half-width of its 95% confidence '
+               'interval as a percentage of the mean. A time at a size past the one at which the sort '
+               'stopped (the table above) was measured after the sweep. A blank is a size at which '
+               'the sort was not run.\n')
     out.append('| Sort | ' + ' | '.join(tex_n(n) for n in picks) + ' |')
     out.append('|---|' + '---:|' * len(picks))
     for s in NLOGN + OTHERS:
@@ -86,8 +101,10 @@ def main():
     out.append('')
 
     n = sizes[-1]
-    out.append('**At %s**, the largest size: time and counts divided by $n \\log_2 n$.\n' % tex_n(n))
-    out.append('| Sort | Time / $(n \\log_2 n)$ | Comparisons / $(n \\log_2 n)$ | Moves / $(n \\log_2 n)$ | Rounds |')
+    out.append('**At %s**, the largest size: the time, comparisons and moves of one sort divided by '
+               '$n \\log_2 n$. The time is in nanoseconds; the counts have no unit. The last column is '
+               'the number of readings (Pilot calls them rounds) in the session.\n' % tex_n(n))
+    out.append('| Sort | Time / $(n \\log_2 n)$ | Comparisons / $(n \\log_2 n)$ | Moves / $(n \\log_2 n)$ | Readings |')
     out.append('|---|---:|---:|---:|---:|')
     for s in sorted(NLOGN + ['shell'], key=lambda s: float(rows.get(s, {}).get(n, {'time_ns': 'inf'})['time_ns'])):
         r = rows.get(s, {}).get(n)
@@ -102,14 +119,14 @@ def main():
     total = sum(float(r['session_s']) for s in rows for r in rows[s].values())
     sessions = sum(len(rows[s]) for s in rows)
     rounds = sum(int(r['rounds']) for s in rows for r in rows[s].values())
-    out.append('%d Pilot sessions, %s rounds, %.1f hours. ' % (sessions, fmt_n(rounds), total / 3600) +
+    out.append('%d Pilot sessions, %s readings, %.1f hours. ' % (sessions, fmt_n(rounds), total / 3600) +
                ('Every session converged.' if not limited else
                 'These did not converge: ' + ', '.join('%s at %s' % (NAMES[s], tex_n(n)) for s, n in limited) + '.'))
 
     readme = os.path.join(ROOT, 'README.md')
     text = open(readme).read()
     a, b = text.index('<!-- tables -->'), text.index('<!-- /tables -->')
-    text = text[:a] + '<!-- tables -->\n\n' + '\n'.join(out) + '\n\n' + text[b:]
+    text = text[:a] + '<!-- tables -->\n\n' + '\n'.join(plain(l) if l.startswith('|') else l for l in out) + '\n\n' + text[b:]
     open(readme, 'w').write(text)
 
 
